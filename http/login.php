@@ -21,6 +21,7 @@ $info['sshport'] = 10000 + $info['id'];
 $info['httpport'] = 20000 + $info['id'];
 
 $num_onthisnode = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `nodeno`='".$info['nodeno']."'"),0);
+$node = get_node_info($info['nodeno']);
 
 $_SESSION['email'] = $email;
 
@@ -138,22 +139,38 @@ body{
             </div>
 <p>This is a simple and naive control panel for freeshell.</p>
 <p>Notice: Freeshell can only accessed within USTC campus!
-<ul>
-  <li>Node: #<?=$info['nodeno']?>
-  <li>Shells on this node: <?=$num_onthisnode?>
-  <li>IP address: <?=get_node_ip($info['nodeno'])?>
-  <li>SSH Port: <?=$info['sshport']?>
-  <li>SSH command: <pre>ssh -p <?=$info['sshport']?> root@<?=$info['ip']?></pre>
-  <li>HTTP Port: <?=$info['httpport']?>
-  <li>HTTP Address: <pre>http://<?=$info['ip']?>:<?=$info['httpport']?>/</pre>
+<style>
+ul.table span.h {
+    width: 200px;
+    margin-right: 30px;
+}
+</style>
+<ul class="table">
+  <li><span class="h">Status:</span><?=$isonline ? 'online' : 'offline'?>
+  <li><span class="h">IP address:</span><?=get_node_ip($info['nodeno'])?>
+  <li><span class="h">SSH port:</span><?=$info['sshport']?>
+  <li><span class="h">SSH command:</span><pre>ssh -p <?=$info['sshport']?> root@<?=$info['ip']?></pre>
+  <li><span class="h">HTTP port:</span><?=$info['httpport']?>
+  <li><span class="h">HTTP address:</span><pre>http://<?=$info['ip']?>:<?=$info['httpport']?>/</pre>
 </ul>
-<p>Operations:
+<p>Manage your freeshell:
 <ul>
   <li><button onclick="manage('start')">Start</button>
   <li><button onclick="manage('stop')">Shutdown</button>
   <li><button onclick="manage('reboot')">Reboot</button>
-<ul>
-<p>More functions are under development...
+</ul>
+<p>Server status:
+<ul class="table">
+  <li><span class="h">Node:</span>#<?=$info['nodeno']?>
+  <li><span class="h">Total shells:</span><?=$num_onthisnode?>
+<?php
+foreach ($node as $key => $value) {
+?>
+  <li><span class="h"><?=$key?></span><pre><?=$value?></pre></li>
+<?php
+}
+?>
+</ul>
 </div>
 </div>
 </div>

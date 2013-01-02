@@ -43,6 +43,17 @@ function control_vz_sync($nodeno, $action, $id) {
     return call_monitor($nodeno, $action, $id, true);
 }
 
+function get_node_info($nodeno) {
+    $str = call_monitor($nodeno, 'node-info', "", true);
+    $items = explode("-----FREESHELL-----", $str);
+    $num = count($items);
+    $info = array();
+    for ($i=0;$i<$num;$i+=2) {
+        $info[trim($items[$i])] = trim($items[$i+1]);
+    }
+    return $info;
+}
+
 function random_string($length) {
     $str = '';
     for ($i=0;$i<$length;$i++) {
@@ -57,3 +68,4 @@ function random_string($length) {
     }
     return $str;
 }
+
