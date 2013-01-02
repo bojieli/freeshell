@@ -9,7 +9,7 @@ id=$2
 
 for act in start stop restart status; do
     if [ $act = $action ]; then
-        sudo vzctl $action $id;
+        vzctl $action $id;
         exit 0
     fi
 done
