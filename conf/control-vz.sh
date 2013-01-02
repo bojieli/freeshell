@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: ./create-vz.sh <action> <id>
+# usage: ./control-vz.sh <action> <id>
 
 if [ -z $1 ] || [ -z $2 ]; then
     exit 1

@@ -2,6 +2,7 @@
 # usage: scgyshell.sh <action> <params>
 
 if [ -z $1 ]; then
+    echo "Welcome to scgyshell!"
     exit 1;
 fi
 action=$1;
