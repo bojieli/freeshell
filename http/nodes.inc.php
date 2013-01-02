@@ -49,7 +49,11 @@ function get_node_info($nodeno) {
     $num = count($items);
     $info = array();
     for ($i=0;$i<$num;$i+=2) {
-        $info[trim($items[$i])] = trim($items[$i+1]);
+        $k = htmlspecialchars(trim($items[$i]));
+        // do not htmlspecialchars because value is in <pre>
+        $v = trim($items[$i+1]);
+        if ($k && $v)
+            $info[$k] = $v;
     }
     return $info;
 }
