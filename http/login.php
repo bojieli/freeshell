@@ -20,6 +20,8 @@ $info['ip'] = get_node_ip($info['nodeno']);
 $info['sshport'] = 10000 + $info['id'];
 $info['httpport'] = 20000 + $info['id'];
 
+$num_onthisnode = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `nodeno`='".$info['nodeno']."'"),0);
+
 $_SESSION['email'] = $email;
 
 function error($msg) {
@@ -138,6 +140,7 @@ body{
 <p>Notice: Freeshell can only accessed within USTC campus!
 <ul>
   <li>Node: #<?=$info['nodeno']?>
+  <li>Shells on this node: <?=$num_onthisnode?>
   <li>IP address: <?=get_node_ip($info['nodeno'])?>
   <li>SSH Port: <?=$info['sshport']?>
   <li>SSH command: <pre>ssh -p <?=$info['sshport']?> root@<?=$info['ip']?></pre>

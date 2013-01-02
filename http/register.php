@@ -116,7 +116,7 @@ if (checkhost($hostname) || strlen($password)<6 || checkemail($email)) {
 $salt = random_string(20);
 $salted_pass = sha1(sha1($password).$salt) . '/'. $salt;
 
-mysql_query("INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$saltedpass', `email`='$email'");
+mysql_query("INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$salted_pass', `email`='$email'");
 $appid = mysql_insert_id();
 if (empty($appid))
     alert('Database error!');
@@ -124,6 +124,10 @@ $nodeno = $appid % nodes_num() + 1;
 mysql_query("UPDATE shellinfo SET `nodeno`='$nodeno' WHERE `id`='$appid'");
 
 create_vz($nodeno, $appid, $hostname, $password);
+
+$token = random_string(40);
+mysql_query("UPDATE shellinfo SET `token`='$token' WHERE `id`='$appid'");
+send_activate_mail($email, $appid, $token);
 ?>
 <div id="wrapper">
 <div id="regtitle">
@@ -146,9 +150,11 @@ function internal_error($msg) {
     alert("Internal Error, please retry. Error message: $msg");
 }
 
-function send_activate_mail($email, $token, $appid, $appname, $username) {
+function send_activate_mail($email, $appid, $token) {
     $title = "Account Activation for USTC freeshell";
-    $body = "Hello $username:\n\nThanks for registering USTC blog. Please click on the link below (or copy it to the address bar) to activate your blog account.\n\nhttp://".$_SERVER['HTTP_HOST']."/activate.php?appid=$appid&token=$token\n\nThis link will expire in 48 hours. Any problems, please email us: lug@ustc.edu.cn\n\nSincerely,\nUSTC Blog Team";
-    return sendmail($email, $title, $body);
+    $body = "Hello,\n\nThanks for being the $appid-th user of USTC freeshell. Please click on the link below (or copy it to the address bar) to activate your blog account.\n\nhttp://blog.ustc.edu.cn/freeshell/activate.php?appid=$appid&token=$token\n\nThis link will expire in 48 hours. Any problems, please email us: lug@ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
+    $headers = 'From: noreply@blog.ustc.edu.cn' . "\r\n".
+        'X-Mailer: PHP/' . phpversion();
+    mail($email, $title, $body, $headers);
 }
 

@@ -74,33 +74,27 @@ $(document).ready(function(){
 	 			}, 1500,'easeInOutExpo'/*,function(){$("#servstate,#welcome,#header").fadeOut()}*/);
 		$("#regsend").bind('click',function(data){
                 console.log(regdata);
-				if(regdata.name&&regdata.email&&regdata.pass&&regdata.folder&&regdata.title)
+				if(regdata.email&&regdata.pass&&regdata.host)
 					$("#regform").submit();
 				else
 				{
-					alert("Please complete your personal information.");
+					alert("Please complete the form.");
                     e.stopPropagation();
 				}
 		});
   						
 	});
 });
-function checkaddr()
-{
-	$("#folderrepeat").html('So,your address will be located at http://'+$('#folderaddr').attr('value')+'.blog.ustc.edu.cn/');
-}
-function  subCheck()
+function subCheck()
 {
     if(event.keyCode==13)
 		$("#loginform").submit();
 }
 function regrecord()
 {
-	this.name;
 	this.pass;
 	this.email;
-	this.folder;
-	this.title;
+	this.host;
 }
 var passcheck=0;
 var regdata=new regrecord();
@@ -196,12 +190,12 @@ function verify(type,data)
 					if(!errcode)
 					{
 							$("#hostfail").html("Great hostname.");
-							$("#hostaddr").css("border-color","#4ecd74");
+							$("#hostname").css("border-color","#4ecd74");
 							regdata.host=tmpdata;
 					}
 					else
 					{
-						$("#hostaddr").css("border-color","#C44D58");
+						$("#hostname").css("border-color","#C44D58");
 						switch(errcode)
 						{
 							case 1:
