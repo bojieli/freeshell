@@ -111,7 +111,7 @@ function checkpass(type)
 	{
 		$("#regpassword").css("border-color","#4ecd74");
 		$("#regconfpass").css("border-color","#4ecd74");
-		$("#passfail").html("Affirmative.");
+		$("#passfail").html("Great password. Your initial root password will be it, too.");
 		regdata.pass=$("#regpassword").val();
 		
 	}
@@ -135,54 +135,6 @@ function verify(type,data)
 	var errcode;
 	switch(type)
 	{
-		case 'name':
-		{
-			tmpdata=data;
-			$.ajax({
-				type:"get",
-				url:"verify.php",
-				async:true,
-				data:{name:data},
-				success:function(data){
-					//alert(data);
-					errcode=parseInt(data.substr(-1));
-					if(!errcode)
-					{
-							$("#namefail").html("A good name.");
-							$("#regname").css("border-color","#4ecd74");
-							regdata.name=tmpdata;
-					}
-					else
-					{
-						$("#regname").css("border-color","#C44D58");
-						switch(errcode)
-						{
-							case 1:
-							{
-								$("#namefail").html("Sorry, the username has been taken.");
-								break;
-							}
-							case 2:
-							{
-								$("#namefail").html("Invalid username format.");
-								break;
-							}
-							case 3:
-							{
-								$("#namefail").html("Sorry, the username is too long.");
-								break;
-							}
-							case 4:
-							{
-								$("#namefail").html("Sorry, the username should have at least 3 characters.");
-								break;
-							}
-						}
-					}
-				}
-			});	
-			break;
-		}
 		case 'email': 
 		{
 			tmpdata=data;
@@ -206,7 +158,7 @@ function verify(type,data)
 						{
 							case 1:
 							{
-								$("#emailfail").html("Sorry, you have created too many blogs.");
+								$("#emailfail").html("Sorry, only one Linux box is allowed for each email.");
 								break;
 							}
 							case 2:
@@ -230,80 +182,56 @@ function verify(type,data)
 			});
 			break;
 		}
-		case 'title': 
+		case 'host': 
 		{
 			tmpdata=data;
 			$.ajax({
 				type:"get",
 				url:"verify.php",
 				async:true,
-				data:{title:data},
-				success:function(data){
-					errcode=parseInt(data.substr(-1));
-					if(!errcode)
-					{
-							$("#titlefail").html("Great blog title.");
-							$("#regbtitle").css("border-color","#4ecd74");
-							regdata.title=tmpdata;
-					}
-					else
-					{
-						$("#regbtitle").css("border-color","#C44D58");
-					}
-				}
-			});
-			break;
-		}
-		case 'folder': 
-		{
-			tmpdata=data;
-			$.ajax({
-				type:"get",
-				url:"verify.php",
-				async:true,
-				data:{folder:data},
+				data:{host:data},
 				success:function(data){
 					//alert(data);
 					errcode=parseInt(data.substr(-1));
 					if(!errcode)
 					{
-							$("#folderfail").html("The domain will be assigned to your blog.");
-							$("#folderaddr").css("border-color","#4ecd74");
-							regdata.folder=tmpdata;
+							$("#hostfail").html("Great hostname.");
+							$("#hostaddr").css("border-color","#4ecd74");
+							regdata.host=tmpdata;
 					}
 					else
 					{
-						$("#folderaddr").css("border-color","#C44D58");
+						$("#hostaddr").css("border-color","#C44D58");
 						switch(errcode)
 						{
 							case 1:
 							{
-								$("#folderfail").html("Only letters, digits and '-' are allowed in domain name.");
+								$("#hostfail").html("Only letters, digits and '-' are allowed in hostname.");
 								break;
 							}
 							case 2:
 							{
-								$("#folderfail").html("Sorry, this domain name has been taken.");
+								$("#hostfail").html("Sorry, this hostname has been taken.");
 								break;
 							}
 							case 3:
 							{
-								$("#folderfail").html("Sorry, the domain name is too long.");
+								$("#hostfail").html("Sorry, the hostname is too long.");
 								break;
 							}
 							case 4:
 							{
-								$("#folderfail").html("Sorry, only lower case letters (a-z) are allowed.");
+								$("#hostfail").html("Sorry, only lower case letters (a-z) are allowed.");
 								break;
 							}
 							case 5:
 							{
-								$("#folderfail").html("Sorry, the domain name should be at least have 3 characters.");
+								$("#hostfail").html("Sorry, the hostname should be at least have 3 characters.");
 								break;
 							}
 							case 6:
 							{
-								$("#folderfail").html("Sorry, this domain is reserved, please try another one.");
+								$("#hostfail").html("Sorry, this domain is reserved, please try another one.");
 								break;
 							}
 						}

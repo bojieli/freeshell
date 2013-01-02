@@ -97,43 +97,40 @@ body{
 }
 </style>
 <?php
-include "verify.inc.php";
-$username = $_POST['regname'];
+include_once "db.php";
+include_once "verify.inc.php";
+include_once "nodes.inc.php";
+
 $password = $_POST['regpassword'];
 if ($password != $_POST['regconfpass'])
     alert('Passwords mismatch.');
 $email = $_POST['regemail'];
-if (strtoupper($_POST['invitation']) != 'USTCLUG')
-    alert('Sorry, the blog service is currently in Beta. You need an invitation code.');
-$title = $_POST['regbtitle'];
-$appname = $_POST['folderaddr'];
+if (strtoupper($_POST['invitation']) != 'SCGYSHELL')
+    alert('Sorry, the freeshell service is currently in testing. You need an invitation code.');
+$hostname = addslashes($_POST['hostname']);
 
-if (checkname($username) || checkemail($email) || checkfolder($appname))
-    internal_error('check failed');
+if (checkhost($hostname) || strlen($password)<6 || checkemail($email)) {
+    alert('Sorry, sanity check failed.');
+}
 
-if (!($appid = create_app($appname, $username, $email, $password)))
-    internal_error('failed create_app');
+$salt = random_string(20);
+$salted_pass = sha1(sha1($password).$salt) . '/'. $salt;
 
-if (!install_blog_filesystem($appname))
-    internal_error('failed install_blog_filesystem');
+mysql_query("INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$saltedpass', `email`='$email'");
+$appid = mysql_insert_id();
+if (empty($appid))
+    alert('Database error!');
+$nodeno = $appid % nodes_num() + 1;
+mysql_query("UPDATE shellinfo SET `nodeno`='$nodeno' WHERE `id`='$appid'");
 
-$siteurl = "http://$appname.blog.ustc.edu.cn";
-if (!init_database($username, $password, $email, $title, $siteurl))
-    internal_error('failed init_database');
-
-if (!($info = get_appinfo($appid)))
-    internal_error('failed get_appinfo');
-
-if (!send_activate_mail($email, $info['token'], $appid, $appname, $username))
-    internal_error('failed sendmail');
-
+create_vz($nodeno, $appid, $hostname, $password);
 ?>
 <div id="wrapper">
 <div id="regtitle">
         	<h1>It's almost there!</h1>
         	<div id="progbar">
             </div>
-<p>Your have successfully registered your blog.</p>
+<p>Your freeshell have been created.</p>
 <p>We have sent you: <?=$email?> an confirmation mail.</p>
 <p>Please activate your account by clicking the link inside the mail.</p>
 </div>
@@ -150,50 +147,8 @@ function internal_error($msg) {
 }
 
 function send_activate_mail($email, $token, $appid, $appname, $username) {
-    $title = "Account Activation for $appname.blog.ustc.edu.cn";
+    $title = "Account Activation for USTC freeshell";
     $body = "Hello $username:\n\nThanks for registering USTC blog. Please click on the link below (or copy it to the address bar) to activate your blog account.\n\nhttp://".$_SERVER['HTTP_HOST']."/activate.php?appid=$appid&token=$token\n\nThis link will expire in 48 hours. Any problems, please email us: lug@ustc.edu.cn\n\nSincerely,\nUSTC Blog Team";
     return sendmail($email, $title, $body);
 }
 
-function init_database($username, $password, $email, $title, $siteurl) {
-    $queries = explode_queries(file_get_contents("wp_installed.sql"));
-    foreach ($queries as $query) {
-        mysql_query($query);
-    }
-
-    update_option('blogname', $title);
-    update_option('admin_email', $email);
-    update_option('siteurl', $siteurl);
-    update_option('home', $siteurl);
-    
-    $password = wp_hash_password($password);
-    $username = addslashes($username);
-    $email = addslashes($email);
-    $title = addslashes($title);
-    mysql_query("UPDATE wp_users SET user_login='$username', user_pass='$password', user_nicename='$username', user_email='$email', user_registered=NOW()");
-
-    mysql_query("UPDATE wp_comments SET comment_date=NOW(), comment_date_gmt=NOW()");
-    mysql_query("UPDATE wp_posts SET post_date=NOW(), post_date_gmt=NOW()");
-
-    return true;
-}
-function update_option($field, $value) {
-    $field = addslashes($field);
-    $value = addslashes($value);
-    mysql_query("UPDATE wp_options SET `option_value`='$value' WHERE `option_name`='$field'");
-}
-function wp_hash_password($password) {
-    include "class-phpass.php";
-    $hasher = new PasswordHash(8, true);
-    return $hasher->HashPassword($password);
-}
-function explode_queries($querystr) {
-    $queries = explode(";\n", $querystr);
-    foreach ($queries as $i => $query) {
-        $query = trim($query);
-        if (in_array(substr($query,0,2), array('/*', '--')))
-            unset($queries[$i]);
-    }
-    return $queries;
-}
-?>

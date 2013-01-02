@@ -1,4 +1,5 @@
 <?php
+include_once "db.php";
 $shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
 ?>
 <!docTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -71,19 +72,19 @@ $shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
 		    	<li class="slide1">
                 <div class="slidewords">
 	                  <h1>This is freeshell.</h1>
-	                  <h2>Create our own Linux box!</h2>
+	                  <h2>Create your own Linux box!</h2>
 	                  <p>You can create a free Linux box on real servers and take full control of it.</p>
                       <p>The word "free" is both in terms of free-of-change and freedom-of-use.</p>
-                      <p>Freeshell is free, powerful and safe.</p>
+                      <p>USTC freeshell is free, powerful and safe.</p>
                       <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
                   </div>
                 </li>
 		        <li class="slide2">
                 <div class="slidewords">
-	                  <h1>This is SCGY.</h1>
+	                  <h1>This is SCGY cluster.</h1>
 	                  <h2>7 nodes: 16G Mem, 8 Cores, 15000rpm disk.</h2>
                       <p>SCGY cluster, previously used for high-performance computing, is now open to public.</p>
-                      <p>Unlike most VPS, each box on freeshell can make use of full capacity of the physical machine.</p>
+                      <p>Unlike most VPS, each box on freeshell can make use of full capacity of the physical machine, i.e. except for disk space, there is nearly no limit.</p>
                       <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
                   </div>
                 </li>
@@ -115,21 +116,16 @@ $shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
             </div>
         </div>
         <form id="regform" action="register.php" method="post">
-         	<p class="descr">Before registering this site, you should read and agreed to the <a href="http://dev.blog.ustc.edu.cn/" target="_blank">EULA</a>.</p>
-        	<p><span>Username:</span><input type="text" name="regname" id="regname" onchange="verify('name',$(this).val())"/><span class="regcheck" id="namefail"></span></p>
+         	<p class="descr">Before registering this site, you should read and agreed to the EULA.</p>
+            <p><span>E-Mail: </span><input type="text" name="regemail" id="regemail" onchange="verify('email',$(this).val())"/><span class="regcheck" id="emailfail"></span></p>
             <p><span>Password:</span><input type="password" name="regpassword" id="regpassword" onchange="if(passcheck){checkpass($(this).val(),'password')}"/><span class="regcheck"></span></p>
             <p><span>Confirm:</span><input type="password" name="regconfpass" id="regconfpass" onchange="checkpass($(this).val())"/><span class="regcheck" id="passfail"></span></p>
-            <p><span>E-Mail: </span><input type="text" name="regemail" id="regemail" onchange="verify('email',$(this).val())"/><span class="regcheck" id="emailfail"></span></p>
             <p><span>Invitation: </span><input type="text" name="invitation" onchange='$(this).css("border-color","#4ecd74")'/><span class="regcheck"></span></p>
-            <p><span>Blog Title: </span><input type="text" name="regbtitle" id="regbtitle" onchange="verify('title',$(this).val())"/><span class="regcheck" id="titlefail"></span></p>
-            <p><span>Blog Address: </span><input type="text" name="folderaddr" id="folderaddr" onkeyup="checkaddr();" onchange="checkaddr();verify('folder',$(this).val());" /><span class="regcheck" id="folderfail"></span></p>
-            <p id="folderrepeat" class="bottomtip" >So, your address will be located at http://.blog.ustc.edu.cn/</p>
-            
+            <p><span>Hostname: </span><input type="text" name="hostaddr" id="hostaddr" onkeyup="checkhost();" onchange="checkhost();verify('host',$(this).val());" /><span class="regcheck" id="hostfail"></span></p>
             
             <div id="regsend">
         		<p>Register!</p>
         	</div>
-           
         </form>
     </div>
 </div>

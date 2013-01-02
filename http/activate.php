@@ -1,15 +1,22 @@
 <?php
+include_once "nodes.inc.php";
+include_once "db.php";
+
 if (!is_numeric($_GET['appid']))
     die('Invalid request');
 $appid = $_GET['appid'];
 
-if (!($info = get_appinfo($appid)))
-    die('App does not exist. The link may have been expired.');
+$info = mysql_fetch_array(mysql_query("SELECT nodeno,token,isactive FROM shellinfo WHERE `id`='$appid'"));
 
+if (empty($info))
+    die('App does not exist. The link may have been expired.');
+if ($info['isactive'])
+    die('Your shell is activated. Please login to the control panel.');
 if ($info['token'] !== $_GET['token'])
     die('Incorrect token. Please copy the link to the address bar of your browser and retry.');
 
-app_activate($appid);
+mysql_query("UPDATE shellinfo SET `isactive`=1 WHERE `id`='$appid'");
+activate_vz($info['nodeno'], $appid);
 ?>
 <!-- This file is the HTML Template for a register -->
 <style type="text/css">
@@ -23,7 +30,7 @@ img, ins, kbd, q, s, samp,
 small, strike, strong,    
 dl, dt, dd, ol, ul, li,   
 fieldset, form, label, legend,   
-table, caption, tbody, tfoot, thead, tr, th, td {   
+table, caption, tbody, tfoot, thead, tr, th, td {
     margin: 0;   
     padding: 0;   
     border: 0;   
@@ -115,12 +122,12 @@ body{
         	<div id="progbar">
             </div>
 <p>All things done.</p>
-<p>Your blog address is: http://<?=$info['appname']?>.blog.ustc.edu.cn</p>
-<p>Now you can login with your username and password.</p>
-<p>We are taking you back to the home page, you can login where the "login bar" shows.</p>
-
+<p>You can login to your shell with SSH now:</p>
+<p style="font:Courier New">ssh -p <?php echo $appid + 10000 ?> root@<?php echo get_node_ip($nodeno); ?></p>
+<p>The root password is the same as the login password of control panel.</p>
+<p>Also you can login to the control panel for more info:</p>
 </div>
 <div id="regbutton" onclick="javascript:document.location.href='/'">
         	<p>Let's Rock!</p>
- </div>
+</div>
 </div>
