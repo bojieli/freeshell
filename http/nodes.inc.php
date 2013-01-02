@@ -50,9 +50,9 @@ function random_string($length) {
         if ($r < 26)
             $char = chr(ord('a')+$r);
         else if ($r < 52)
-            $char = chr(ord('A')+$r);
+            $char = chr(ord('A')+$r-26);
         else
-            $char = chr(ord('0')+$r);
+            $char = chr(ord('0')+$r-52);
         $str = $str.$char;
     }
     return $str;
