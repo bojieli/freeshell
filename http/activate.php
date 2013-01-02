@@ -123,7 +123,7 @@ body{
             </div>
 <p>All things done.</p>
 <p>You can login to your shell with SSH now:</p>
-<p style="font:Courier New">ssh -p <?php echo $appid + 10000 ?> root@<?php echo get_node_ip($nodeno); ?></p>
+<p style="font:Courier New">ssh -p <?php echo $appid + 10000 ?> root@<?php echo get_node_ip($info['nodeno']); ?></p>
 <p>The root password is the same as the login password of control panel.</p>
 <p>Also you can login to the control panel for more info:</p>
 </div>

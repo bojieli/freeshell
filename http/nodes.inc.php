@@ -16,7 +16,7 @@ function nodes_num() {
 
 function get_node_ip($nodeno) {
     global $nodes2ip;
-    return $nodes2ip[$i];
+    return $nodes2ip[$nodeno];
 }
 
 function call_monitor($nodeno, $action, $param, $sync = false) {
