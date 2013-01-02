@@ -1,0 +1,16 @@
+#header ul{
+	display:inline;
+    margin-left:0px;
+}
+#header ul li{
+	margin-left:15px;
+    }
+#logininput{
+	position:absolute;
+    left:0px;
+}
+#progbar{
+	height:2px;
+    line-height:0px;
+    font-size:0px;
+}

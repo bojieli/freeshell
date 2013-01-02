@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* CSS Document */
+
+#header{
+    margin-top:0px;
+}
+#servstate{
+	margin-top:10px;
+}
+#regbutton{
+	margin-top:10px;
+}
+#loginconfirm{
+	background-image:url("../img/next_ie7.png");
+	background-repeat:no-repeat;
+        
+}
+#regsend p{
+	margin:0;
+}
