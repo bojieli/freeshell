@@ -55,7 +55,7 @@ $shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
         	<div id="logininput" style="display:none">
 	        	<p>
                 	<form id="loginform" action="login.php" method="post">
-		            <input tabindex="1" name="name" type="text" value="Full Email" onclick='$(this).attr("value","")';/>
+		            <input tabindex="1" name="email" type="text" value="Email" onclick='$(this).attr("value","")';/>
 		            <input tabindex="2" name="pass" type="password"  onkeydown="subCheck();"/>
                     <input type="submit" style="display:none"/>
                     </form>

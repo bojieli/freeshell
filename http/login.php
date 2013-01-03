@@ -4,12 +4,13 @@ include_once "db.php";
 include_once "nodes.inc.php";
 
 $email = addslashes($_POST['email']);
+if (!strstr($email,'@'))
+    $email .= '@mail.ustc.edu.cn';
 $pass = $_POST['pass'];
 
-$rs = mysql_query("SELECT * FROM shellinfo WHERE `email`='$email'");
-if (!$rs)
+$info = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE `email`='$email'"));
+if (empty($info))
     error('Email account does not exist.');
-$info = mysql_fetch_array($rs);
 $passes = explode('/', $info['password']);
 if (sha1(sha1($pass).$passes[1]) !== $passes[0])
     error('Wrong password!');
