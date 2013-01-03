@@ -82,7 +82,7 @@ $shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
 		        <li class="slide2">
                 <div class="slidewords">
 	                  <h1>This is SCGY cluster.</h1>
-	                  <h2>7 nodes: 16G Mem, 8 Cores, 15000rpm disk.</h2>
+	                  <h2>16G Mem, 8 Cores, 15000rpm disk * 7 nodes</h2>
                       <p>SCGY cluster, previously used for high-performance computing, is now open to public.</p>
                       <p>Unlike most VPS, each box on freeshell can make use of full capacity of the physical machine, i.e. except for disk space, there is nearly no limit.</p>
                       <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
