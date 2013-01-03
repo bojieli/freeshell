@@ -10,4 +10,4 @@ CREATE TABLE shellinfo (
     PRIMARY KEY (`id`),
     KEY key_nodeno (`nodeno`),
     KEY key_email (`email`)
-);
+) AUTO_INCREMENT = 101;

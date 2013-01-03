@@ -5,7 +5,7 @@ SEPARATOR="-----FREESHELL-----";
 
 echo "Live shell count"
 echo $SEPARATOR
-vzctl
+vzlist | grep running | wc -l
 echo $SEPARATOR
 echo "Load average"
 echo $SEPARATOR
@@ -26,8 +26,4 @@ echo $SEPARATOR
 echo "Memory usage"
 echo $SEPARATOR
 free -m | awk 'NR<=2'
-echo $SEPARATOR
-echo "Network flow"
-echo $SEPARATOR
-ifstat eth0 | awk 'NR>1'
 echo $SEPARATOR
