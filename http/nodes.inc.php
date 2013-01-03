@@ -19,12 +19,11 @@ function get_node_ip($nodeno) {
     return $nodes2ip[$nodeno];
 }
 
-function call_monitor($nodeno, $action, $param, $sync = false) {
+function call_monitor($nodeno, $action, $param) {
     $cmd = "sudo -u scgyshell-monitor ssh -t scgyshell-client@scgyshell-$nodeno sudo /home/boj/scripts/scgyshell.sh $action $param";
-    if ($sync)
-        return system($cmd);
-    else
-        return exec($cmd);
+    $output = array();
+    exec($cmd, $output);
+    return implode("\n", $output);
 }
 
 function create_vz($nodeno, $id, $hostname, $password) {
@@ -37,10 +36,6 @@ function activate_vz($nodeno, $id) {
 
 function control_vz($nodeno, $action, $id) {
     return call_monitor($nodeno, $action, $id);
-}
-
-function control_vz_sync($nodeno, $action, $id) {
-    return call_monitor($nodeno, $action, $id, true);
 }
 
 function get_node_info($nodeno) {

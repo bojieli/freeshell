@@ -75,7 +75,7 @@ body{
 	margin-left:100px;
 	margin-top:20px;
 }
-#regtitle p{
+#regtitle p, #regtitle ul {
 	font-size:18px;
 	font-weight:100;
 	color:#333;
@@ -123,6 +123,7 @@ body{
 <p>Notice: Freeshell can only accessed within USTC campus!
 <style>
 ul.table span.h {
+    display: inline-block;
     width: 200px;
     margin-right: 30px;
 }
@@ -158,7 +159,7 @@ foreach ($node as $key => $value) {
 <ul class="table">
   <li><span class="h">Memory</span>16G, unlimited
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
-  <li><span class="h">Disk</span>5GB. You can use up to 7GB in the grace period of 24 hours. Our storage is in shortage, please delete files as soon as you donot need them.
+  <li><span class="h">Disk</span>5GB. You can use up to 7GB in the grace period of 24 hours. Please delete files as soon as you no longer need them.
   <li><span class="h">Process</span>Up to 200 processes, including kernel threads.
   <li><span class="h">TCP sockets</span>100
   <li><span class="h">UDP sockets</span>100

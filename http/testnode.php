@@ -1,5 +1,5 @@
 <?php
-if (empty($argv))
+if (empty($argv) || count($argv) < 3)
 	exit();
 $nodeno = $argv[1];
 $id = $argv[2];
