@@ -140,6 +140,7 @@ ul.table li {
 ul.help li {
     list-style: square;
     margin: 10px 0 10px 0;
+    width: 700px;
 }
 .buttons span {
     margin-right: 30px;
