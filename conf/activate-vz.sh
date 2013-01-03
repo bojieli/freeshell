@@ -15,3 +15,5 @@ iptables -t nat -A PREROUTING -i eth0 -p tcp -d $serverip --dport $sshport -j DN
 iptables -t nat -A PREROUTING -i eth0 -p tcp -d $serverip --dport $httpport -j DNAT --to-destination $localip:80
 iptables-save > /home/boj/iptables-save
 vzctl start $id
+cat `dirname $0`/sources.list | vzctl exec $id "cat - > /etc/apt/sources.list"
+vzctl exec $id "apt-get update"
