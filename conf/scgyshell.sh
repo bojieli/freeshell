@@ -7,7 +7,7 @@ if [ -z $1 ]; then
 fi
 action=$1;
 
-if [ -f ./${action}.sh ]; then
+if [ -f `dirname $0`/${action}.sh ]; then
     `dirname $0`/${action}.sh $(echo $@ | awk '{$1="";print $0}')
 else
     `dirname $0`/control-vz.sh $@
