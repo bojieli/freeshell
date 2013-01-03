@@ -19,3 +19,4 @@ cat `dirname $0`/sources.list | vzctl exec $id "cat - > /etc/apt/sources.list"
 sleep 2 # for network bootstrap
 vzctl exec $id "apt-get update"
 vzctl exec $id "apt-get -y install fail2ban"
+vzctl exec $id "apt-get -y install sudo"
