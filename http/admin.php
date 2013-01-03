@@ -137,6 +137,10 @@ ul.table span.c {
 ul.table li {
     margin: 5px 0 5px 0;
 }
+ul.help li {
+    list-style: square;
+    margin: 10px 0 10px 0;
+}
 .buttons span {
     margin-right: 30px;
 }
@@ -182,7 +186,7 @@ foreach ($node as $key => $value) {
 </ul>
 <div id="progbar"></div>
 <p>For Linux newbies:
-<ul>
+<ul class="help">
   <li>If you are using Windows, please download PuTTY <a href="http://lug.ustc.edu.cn/~boj/web_dev/ref/putty.zip">Here</a>. The usage of PuTTY can be found on Google.
   <li>If you are still using ROOT account to login, please create your own user and add it to sudo group. It is also recommended to login with SSH key instead of username and password. If you don't know what this is all about, just ignore this recommendation.
   <li>This Linux box ships with few pre-installed software packages. It is a minimal debian 6.0 system with USTC mirror configured and "fail2ban", "sudo" installed. Many utils on normal Linux distributions have to be installed by yourself. Remember not to install too many packages, since our disk space is limited :)
