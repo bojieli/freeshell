@@ -120,7 +120,11 @@ mysql_query("INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$salt
 $appid = mysql_insert_id();
 if (empty($appid))
     alert('Database error!');
-$nodeno = $appid % nodes_num() + 1;
+
+$nodeno = $appid % nodes_num();
+if ($nodeno == 0)
+    $nodeno = nodes_num();
+
 mysql_query("UPDATE shellinfo SET `nodeno`='$nodeno' WHERE `id`='$appid'");
 
 create_vz($nodeno, $appid, $hostname, $password);
