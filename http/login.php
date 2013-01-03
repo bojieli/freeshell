@@ -14,7 +14,7 @@ if (empty($info))
 $passes = explode('/', $info['password']);
 if (sha1(sha1($pass).$passes[1]) !== $passes[0])
     error('Wrong password!');
-if (!$rs['isactive'])
+if (!$info['isactive'])
     error('Your account is not activated! Please check your email.');
 
 $_SESSION['email'] = $email;

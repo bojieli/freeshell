@@ -11,7 +11,7 @@ $info = mysql_fetch_array(mysql_query("SELECT nodeno,token,isactive FROM shellin
 if (empty($info))
     die('App does not exist. The link may have been expired.');
 if ($info['isactive'])
-    die('Your shell is activated. Please login to the control panel.');
+    die('Your shell has been activated. Please login to the control panel.');
 if ($info['token'] !== $_GET['token'])
     die('Incorrect token. Please copy the link to the address bar of your browser and retry.');
 
