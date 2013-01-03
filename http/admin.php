@@ -173,7 +173,7 @@ foreach ($node as $key => $value) {
 <div id="progbar"></div>
 <p>Resource Limits:
 <ul class="table">
-  <li><span class="h">Memory</span>16G, unlimited
+  <li><span class="h">Memory</span><?=$info['nodeno']==3?"12G":"16G"?>, unlimited
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
   <li><span class="h">Disk</span><span class="r">5GB. You can use up to 7GB in a grace period of 24 hours.<br>Please delete unused files as soon as possible :)</span>
   <li><span class="h">Process</span>Up to 200 processes, including kernel threads.
@@ -194,7 +194,7 @@ function manage(action) {
         async: true,
         data: {appid: <?=$info['id']?>, action: action},
         success: function(msg){
-            alert("Your request have been sent.");
+            setTimeout("window.location.reload()", 2000);
         }
     });
 }
