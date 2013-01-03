@@ -13,8 +13,9 @@ localip="10.10.$(echo $id/256 | bc).$(echo $id%256 | bc)"
 vzctl create $id
 vzctl set $id --userpasswd root:$password
 vzctl set $id --privvmpages unlimited --save
-vzctl set $id --diskspace 5G --save
-vzctl set $id --numproc 50 --save
+vzctl set $id --diskspace 5G:7G --save
+vzctl set $id --quotatime 86400 --save
+vzctl set $id --numproc 200 --save
 vzctl set $id --numtcpsock 100 --save
 vzctl set $id --numothersock 100 --save
 vzctl set $id --onboot yes --save
