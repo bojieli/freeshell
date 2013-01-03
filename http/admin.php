@@ -126,8 +126,13 @@ ul.table span.h {
     width: 200px;
     margin-right: 30px;
 }
+ul.table span.r {
+    display: inline-block;
+}
 ul.table span.c {
-    font-family: "Courier New";
+    display: inline-block;
+    font-family: "Courier New", "Monospace";
+    font-size: 14px;
 }
 ul.table li {
     margin: 5px 0 5px 0;
@@ -170,7 +175,7 @@ foreach ($node as $key => $value) {
 <ul class="table">
   <li><span class="h">Memory</span>16G, unlimited
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
-  <li><span class="h">Disk</span>5GB. You can use up to 7GB in a grace period of 24 hours.
+  <li><span class="h">Disk</span><span class="r">5GB. You can use up to 7GB in a grace period of 24 hours. Please delete unused files as soon as possible :)</span>
   <li><span class="h">Process</span>Up to 200 processes, including kernel threads.
   <li><span class="h">TCP sockets</span>100
   <li><span class="h">UDP sockets</span>100
