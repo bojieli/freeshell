@@ -127,11 +127,6 @@ if ($nodeno == 0)
 
 mysql_query("UPDATE shellinfo SET `nodeno`='$nodeno' WHERE `id`='$appid'");
 
-create_vz($nodeno, $appid, $hostname, $password);
-
-$token = random_string(40);
-mysql_query("UPDATE shellinfo SET `token`='$token' WHERE `id`='$appid'");
-send_activate_mail($email, $appid, $token);
 ?>
 <div id="wrapper">
 <div id="regtitle">
@@ -147,6 +142,11 @@ send_activate_mail($email, $appid, $token);
 </div>
 </div>
 <?php
+create_vz($nodeno, $appid, $hostname, $password);
+
+$token = random_string(40);
+mysql_query("UPDATE shellinfo SET `token`='$token' WHERE `id`='$appid'");
+send_activate_mail($email, $appid, $token);
 function alert($msg) {
     die("<script>alert('$msg');location.href='index.php';</script>");
 }
