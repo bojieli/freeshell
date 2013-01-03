@@ -127,7 +127,10 @@ ul.table span.h {
     margin-right: 30px;
 }
 ul.table span.c {
-    font: "Courier New";
+    font-family: "Courier New";
+}
+ul.table li {
+    margin: 5px 0 5px 0;
 }
 .buttons span {
     margin-right: 30px;
@@ -142,12 +145,14 @@ ul.table span.c {
   <li><span class="h">HTTP port:</span><?=$info['httpport']?>
   <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['ip']?>:<?=$info['httpport']?>/</span>
 </ul>
+<div id="progbar"></div>
 <p>Manage your freeshell:
 <p class="buttons">
   <span><button onclick="manage('start')">Start</button></span>
   <span><button onclick="manage('stop')">Shutdown</button></span>
   <span><button onclick="manage('reboot')">Reboot</button></span>
-<p>
+</p>
+<div id="progbar"></div>
 <p>Server status:
 <ul class="table">
   <li><span class="h">Node</span>#<?=$info['nodeno']?>
@@ -160,6 +165,7 @@ foreach ($node as $key => $value) {
 }
 ?>
 </ul>
+<div id="progbar"></div>
 <p>Resource Limits:
 <ul class="table">
   <li><span class="h">Memory</span>16G, unlimited

@@ -45,8 +45,7 @@ function get_node_info($nodeno, $id) {
     $info = array();
     for ($i=0;$i<$num;$i+=2) {
         $k = htmlspecialchars(trim($items[$i]));
-        // do not htmlspecialchars because value is in <pre>
-        $v = trim($items[$i+1]);
+        $v = nl2br(htmlspecialchars(trim($items[$i+1])));
         if ($k && $v)
             $info[$k] = $v;
     }
