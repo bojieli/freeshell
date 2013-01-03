@@ -8,6 +8,3 @@ deb-src http://mirrors.ustc.edu.cn/debian-backports/ squeeze-backports main cont
 
 deb http://mirrors.ustc.edu.cn/debian-security/ squeeze/updates main non-free contrib
 deb-src http://mirrors.ustc.edu.cn/debian-security/ squeeze/updates main non-free contrib
-
-deb http://mirrors.ustc.edu.cn/debian-multimedia/ squeeze-backports main contrib non-free
-deb-src http://mirrors.ustc.edu.cn/debian-multimedia/ squeeze-backports main contrib non-free
