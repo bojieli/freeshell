@@ -191,7 +191,8 @@ foreach ($node as $key => $value) {
   <li>If you are using Windows, please download PuTTY <a href="http://lug.ustc.edu.cn/~boj/web_dev/ref/putty.zip">Here</a>. The usage of PuTTY can be found on Google.
   <li>If you are still using ROOT account to login, please create your own user and add it to sudo group. It is also recommended to login with SSH key instead of username and password. If you don't know what this is all about, just ignore this recommendation.
   <li>This Linux box ships with few pre-installed software packages. It is a minimal debian 6.0 system with USTC mirror configured and "fail2ban", "sudo" installed. Many utils on normal Linux distributions have to be installed by yourself. Remember not to install too many packages, since our disk space is limited :)
-  <li>DO NOT INSTALL X, GNOME OR KDE! This is command-line based shell, not a graphical desktop environment. You are expected to learn some shell commands. Break shell, touch Linux!
+  <li>DO NOT INSTALL X, GNOME OR KDE! This is a command-line based shell, not a graphical desktop environment. You are expected to learn some shell commands. Break shell, touch Linux!
+  <li>Why my HTTP address cannot be accessed? You have not installed a Web server. If you are not in need of Web service, please save our shared resource by leaving it uninstalled.
 </ul>
 </div>
 </div>
