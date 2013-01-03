@@ -142,6 +142,7 @@ mysql_query("UPDATE shellinfo SET `nodeno`='$nodeno' WHERE `id`='$appid'");
 </div>
 </div>
 <?php
+fastcgi_finish_request();
 create_vz($nodeno, $appid, $hostname, $password);
 
 $token = random_string(40);

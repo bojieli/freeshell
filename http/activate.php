@@ -16,7 +16,6 @@ if ($info['token'] !== $_GET['token'])
     die('Incorrect token. Please copy the link to the address bar of your browser and retry.');
 
 mysql_query("UPDATE shellinfo SET `isactive`=1 WHERE `id`='$appid'");
-activate_vz($info['nodeno'], $appid);
 ?>
 <!-- This file is the HTML Template for a register -->
 <style type="text/css">
@@ -132,3 +131,7 @@ body{
         	<p>Let's Rock!</p>
 </div>
 </div>
+<?php
+fastcgi_finish_request();
+activate_vz($info['nodeno'], $appid);
+?>
