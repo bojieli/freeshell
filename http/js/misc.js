@@ -105,7 +105,7 @@ function checkpass(type)
 	{
 		$("#regpassword").css("border-color","#4ecd74");
 		$("#regconfpass").css("border-color","#4ecd74");
-		$("#passfail").html("Great password. Your initial root password will be it, too.");
+		$("#passfail").html("Great. Your initial root password will be it, too.");
 		regdata.pass=$("#regpassword").val();
 		
 	}
