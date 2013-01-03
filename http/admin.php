@@ -13,7 +13,7 @@ $info['sshport'] = 10000 + $appid;
 $info['httpport'] = 20000 + $appid;
 
 $num_onthisnode = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `nodeno`='".$info['nodeno']."'"),0);
-$node = get_node_info($info['nodeno']);
+$node = get_node_info($info['nodeno'], $appid);
 ?>
 <!-- This file is the HTML Template for a register -->
 <style type="text/css">
@@ -119,30 +119,35 @@ body{
         	<h1>Control Panel</h1>
         	<div id="progbar">
             </div>
-<p>This is a simple and naive control panel for freeshell.</p>
-<p>Notice: Freeshell can only accessed within USTC campus!
+<p>Note: Freeshell can only be accessed within USTC campus!
 <style>
 ul.table span.h {
     display: inline-block;
     width: 200px;
     margin-right: 30px;
 }
+ul.table span.c {
+    font: "Courier New";
+}
+.buttons span {
+    margin-right: 30px;
+}
 </style>
 <ul class="table">
   <li><span class="h">Shell ID:</span><?=$appid?>
-  <li><span class="h">Status:</span><?=$isonline ? 'online' : 'offline'?>
+  <li><span class="h">Status:</span><?=$node['mystatus']?> <?php unset($node['mystatus']); ?>
   <li><span class="h">IP address:</span><?=get_node_ip($info['nodeno'])?>
   <li><span class="h">SSH port:</span><?=$info['sshport']?>
-  <li><span class="h">SSH command:</span><pre>ssh -p <?=$info['sshport']?> root@<?=$info['ip']?></pre>
+  <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['ip']?></span>
   <li><span class="h">HTTP port:</span><?=$info['httpport']?>
-  <li><span class="h">HTTP address:</span><pre>http://<?=$info['ip']?>:<?=$info['httpport']?>/</pre>
+  <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['ip']?>:<?=$info['httpport']?>/</span>
 </ul>
 <p>Manage your freeshell:
-<ul>
-  <li><button onclick="manage('start')">Start</button>
-  <li><button onclick="manage('stop')">Shutdown</button>
-  <li><button onclick="manage('reboot')">Reboot</button>
-</ul>
+<p class="buttons">
+  <span><button onclick="manage('start')">Start</button></span>
+  <span><button onclick="manage('stop')">Shutdown</button></span>
+  <span><button onclick="manage('reboot')">Reboot</button></span>
+<p>
 <p>Server status:
 <ul class="table">
   <li><span class="h">Node</span>#<?=$info['nodeno']?>
@@ -150,7 +155,7 @@ ul.table span.h {
 <?php
 foreach ($node as $key => $value) {
 ?>
-  <li><span class="h"><?=$key?></span><pre><?=$value?></pre></li>
+  <li><span class="h"><?=$key?></span><span class="c"><?=$value?></span></li>
 <?php
 }
 ?>
@@ -159,7 +164,7 @@ foreach ($node as $key => $value) {
 <ul class="table">
   <li><span class="h">Memory</span>16G, unlimited
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
-  <li><span class="h">Disk</span>5GB. You can use up to 7GB in the grace period of 24 hours. Please delete files as soon as you no longer need them.
+  <li><span class="h">Disk</span>5GB. You can use up to 7GB in a grace period of 24 hours.
   <li><span class="h">Process</span>Up to 200 processes, including kernel threads.
   <li><span class="h">TCP sockets</span>100
   <li><span class="h">UDP sockets</span>100

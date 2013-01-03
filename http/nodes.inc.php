@@ -38,8 +38,8 @@ function control_vz($nodeno, $action, $id) {
     return call_monitor($nodeno, $action, $id);
 }
 
-function get_node_info($nodeno) {
-    $str = call_monitor($nodeno, 'node-info', "", true);
+function get_node_info($nodeno, $id) {
+    $str = call_monitor($nodeno, 'node-info', $id);
     $items = explode("-----FREESHELL-----", $str);
     $num = count($items);
     $info = array();

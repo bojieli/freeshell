@@ -1,8 +1,13 @@
 #!/bin/bash
-# this program requires iostat and ifstat.
+# this program requires iostat.
 
+id=$1
 SEPARATOR="-----FREESHELL-----";
 
+echo "mystatus"
+echo $SEPARATOR
+sudo vzctl status $id
+echo $SEPARATOR
 echo "Live shell count"
 echo $SEPARATOR
 vzlist | grep running | wc -l
