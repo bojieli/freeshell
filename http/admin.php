@@ -119,7 +119,6 @@ body{
         	<h1>Control Panel</h1>
         	<div id="progbar">
             </div>
-<p>Note: Freeshell can only be accessed within USTC campus!
 <style>
 ul.table span.h {
     display: inline-block;
@@ -145,7 +144,11 @@ ul.help li {
 .buttons span {
     margin-right: 30px;
 }
+.note {
+    width: 700px;
+}
 </style>
+<p class="note">Note: Freeshell can only be accessed within USTC campus. The outgoing network is limited to USTC for IPv4 and unlimited for IPv6.
 <ul class="table">
   <li><span class="h">Shell ID:</span><?=$appid?>
   <li><span class="h">Status:</span><?=$node['mystatus']?> <?php unset($node['mystatus']); ?>
