@@ -209,7 +209,10 @@ function manage(action) {
         async: true,
         data: {appid: <?=$info['id']?>, action: action},
         success: function(msg){
-            setTimeout("window.location.reload()", 2000);
+            if (msg.length > 0)
+                alert(msg);
+            else
+                window.location.reload();
         }
     });
 }

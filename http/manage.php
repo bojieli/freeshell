@@ -17,8 +17,8 @@ switch ($_POST['action']) {
     case 'start':
     case 'reboot':
     case 'stop':
-        fastcgi_finish_request();
         control_vz($a['nodeno'], $_POST['action'], $id);
+        break;
     default:
         die('Unsupported action');
 }
