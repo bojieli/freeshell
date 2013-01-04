@@ -1,5 +1,4 @@
 <?php
-session_start();
 include_once "db.php";
 include_once "nodes.inc.php";
 
@@ -17,6 +16,7 @@ if (sha1(sha1($pass).$passes[1]) !== $passes[0])
 if (!$info['isactive'])
     error('Your account is not activated! Please check your email.');
 
+session_start();
 $_SESSION['email'] = $email;
 $_SESSION['appid'] = $info['id'];
 

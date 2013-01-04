@@ -6,7 +6,7 @@ if (!is_numeric($_GET['appid']))
     die('Invalid request');
 $appid = $_GET['appid'];
 
-$info = mysql_fetch_array(mysql_query("SELECT nodeno,token,isactive FROM shellinfo WHERE `id`='$appid'"));
+$info = mysql_fetch_array(mysql_query("SELECT email,nodeno,token,isactive FROM shellinfo WHERE `id`='$appid'"));
 
 if (empty($info))
     die('App does not exist. The link may have been expired.');
@@ -16,6 +16,11 @@ if ($info['token'] !== $_GET['token'])
     die('Incorrect token. Please copy the link to the address bar of your browser and retry.');
 
 mysql_query("UPDATE shellinfo SET `isactive`=1 WHERE `id`='$appid'");
+
+// auto login
+session_start();
+$_SESSION['email'] = $info['email'];
+$_SESSION['appid'] = $info['id'];
 ?>
 <!-- This file is the HTML Template for a register -->
 <style type="text/css">
@@ -127,7 +132,7 @@ body{
 <p>It is recommended that you create your own account and login with it instead of root.</p>
 <p>Also you can login to the control panel for more info:</p>
 </div>
-<div id="regbutton" onclick="javascript:document.location.href='index.php'">
+<div id="regbutton" onclick="javascript:document.location.href='admin.php'">
         	<p>Let's Rock!</p>
 </div>
 </div>
