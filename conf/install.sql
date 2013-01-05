@@ -14,6 +14,7 @@ CREATE TABLE shellinfo (
 
 CREATE TABLE ssh_log (
     `nodeno` INT(10) NOT NULL,
+    `action` VARCHAR(200) NOT NULL,
     `cmd` TEXT,
     `output` TEXT,
     KEY key_nodeno (`nodeno`)

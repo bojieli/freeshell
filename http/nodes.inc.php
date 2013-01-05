@@ -26,7 +26,7 @@ function call_monitor($nodeno, $action, $param) {
     $output = array();
     exec($cmd, $output);
     $output = implode("\n", $output);
-    mysql_query("INSERT INTO ssh_log SET `nodeno`='$nodeno', `cmd`='".addslashes($cmd)."', `output`='".addslashes($output)."'");
+    mysql_query("INSERT INTO ssh_log SET `nodeno`='$nodeno', `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `output`='".addslashes($output)."'");
     return $output;
 }
 
