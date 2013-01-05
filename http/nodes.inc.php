@@ -20,10 +20,14 @@ function get_node_ip($nodeno) {
 }
 
 function call_monitor($nodeno, $action, $param) {
+    if (!is_numeric($nodeno))
+        return;
     $cmd = "sudo -u scgyshell-monitor ssh -t scgyshell-client@scgyshell-$nodeno sudo /home/boj/scripts/scgyshell.sh $action $param";
     $output = array();
     exec($cmd, $output);
-    return implode("\n", $output);
+    $output = implode("\n", $output);
+    mysql_query("INSERT INTO ssh_log SET `nodeno`='$nodeno', `cmd`='".addslashes($cmd)."', `output`='".addslashes($output)."'");
+    return $output;
 }
 
 function create_vz($nodeno, $id, $hostname, $password) {

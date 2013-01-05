@@ -11,3 +11,10 @@ CREATE TABLE shellinfo (
     KEY key_nodeno (`nodeno`),
     KEY key_email (`email`)
 ) AUTO_INCREMENT = 101;
+
+CREATE TABLE ssh_log (
+    `nodeno` INT(10) NOT NULL,
+    `cmd` TEXT,
+    `output` TEXT,
+    KEY key_nodeno (`nodeno`)
+);
