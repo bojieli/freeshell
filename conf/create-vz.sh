@@ -14,6 +14,7 @@ vzctl create $id
 vzctl set $id --userpasswd root:$password
 vzctl set $id --privvmpages unlimited --save
 vzctl set $id --diskspace 5G:7G --save
+vzctl set $id --diskinodes unlimited --save
 vzctl set $id --quotatime 86400 --save
 vzctl set $id --numproc 200 --save
 vzctl set $id --numtcpsock 100 --save
