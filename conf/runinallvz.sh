@@ -14,5 +14,5 @@ for id in $(seq 101 $max); do
         host=7
     fi
     echo $host:$id
-    ssh scgyshell-$host "sudo vzctl enter $id --exec $command"
+    ssh scgyshell-$host "sudo vzctl exec $id $command"
 done

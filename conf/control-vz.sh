@@ -10,6 +10,9 @@ id=$2
 for act in start stop restart status; do
     if [ $act = $action ]; then
         vzctl $action $id;
+        if [ $action = "start" ] || [ $action = "restart" ]; then
+            vzctl exec $id "mount -t tmpfs -o noexec,nosuid tmpfs /tmp/"
+        fi
         exit 0
     fi
 done
