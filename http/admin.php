@@ -9,6 +9,7 @@ if (empty($appid))
 $rs = mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
 $info = mysql_fetch_array($rs);
 $info['ip'] = get_node_ip($info['nodeno']);
+$info['ipv6'] = get_node_ipv6($info['nodeno']);
 $info['sshport'] = 10000 + $appid;
 $info['httpport'] = 20000 + $appid;
 
@@ -148,16 +149,22 @@ ul.help li {
     width: 700px;
 }
 </style>
-<p class="note">Note: Freeshell can only be accessed within USTC campus. The outgoing network is limited to USTC for IPv4 and unlimited for IPv6.
+<p class="note">Note: Your IPv4 address can only be accessed within USTC campus. The outgoing network is limited to USTC for IPv4 and unlimited for IPv6.
 <ul class="table">
   <li><span class="h">Shell ID:</span><?=$appid?>
   <li><span class="h">Status:</span><?=$node['mystatus']?> <?php unset($node['mystatus']); ?>
-  <li><span class="h">IP address:</span><?=get_node_ip($info['nodeno'])?>
+  <li><span class="h">IPv4 address:</span><?=$info['ip']?>
   <li><span class="h">SSH port:</span><?=$info['sshport']?>
   <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['ip']?></span>
   <li><span class="h">HTTP port:</span><?=$info['httpport']?>
   <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['ip']?>:<?=$info['httpport']?>/</span>
 </ul>
+<p class="note">Well, the IPv6 world is without walls...
+<ul class="table">
+  <li><span class="h">IPv6 address:</span><?=$info['ipv6']?>
+  <li><span class="h">SSH command:</span><span class="c">ssh root@<?=$info['ipv6']?></span>
+</ul>
+
 <div id="progbar"></div>
 <p>Manage your freeshell:
 <p class="buttons">

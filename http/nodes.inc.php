@@ -19,6 +19,14 @@ function get_node_ip($nodeno) {
     return $nodes2ip[$nodeno];
 }
 
+function get_node_ipv6($nodeno) {
+    $prefix = "2001:da8:d800:701:8000::";
+    if ($nodeno < 10000)
+        return $prefix.($nodeno % 10000);
+    else
+        return $prefix.($nodeno / 10000).':'.($nodeno % 10000);
+}
+
 function call_monitor($nodeno, $action, $param) {
     if (!is_numeric($nodeno))
         return;
