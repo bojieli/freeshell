@@ -9,6 +9,7 @@ id=$1
 hostname=$2
 password=$3
 localip="10.10.$(echo $id/256 | bc).$(echo $id%256 | bc)"
+ipv6="2001:da8:d800:701:8000::$(echo $id/10000 | bc):$(echo $id%10000 | bc)"
 
 vzctl create $id
 vzctl set $id --userpasswd root:$password
@@ -23,4 +24,5 @@ vzctl set $id --numothersock 100 --save
 vzctl set $id --onboot yes --save
 vzctl set $id --hostname $hostname --save
 vzctl set $id --ipadd $localip --save
+vzctl set $id --ipadd $ipv6 --save
 vzctl set $id --nameserver 202.38.64.56 --nameserver 202.38.64.17 --save
