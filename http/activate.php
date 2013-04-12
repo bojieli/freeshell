@@ -24,8 +24,6 @@ $_SESSION['appid'] = $info['id'];
 ?>
 <!-- This file is the HTML Template for a register -->
 <style type="text/css">
-@font-face { font-family: "Segoe UI"; src: url('./fonts/segoeui.otf');  }
-@font-face { font-family: "Helvetica Neue"; src: url('./fonts/HelveticaNeueLTStd-Lt.otf');  }
 /*initialization*/
 html, body, div, span,    
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,   
