@@ -8,7 +8,7 @@ if (empty($appid))
     exit();
 $rs = mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
 $info = mysql_fetch_array($rs);
-$info['ip'] = get_node_ip($info[1]);
+$info['ip'] = get_node_ip(1);
 $info['realip'] = get_node_ip($info['nodeno']);
 $info['ipv6'] = get_node_ipv6($appid);
 $info['sshport'] = 10000 + $appid;
