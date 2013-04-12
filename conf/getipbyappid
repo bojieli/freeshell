@@ -1,0 +1,12 @@
+#!/bin/bash
+# usage: ./getipbyappid <appid>
+
+if [ -z $1 ]; then
+	exit 1;
+fi
+
+nodeno=$(echo $1%7 | bc)
+if [ $nodeno -eq 0 ]; then
+	nodeno=7;
+fi
+./getipbynodeno $nodeno
