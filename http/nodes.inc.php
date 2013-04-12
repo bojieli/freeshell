@@ -8,6 +8,7 @@ $nodes2ip = array(
  6 => "114.214.197.124",
  7 => "114.214.197.235",
 );
+$master_node = 1;
 
 function nodes_num() {
     global $nodes2ip;
@@ -43,7 +44,9 @@ function create_vz($nodeno, $id, $hostname, $password) {
 }
 
 function activate_vz($nodeno, $id) {
-    return call_monitor($nodeno, "activate-vz", "$id ". get_node_ip($nodeno));
+    call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno));
+	if ($nodeno != $master_node)
+		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ip($master_node)." ".get_node_ip($nodeno));
 }
 
 function control_vz($nodeno, $action, $id) {
