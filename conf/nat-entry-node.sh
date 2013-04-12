@@ -11,6 +11,10 @@ nodeip=$3
 sshport=$(echo $id + 10000 | bc)
 httpport=$(echo $id + 20000 | bc)
 
+if [ $localip == $nodeip ]; then
+	exit 1
+fi
+
 iptables -t nat -A PREROUTING -i eth0 -p tcp --dport $sshport -j DNAT --to-destination $nodeip:$sshport
 iptables -t nat -A POSTROUTING -p tcp --dport $sshport -j SNAT --to-source $localip
 iptables -t nat -A PREROUTING -i eth0 -p tcp --dport $httpport -j DNAT --to-destination $nodeip:$httpport
