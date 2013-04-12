@@ -8,7 +8,8 @@ if (empty($appid))
     exit();
 $rs = mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
 $info = mysql_fetch_array($rs);
-$info['ip'] = get_node_ip($info['nodeno']);
+$info['ip'] = get_node_ip($info[1]);
+$info['realip'] = get_node_ip($info['nodeno']);
 $info['ipv6'] = get_node_ipv6($appid);
 $info['sshport'] = 10000 + $appid;
 $info['httpport'] = 20000 + $appid;
@@ -176,6 +177,7 @@ ul.help li {
 <p>Server status:
 <ul class="table">
   <li><span class="h">Node</span>#<?=$info['nodeno']?>
+  <li><span class="h">Node IP</span><?=$info['realip']?>
   <li><span class="h">Total shells</span><?=$num_onthisnode?>
 <?php
 foreach ($node as $key => $value) {
