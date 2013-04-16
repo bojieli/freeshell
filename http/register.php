@@ -103,8 +103,6 @@ $password = $_POST['regpassword'];
 if ($password != $_POST['regconfpass'])
     alert('Passwords mismatch.');
 $email = $_POST['regemail'];
-if (strtoupper($_POST['invitation']) != 'SCGYSHELL')
-    alert('Sorry, the freeshell service is currently in testing. You need an invitation code.');
 $hostname = addslashes($_POST['hostname']);
 
 if (checkhost($hostname) || strlen($password)<6 || checkemail($email)) {
