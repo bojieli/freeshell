@@ -17,5 +17,6 @@ CREATE TABLE ssh_log (
     `action` VARCHAR(200) NOT NULL,
     `cmd` TEXT,
     `output` TEXT,
+    `log_time` INT(10),
     KEY key_nodeno (`nodeno`)
 );

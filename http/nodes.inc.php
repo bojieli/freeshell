@@ -35,7 +35,7 @@ function call_monitor($nodeno, $action, $param) {
     $output = array();
     exec($cmd, $output);
     $output = implode("\n", $output);
-    mysql_query("INSERT INTO ssh_log SET `nodeno`='$nodeno', `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `output`='".addslashes($output)."'");
+    mysql_query("INSERT INTO ssh_log SET `nodeno`='$nodeno', `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `output`='".addslashes($output)."', `log_time`='".time()."'");
     return $output;
 }
 
@@ -44,6 +44,7 @@ function create_vz($nodeno, $id, $hostname, $password) {
 }
 
 function activate_vz($nodeno, $id) {
+    global $master_node;
     call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno));
 	if ($nodeno != $master_node)
 		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ip($master_node)." ".get_node_ip($nodeno));
