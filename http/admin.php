@@ -1,5 +1,5 @@
 <?php
-session_start();
+include_once "header.php";
 include_once "db.php";
 include_once "nodes.inc.php";
 
@@ -17,109 +17,25 @@ $info['httpport'] = 20000 + $appid;
 $num_onthisnode = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `nodeno`='".$info['nodeno']."'"),0);
 $node = get_node_info($info['nodeno'], $appid);
 ?>
-<!-- This file is the HTML Template for a register -->
-<style type="text/css">
-/*initialization*/
-html, body, div, span,    
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,   
-a, abbr, acronym, address, big, cite, code,   
-img, ins, kbd, q, s, samp,   
-small, strike, strong,    
-dl, dt, dd, ol, ul, li,   
-fieldset, form, label, legend,   
-table, caption, tbody, tfoot, thead, tr, th, td {   
-    margin: 0;   
-    padding: 0;   
-    border: 0;   
-    outline: 0;   
-    /*font-size: 100%; */  
-    vertical-align: baseline;   
-    background: transparent;   
-}   
-body {
-	line-height: 1;
-	text-align:left;
-}   
-ol, ul {   
-    list-style: none;   
-}   
-blockquote, q {   
-    quotes: none;   
-}   
-blockquote:before, blockquote:after,   
-q:before, q:after {   
-    content: '';   
-    content: none;   
-}   
-   
-table {   
-    border-collapse: collapse;   
-    border-spacing: 0;   
-}  
-
-body{
-	background-color:#DDDDDD;
-}
-#wrapper{
-	margin:20px auto;
-	width:1000px;
-	background-color:white;
-	box-shadow:0 0 25px #444;
-	padding:20px 0;
-}
-#regtitle h1{
-	font-size:36px;
-	font-weight:100;
-	color:#333;
-	font-family:"Segoe UI","Helvetica Neue", Helvetica, Ubuntu;
-	margin-left:100px;
-	margin-top:20px;
-}
-#regtitle p, #regtitle ul {
-	font-size:18px;
-	font-weight:100;
-	color:#333;
-	font-family:"Segoe UI","Helvetica Neue", Helvetica, Ubuntu;
-	margin-left:100px;
-	margin-top:20px;
-}
-#progbar{
-	width:800px;
-	height:2px;
-	margin:20px auto;
-	background-color:#C44D58;
-}
-#regbutton{
-	width:250px;
-	height:60px;
-	background-color:#C44D58;
-	margin:20px auto 0;
-	text-align:center;
-	font-size:22px;
-	font-family:"Segoe UI","Helvetica Neue", Helvetica, Ubuntu;
-	color:white;
-	cursor:pointer;
-	-moz-transition: background-color 0.5s;
-	-webkit-transition: background-color 0.5s;
-	-o-transition: background-color 0.5s;
-	transition: background-color 0.5s;
-}
-#regbutton:hover{
-	background-color:#FF6B6B;
-}
-#regbutton p{
-	margin:0;
-	padding-top:16px;
-	vertical-align:central;
-}
-</style>
-
 <div id="wrapper">
 <div id="regtitle">
-        	<h1>Control Panel</h1>
+        	<h1>Freeshell Control Panel</h1>
         	<div id="progbar">
             </div>
 <style>
+ul.table, ul.help, p.note {
+	font-size: 16px !important;
+	font-family: "Segoe UI","Helvetica Neue", Helvetica, Ubuntu;
+	margin-left: 100px !important;
+	margin-top: 20px;
+	line-height: 20px;
+}
+h2 {
+	font-size: 20px !important;
+	font-family: "Segoe UI","Helvetica Neue", Helvetica, Ubuntu;
+	font-weight: 100;
+	margin-left: 100px !important;
+}
 ul.table span.h {
     display: inline-block;
     width: 200px;
@@ -144,7 +60,7 @@ ul.help li {
 .buttons span {
     margin-right: 30px;
 }
-.note {
+p.note {
     width: 700px;
 }
 </style>
@@ -165,14 +81,14 @@ ul.help li {
 </ul>
 
 <div id="progbar"></div>
-<p>Manage your freeshell:
+<h2>Manage your freeshell</h2>
 <p class="buttons">
   <span><button onclick="manage('start')">Start</button></span>
   <span><button onclick="manage('stop')">Shutdown</button></span>
   <span><button onclick="manage('reboot')">Reboot</button></span>
 </p>
 <div id="progbar"></div>
-<p>Server status:
+<h2>Server status</h2>
 <ul class="table">
   <li><span class="h">Node</span>#<?=$info['nodeno']?>
   <li><span class="h">Node IP</span><?=$info['realip']?>
@@ -186,7 +102,7 @@ foreach ($node as $key => $value) {
 ?>
 </ul>
 <div id="progbar"></div>
-<p>Resource Limits:
+<h2>Resource Limits</h2>
 <ul class="table">
   <li><span class="h">Memory</span><?=$info['nodeno']==3?"12G":"16G"?>, unlimited
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
@@ -196,7 +112,7 @@ foreach ($node as $key => $value) {
   <li><span class="h">UDP sockets</span>100
 </ul>
 <div id="progbar"></div>
-<p>For Linux newbies:
+<h2>For Linux newbies</h2>
 <ul class="help">
   <li>If you are using Windows, please download PuTTY <a href="http://lug.ustc.edu.cn/~boj/web_dev/ref/putty.zip">Here</a>. The usage of PuTTY can be found on Google.
   <li>If you are still using ROOT account to login, please create your own user and add it to sudo group. It is also recommended to login with SSH key instead of username and password. If you don't know what this is all about, just ignore this recommendation.

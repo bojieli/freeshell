@@ -1,6 +1,8 @@
 <?php
+include_once "header.php";
 include_once "db.php";
 include_once "nodes.inc.php";
+include_once "admin.inc.php";
 
 $email = addslashes($_POST['email']);
 if (!strstr($email,'@'))
@@ -13,19 +15,26 @@ if (empty($info))
 $passes = explode('/', $info['password']);
 if (sha1(sha1($pass).$passes[1]) !== $passes[0])
     error('Wrong password!');
-if (!$info['isactive'])
-    error('Your account is not activated! Please check your email.');
 
-session_start();
 $_SESSION['email'] = $email;
 $_SESSION['appid'] = $info['id'];
 
-function error($msg) {
-    echo "<script>";
-    echo "alert('$msg');";
-    echo "window.location.href='index.php';";
-    echo "</script>";
-    exit();
+if ($info['isactive']) {
+	echo "<script>window.location.href='admin.php';</script>";
+	exit();
 }
+
+// not activated
 ?>
-<script>window.location.href='admin.php';</script>
+<div id="wrapper">
+<div id="regtitle">
+        	<h1>It's almost there!</h1>
+        	<div id="progbar">
+            </div>
+<p>Please confirm your identify by clicking the link in <?=$email?>.</p>
+<p>If you have not received confirmation mail, click below to resend:</p>
+</div>
+<div id="regbutton" onclick="javascript:window.location.href='resend_confirm_mail.php'">
+        	<p>Resend Mail</p>
+</div>
+</div>
