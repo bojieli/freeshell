@@ -1,0 +1,12 @@
+#!/bin/bash
+# usage: ./getnodebyappid <appid>
+
+if [ -z "$1" ] || [[ "$1" == *[!0-9]* ]]; then
+	exit 1;
+fi
+
+nodeno=$(echo $1%7 | bc)
+if [ $nodeno -eq 0 ]; then
+	nodeno=7;
+fi
+echo $nodeno
