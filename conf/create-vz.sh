@@ -13,6 +13,7 @@ ipv6="2001:da8:d800:701:8000::$(echo $id/10000 | bc):$(echo $id%10000 | bc)"
 
 vzctl create $id
 vzctl set $id --userpasswd root:$password
+vzctl set $id --kmemsize unlimited --save
 vzctl set $id --privvmpages unlimited --save
 vzctl set $id --shmpages unlimited --save
 vzctl set $id --diskspace 5G:7G --save
