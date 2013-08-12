@@ -28,13 +28,18 @@ function get_node_ipv6($nodeno) {
         return $prefix.($nodeno / 10000).':'.($nodeno % 10000);
 }
 
+function run_in_node($nodeno, $cmd) {
+    $local_cmd = "sudo -u scgyshell-monitor ssh -t scgyshell-client@scgyshell-$nodeno $cmd";
+    $output = array();
+    exec($local_cmd, $output);
+    return implode("\n", $output);
+}
+
 function call_monitor($nodeno, $action, $param) {
     if (!is_numeric($nodeno))
         return;
-    $cmd = "sudo -u scgyshell-monitor ssh -t scgyshell-client@scgyshell-$nodeno sudo /home/boj/scripts/scgyshell.sh $action $param";
-    $output = array();
-    exec($cmd, $output);
-    $output = implode("\n", $output);
+    $cmd = "sudo /home/boj/scripts/scgyshell.sh $action $param";
+    $output = run_in_node($nodeno, $cmd);
     mysql_query("INSERT INTO ssh_log SET `nodeno`='$nodeno', `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `output`='".addslashes($output)."', `log_time`='".time()."'");
     return $output;
 }
