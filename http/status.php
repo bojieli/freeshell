@@ -106,7 +106,7 @@ p.note {
 }
 </style>
 <?php
-for ($nodes2ip as $nodeno => $ip) {
+foreach ($nodes2ip as $nodeno => $ip) {
     echo "<h2>Node #$nodeno: $ip</h2>\n";
     echo "<pre>";
     echo run_in_node($nodeno, $cmd);
