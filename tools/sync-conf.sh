@@ -14,4 +14,10 @@ function prun() {
 
 # preserve perms and execution bit, chown as root
 prun "rsync -rpE $BASE/etc/ /etc/"
-prun "rsync -rpE $BASE/scgyshell-client.authorized_keys /home/scgyshell-client/.ssh/authorized_keys"
+prun "chmod 440 /etc/sudoers"
+
+KEY_SRC="$BASE/scgyshell-client.authorized_keys"
+KEY_TARGET="/home/scgyshell-client/.ssh/authorized_keys"
+prun "chown scgyshell-client:scgyshell-client $KEY_SRC"
+prun "chmod 600 $KEY_SRC"
+prun "mv $KEY_SRC $KEY_TARGET"
