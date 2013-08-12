@@ -7,7 +7,7 @@ if [ -z $1 ] || [ -z $2 ]; then
 fi
 
 echo "Uploading $1 ..."
-parallel-scp -A -h pssh-hosts $1 /home/boj
+parallel-scp -h pssh-hosts $1 /home/boj
 echo "Moving $1 to $2 ..."
-parallel-ssh -A -h pssh-hosts "sudo mv /home/boj/$1 $2"
+parallel-ssh -h pssh-hosts "sudo mv /home/boj/$1 $2"
 exit 0

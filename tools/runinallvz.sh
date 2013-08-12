@@ -1,8 +1,8 @@
 #!/bin/bash
-# usage: ./execinallvz.sh <command>
+# usage: ./runinallvz.sh <command>
 
 if [ -z $1 ]; then
-    echo "usage: ./execinallvz.sh <command>";
+    echo "usage: ./runinallvz.sh <command>";
     exit 1
 fi
 command=$@
