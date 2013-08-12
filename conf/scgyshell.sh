@@ -4,16 +4,21 @@
 # This script has no security check.
 # Please ensure the input does not have injections.
 
+if [ `whoami` != 'root' ]; then
+    echo "This script must be run by root!"
+    exit 1
+fi
+
 read action params;
 if [ -z "$action" ]; then
     echo "Welcome to scgyshell!"
-    exit 1;
+    exit 1
 fi
 
 if [ -f `dirname $0`/${action}.sh ]; then
-    `dirname $0`/${action}.sh $params
+    script -c "`dirname $0`/${action}.sh $params" /dev/null
 elif [ "$action" == "vzlist" ]; then
-    sudo vzlist $params
+    vzlist $params
 else
-    `dirname $0`/control-vz.sh $@
+    script -c "`dirname $0`/control-vz.sh $@" /dev/null
 fi
