@@ -29,7 +29,8 @@ function get_node_ipv6($nodeno) {
 }
 
 function run_in_node($nodeno, $cmd) {
-    $local_cmd = "/bin/sh -c 'echo $cmd | sudo -u scgyshell-monitor ssh scgyshell-client@scgyshell-$nodeno'";
+    // force fork terminal
+    $local_cmd = "/bin/sh -c 'echo $cmd | sudo -u scgyshell-monitor ssh -t -t scgyshell-client@scgyshell-$nodeno'";
     $output = array();
     exec($local_cmd, $output);
     return implode("\n", $output);

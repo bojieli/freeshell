@@ -16,9 +16,9 @@ if [ -z "$action" ]; then
 fi
 
 if [ -f `dirname $0`/${action}.sh ]; then
-    script -c "`dirname $0`/${action}.sh $params" /dev/null
+    `dirname $0`/${action}.sh $params
 elif [ "$action" == "vzlist" ]; then
     vzlist $params
 else
-    script -c "`dirname $0`/control-vz.sh $@" /dev/null
+    `dirname $0`/control-vz.sh $@
 fi
