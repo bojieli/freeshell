@@ -66,17 +66,17 @@ p.note {
 </style>
 <p class="note">Note: Your IPv4 address can only be accessed within USTC campus. The outgoing network is limited to USTC for IPv4 and unlimited for IPv6.
 <ul class="table">
-  <li><span class="h">Shell ID:</span><?=$appid?>
+  <li><span class="h">Shell ID:</span><strong><?=$appid?></strong>
   <li><span class="h">Status:</span><?=$node['mystatus']?> <?php unset($node['mystatus']); ?>
-  <li><span class="h">IPv4 address:</span><?=$info['ip']?>
-  <li><span class="h">SSH port:</span><?=$info['sshport']?>
+  <li><span class="h">IPv4 address:</span><strong><?=$info['ip']?></strong>
+  <li><span class="h">SSH port:</span><strong><?=$info['sshport']?></strong> (mapped to port 22 of your shell)
   <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['ip']?></span>
-  <li><span class="h">HTTP port:</span><?=$info['httpport']?>
+  <li><span class="h">HTTP port:</span><strong><?=$info['httpport']?></strong> (mapped to port 80 of your shell)
   <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['ip']?>:<?=$info['httpport']?>/</span>
 </ul>
 <p class="note">Well, the IPv6 world is without walls...
 <ul class="table">
-  <li><span class="h">IPv6 address:</span><?=$info['ipv6']?>
+  <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong>
   <li><span class="h">SSH command:</span><span class="c">ssh root@<?=$info['ipv6']?></span>
 </ul>
 
