@@ -17,8 +17,9 @@ chown scgyshell-client:scgyshell-client $KEY_SRC
 chmod 600 $KEY_SRC
 mv $KEY_SRC $KEY_TARGET
 
-# must ensure perm of sudoers is OK
+# must ensure perm and owner of sudoers is OK
 chmod 440 $BASE/node-sudoers
+chown root:root $BASE/node-sudoers
 visudo -c -f $BASE/node-sudoers
 if [ "$?" -eq 0 ]; then
     mv $BASE/node-sudoers /etc/sudoers
