@@ -62,12 +62,16 @@ function control_vz($nodeno, $action, $id) {
 
 function get_node_info($nodeno, $id) {
     $str = call_monitor($nodeno, 'node-info', $id);
-    $items = explode("-----FREESHELL-----", $str);
-    $num = count($items);
+    $FS = "-----FREESHELL-FIELD-----";
+    $LS = "-----FREESHELL-LINE-----";
+    $lines = explode($LS, $str);
     $info = array();
-    for ($i=0;$i<$num;$i+=2) {
-        $k = htmlspecialchars(trim($items[$i]));
-        $v = nl2br(htmlspecialchars(trim($items[$i+1])));
+    foreach ($lines as $line) {
+        $fields = explode($FS, $line);
+        if (count($fields) != 2)
+            continue;
+        $k = htmlspecialchars(trim($fields[0]));
+        $v = nl2br(htmlspecialchars(trim($fields[1])));
         if ($k && $v)
             $info[$k] = $v;
     }

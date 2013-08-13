@@ -2,33 +2,35 @@
 # this program requires iostat.
 
 id=$1
-SEPARATOR="-----FREESHELL-----";
+LS="-----FREESHELL-LINE-----";
+FS="-----FREESHELL-FIELD-----";
 
+echo $LS
 echo "mystatus"
-echo $SEPARATOR
+echo $FS
 sudo vzctl status $id
-echo $SEPARATOR
+echo $LS
 echo "Live shell count"
-echo $SEPARATOR
+echo $FS
 vzlist | grep running | wc -l
-echo $SEPARATOR
+echo $LS
 echo "Load average"
-echo $SEPARATOR
+echo $FS
 cat /proc/loadavg
-echo $SEPARATOR
+echo $LS
 echo "CPU load"
-echo $SEPARATOR
+echo $FS
 iostat | awk 'NR>=3&&NR<=4'
-echo $SEPARATOR
+echo $LS
 echo "Disk usage"
-echo $SEPARATOR
+echo $FS
 df -lh | grep sda3
-echo $SEPARATOR
+echo $LS
 echo "Disk flow"
-echo $SEPARATOR
+echo $FS
 iostat | awk 'NR>=6&&NR<=7'
-echo $SEPARATOR
+echo $LS
 echo "Memory usage"
-echo $SEPARATOR
+echo $FS
 free -m | awk 'NR<=2'
-echo $SEPARATOR
+echo $LS
