@@ -68,15 +68,15 @@ p.note {
 <ul class="table">
   <li><span class="h">Shell ID:</span><strong><?=$appid?></strong>
   <li><span class="h">Status:</span><?=$node['mystatus']?> <?php unset($node['mystatus']); ?>
-  <li><span class="h">IPv4 address:</span><strong><?=$info['ip']?></strong>
+  <li><span class="h">IPv4 address:</span><strong><?=$info['realip']?></strong> (shared)
   <li><span class="h">SSH port:</span><strong><?=$info['sshport']?></strong> (mapped to port 22 of your shell)
-  <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['ip']?></span>
+  <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['realip']?></span>
   <li><span class="h">HTTP port:</span><strong><?=$info['httpport']?></strong> (mapped to port 80 of your shell)
-  <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['ip']?>:<?=$info['httpport']?>/</span>
+  <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['realip']?>:<?=$info['httpport']?>/</span>
 </ul>
 <p class="note">Well, the IPv6 world is without walls...
 <ul class="table">
-  <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong>
+  <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong> (dedicate)
   <li><span class="h">SSH command:</span><span class="c">ssh root@<?=$info['ipv6']?></span>
 </ul>
 
