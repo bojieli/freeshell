@@ -13,6 +13,7 @@ $info['realip'] = get_node_ip($info['nodeno']);
 $info['ipv6'] = get_node_ipv6($appid);
 $info['sshport'] = 10000 + $appid;
 $info['httpport'] = 20000 + $appid;
+$info['domain'] = 's'.$info['nodeno'].'.freeshell.ustc.edu.cn';
 
 $num_onthisnode = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `nodeno`='".$info['nodeno']."'"),0);
 $node = get_node_info($info['nodeno'], $appid);
@@ -64,17 +65,16 @@ p.note {
     width: 700px;
 }
 </style>
-<p class="note">Note: Your IPv4 address can only be accessed within USTC campus. The outgoing network is limited to USTC for IPv4 and unlimited for IPv6.
+<p class="note">Note: IPv4 address of your freeshell is shared and can only be accessed within USTC campus.
 <ul class="table">
   <li><span class="h">Shell ID:</span><strong><?=$appid?></strong>
   <li><span class="h">Status:</span><?=$node['mystatus']?> <?php unset($node['mystatus']); ?>
-  <li><span class="h">IPv4 address:</span><strong><?=$info['realip']?></strong> (shared)
   <li><span class="h">SSH port:</span><strong><?=$info['sshport']?></strong> (mapped to port 22 of your shell)
-  <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['realip']?></span>
+  <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['domain']?></span>
   <li><span class="h">HTTP port:</span><strong><?=$info['httpport']?></strong> (mapped to port 80 of your shell)
-  <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['realip']?>:<?=$info['httpport']?>/</span>
+  <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['domain']?>:<?=$info['httpport']?>/</span>
 </ul>
-<p class="note">Well, the IPv6 world is without walls...
+<p class="note">Note: The following IPv6 access is experimental.
 <ul class="table">
   <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong> (dedicate)
   <li><span class="h">SSH command:</span><span class="c">ssh root@<?=$info['ipv6']?></span>
@@ -90,8 +90,8 @@ p.note {
 <div id="progbar"></div>
 <h2>Server status</h2>
 <ul class="table">
-  <li><span class="h">Node</span>#<?=$info['nodeno']?>
-  <li><span class="h">Node IP</span><?=$info['realip']?>
+  <li><span class="h">Node</span><strong>#<?=$info['nodeno']?></strong>
+  <li><span class="h">Domain Name</span><strong><?=$info['domain']?></strong>
   <li><span class="h">Total shells</span><?=$num_onthisnode?>
 <?php
 foreach ($node as $key => $value) {
