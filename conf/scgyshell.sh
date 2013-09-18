@@ -20,5 +20,5 @@ if [ -f `dirname $0`/${action}.sh ]; then
 elif [ "$action" == "vzlist" ]; then
     vzlist $params
 else
-    `dirname $0`/control-vz.sh $@
+    `dirname $0`/control-vz.sh $action $params
 fi
