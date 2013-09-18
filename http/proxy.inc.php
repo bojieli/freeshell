@@ -52,7 +52,7 @@ function subdomain_check_norepeat($domain) {
         return 1;
     if (!preg_match('/[a-z0-9]+/', $domain))
         return 2;
-    if (in_array($domain, array('master', 'proxy', 'lug', 'freeshell')))
+    if (in_array($domain, array('master', 'proxy', 'lug', 'freeshell', 'test', 'example')))
         return 3;
     return 0;
 }
