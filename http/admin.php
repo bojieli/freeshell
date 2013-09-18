@@ -66,6 +66,18 @@ p.note {
     width: 700px;
 }
 </style>
+
+<?php
+$rs = mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `email`='".addslashes($_SESSION['email'])."'");
+$num_shells = mysql_result($rs,0);
+if ($num_shells >= 2) {
+?>
+<p>You have <?=$num_shells?> freeshells. <a href="select-shell.php">Click here to switch</a>.</p>
+<div id="progbar"></div>
+<?php
+}
+?>
+
 <p class="note">Note: IPv4 address of your freeshell is shared and can only be accessed within USTC campus.
 <ul class="table">
   <li><span class="h">Shell ID:</span><strong><?=$appid?></strong>

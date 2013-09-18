@@ -24,5 +24,5 @@ function checkhost($folder) {
 function check_email_count($email) {
     include_once "db.php";
     $rs = mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `email`='$email'");
-    return mysql_result($rs,0) == 0;
+    return mysql_result($rs,0) <= 5;
 }
