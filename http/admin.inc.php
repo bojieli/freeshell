@@ -20,3 +20,23 @@ function send_activate_mail($email, $appid, $token) {
     mail($email, $title, $body, $headers);
 }
 
+function send_reset_root_email($email, $appid, $new_passwd) {
+    $title = "New Root Password for your Freeshell";
+    $body = "Hello,\n\nYou have requested root password reset for shell ID $appid on http://freeshell.ustc.edu.cn.\n\nNew root password: $new_passwd\n\nPlease login and change it as soon as possible.\n\nIf you did not request this password reset, maybe your web account is stolen, please contact us.\nAny problems, please email us: lug@ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
+    $headers = 'From: noreply@blog.ustc.edu.cn';
+    mail($email, $title, $body, $headers);
+}
+
+function send_manage_notify_email($email, $appid, $action) {
+    switch ($action) {
+        case 'stop':
+            $actioned = 'stopped';
+            break;
+        default:
+            $actioned = $action . 'ed';
+    }
+    $title = "Your freeshell has $actioned";
+    $body = "Hello,\n\nThis email is to notify you that shell ID $appid has been $actioned via Web control panel http://freeshell.ustc.edu.cn.\n\nIf you did not request this action, maybe your web account is stolen, please contact us.\nAny problems, please email us: lug@ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
+    $headers = 'From: noreply@blog.ustc.edu.cn';
+    mail($email, $title, $body, $headers);
+}

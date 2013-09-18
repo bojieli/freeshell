@@ -1,6 +1,7 @@
 <?php
 include_once "nodes.inc.php";
 include_once "proxy.inc.php";
+include_once "admin.inc.php";
 include_once "db.php";
 
 session_start();
@@ -19,12 +20,23 @@ switch ($_POST['action']) {
     case 'reboot':
     case 'stop':
         control_vz($a['nodeno'], $_POST['action'], $id);
+        send_manage_notify_email($email, $id, $_POST['action']);
+        break;
+    case 'reset-root':
+        reset_passwd($email, $a['nodeno'], $id);
         break;
     case 'update-proxy':
         update_proxy($_POST['domain']);
         break;
     default:
         die('Unsupported action');
+}
+
+function reset_passwd($email, $nodeno, $id) {
+    $new_passwd = random_string(12);
+    control_vz($nodeno, "reset-root", "$id $new_passwd");
+    send_reset_root_email($email, $id, $new_passwd);
+    echo 'New root password has been sent to your email. If not found, please check the Spam box.';
 }
 
 function update_proxy($domain) {

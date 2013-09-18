@@ -65,6 +65,9 @@ ul.help li {
 p.note {
     width: 700px;
 }
+.smaller {
+    font-size: 16px !important;
+}
 </style>
 
 <?php
@@ -99,13 +102,17 @@ if ($num_shells >= 2) {
   <span><button id="btn-manage-start" onclick="manage('start')">Start</button></span>
   <span><button id="btn-manage-stop" onclick="manage('stop')">Shutdown</button></span>
   <span><button id="btn-manage-reboot" onclick="manage('reboot')">Reboot</button></span>
+  <span><button id="btn-manage-reset-root" onclick="manage('reset-root')">Reset Root Password</button></span>
+</p>
+<p class="smaller">If you need further assistance, please contact lug@ustc.edu.cn</p>
 </p>
 <div id="progbar"></div>
 <h2>HTTP Proxy</h2>
-<p>http://<strong><input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />.freeshell.ustc.edu.cn</strong> (IPv4 access is limited to USTC)</p>
-<p class="buttons"><span>
-<button id="btn-update-proxy" onclick="updateProxy()">Update</button>
-</span></p>
+<p>
+http://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />.freeshell.ustc.edu.cn
+<span><button id="btn-update-proxy" onclick="updateProxy()">Update Subdomain</button></span>
+</p>
+<p><span class="smaller">IPv4 access is limited to USTC. A Web Server should be installed on freeshell.</span></p>
 <div id="progbar"></div>
 <h2>Server status</h2>
 <ul class="table">
@@ -159,8 +166,7 @@ function manage(action) {
         success: function(msg){
             if (msg.length > 0)
                 alert(msg);
-            else
-                window.location.reload();
+            window.location.reload();
         }
     });
 }

@@ -24,8 +24,7 @@ function nginx_conf_gen_for_proxy() {
 }
 
 function conf_for_one_subdomain($domain, $nodeno, $httpport) {
-
-return "
+    return "
 server {
         listen 80;
         listen [::]:80;
@@ -42,8 +41,10 @@ function runas_monitor($cmd) {
 
 function ssh_update_proxy_conf($tmpfile) {
     $host = '202.38.70.159';
-    runas_monitor("scp $tmpfile scgyshell-client@$host:~/freeshell-proxy");
-    runas_monitor("ssh scgyshell-client@$host 'chmod 644 freeshell-proxy; sudo /etc/init.d/nginx reload");
+    $userhost = "scgyshell-client@$host";
+    runas_monitor("scp $tmpfile $userhost:~/freeshell-proxy");
+    runas_monitor("ssh $userhost chmod 644 freeshell-proxy");
+    runas_monitor("ssh $userhost sudo /etc/init.d/nginx reload");
 }
 
 function subdomain_check_norepeat($domain) {
