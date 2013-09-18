@@ -95,3 +95,17 @@ function random_string($length) {
     return $str;
 }
 
+function appid2sshport($appid) {
+    return 10000 + $appid;
+}
+function appid2httpport($appid) {
+    return 20000 + $appid;
+}
+
+function human_readable_status($str) {
+    if (strstr($str, 'running'))
+        return 'Running';
+    if (strstr($str, 'exist'))
+        return 'Down';
+    return 'Not exist';
+}

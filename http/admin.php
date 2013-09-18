@@ -11,12 +11,13 @@ $info = mysql_fetch_array($rs);
 $info['ip'] = get_node_ip(1);
 $info['realip'] = get_node_ip($info['nodeno']);
 $info['ipv6'] = get_node_ipv6($appid);
-$info['sshport'] = 10000 + $appid;
-$info['httpport'] = 20000 + $appid;
+$info['sshport'] = appid2sshport($appid);
+$info['httpport'] = appid2httpport($appid);
 $info['domain'] = 's'.$info['nodeno'].'.freeshell.ustc.edu.cn';
 
 $num_onthisnode = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `nodeno`='".$info['nodeno']."'"),0);
 $node = get_node_info($info['nodeno'], $appid);
+$node['mystatus'] = human_readable_status($node['mystatus']);
 ?>
 <div id="wrapper">
 <div id="regtitle">
@@ -68,7 +69,7 @@ p.note {
 <p class="note">Note: IPv4 address of your freeshell is shared and can only be accessed within USTC campus.
 <ul class="table">
   <li><span class="h">Shell ID:</span><strong><?=$appid?></strong>
-  <li><span class="h">Status:</span><?=$node['mystatus']?> <?php unset($node['mystatus']); ?>
+  <li><span class="h">Status:</span><strong><?=$node['mystatus']?></strong>
   <li><span class="h">SSH port:</span><strong><?=$info['sshport']?></strong> (mapped to port 22 of your shell)
   <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['domain']?></span>
   <li><span class="h">HTTP port:</span><strong><?=$info['httpport']?></strong> (mapped to port 80 of your shell)
@@ -81,12 +82,18 @@ p.note {
 </ul>
 
 <div id="progbar"></div>
-<h2>Manage your freeshell</h2>
+<h2>Manage your <?=$node['mystatus'] ?> freeshell</h2>
 <p class="buttons">
-  <span><button onclick="manage('start')">Start</button></span>
-  <span><button onclick="manage('stop')">Shutdown</button></span>
-  <span><button onclick="manage('reboot')">Reboot</button></span>
+  <span><button id="btn-manage-start" onclick="manage('start')">Start</button></span>
+  <span><button id="btn-manage-stop" onclick="manage('stop')">Shutdown</button></span>
+  <span><button id="btn-manage-reboot" onclick="manage('reboot')">Reboot</button></span>
 </p>
+<div id="progbar"></div>
+<h2>HTTP Proxy</h2>
+<p>http://<strong><input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />.freeshell.ustc.edu.cn</strong> (IPv4 access is limited to USTC)</p>
+<p class="buttons"><span>
+<button id="btn-update-proxy" onclick="updateProxy()">Update</button>
+</span></p>
 <div id="progbar"></div>
 <h2>Server status</h2>
 <ul class="table">
@@ -94,6 +101,7 @@ p.note {
   <li><span class="h">Domain Name</span><strong><?=$info['domain']?></strong>
   <li><span class="h">Total shells</span><?=$num_onthisnode?>
 <?php
+unset($node['mystatus']);
 foreach ($node as $key => $value) {
 ?>
   <li><span class="h"><?=$key?></span><span class="c"><?=$value?></span></li>
@@ -129,6 +137,8 @@ foreach ($node as $key => $value) {
 function manage(action) {
     if (!confirm("Do you really want to " + action + " your freeshell?"))
         return;
+    $('#btn-manage-'+action).attr('disabled', true);
+    $('#btn-manage-'+action).html('Processing...');
     $.ajax({
         url: 'manage.php',
         type: 'post',
@@ -139,6 +149,31 @@ function manage(action) {
                 alert(msg);
             else
                 window.location.reload();
+        }
+    });
+}
+function updateProxy() {
+    var old_domain = "<?=$info['http_subdomain'] ?>";
+    var new_domain = $('#http-proxy-subdomain').val();
+    if (old_domain == new_domain) {
+        alert('Domain Name Unchanged');
+        return;
+    }
+    $('#btn-update-proxy').attr('disabled', true);
+    $('#btn-update-proxy').html('Processing...');
+    $.ajax({
+        url: 'manage.php',
+        type: 'post',
+        async: true,
+        data: {
+            appid: <?=$info['id']?>,
+            action: 'update-proxy',
+            domain: new_domain
+        },
+        success: function(msg) {
+            if (msg.length > 0)
+                alert(msg);
+            window.location.reload();
         }
     });
 }

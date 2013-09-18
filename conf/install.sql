@@ -7,6 +7,7 @@ CREATE TABLE shellinfo (
     `hostname` VARCHAR(255) NOT NULL,
     `token` CHAR(40),
     `isactive` TINYINT(1) NOT NULL DEFAULT 0,
+    `http_subdomain` VARCHAR(50) NOT NULL,
     PRIMARY KEY (`id`),
     KEY key_nodeno (`nodeno`),
     KEY key_email (`email`)
