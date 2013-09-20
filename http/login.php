@@ -20,7 +20,6 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['appid'])) {
         if (sha1(sha1($pass).$passes[1]) === $passes[0])
             $verified[] = $info;
     }
-    var_dump($verified);
     if (empty($verified))
         error('Wrong password!');
     if (count($verified) >= 2) {
