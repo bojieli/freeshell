@@ -44,7 +44,7 @@ function need_email_verification($name, $msg, $action, $email, $appid) {
         return "Failed to generate ticket. Please contact lug@ustc.edu.cn";
 
     $title = "Freeshell Danger Action Confirmation: $name";
-    $body = "Hello,\n\nYou have requested $name for shell ID $appid on http://freeshell.ustc.edu.cn. This is a DANGER action, so we need your confirmation to proceed.\n\n$msg\n\nFollow this link to perform $name immediately and irreversibly:\nhttp://freeshell.ustc.edu.cn/$action?id=$id&token=$token\n\nIf you did not request this action, maybe your account is stolen, please contact us. Any problems, please email us: lug@ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
+    $body = "Hello,\n\nYou have requested $name for shell ID $appid on http://freeshell.ustc.edu.cn. This is a DANGER action, so we need your confirmation to proceed.\n\n$msg\n\nFollow this link to perform $name immediately and irreversibly:\nhttp://freeshell.ustc.edu.cn/$action?id=$id&token=$token\n\nThis link will expire in 48 hours.\nIf you did not request this action, maybe your account is stolen, please contact us.\nAny problems, please email us: lug@ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
     $headers = 'From: noreply@blog.ustc.edu.cn';
     mail($email, $title, $body, $headers);
 
