@@ -47,8 +47,17 @@ function call_monitor($nodeno, $action, $param) {
     return $output;
 }
 
+function destroy_vz($nodeno, $id) {
+    call_monitor($nodeno, "stop", $id);
+    return call_monitor($nodeno, "destroy", $id);
+}
+
 function create_vz($nodeno, $id, $hostname, $password) {
     return call_monitor($nodeno, "create-vz", "$id $hostname $password");
+}
+
+function reactivate_vz($nodeno, $id) {
+    return call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno)." renew");
 }
 
 function activate_vz($nodeno, $id) {

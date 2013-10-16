@@ -35,8 +35,8 @@ mysql_query("UPDATE shellinfo SET `nodeno`='$nodeno' WHERE `id`='$appid'");
         	<h1>It's almost there!</h1>
         	<div id="progbar">
             </div>
-<p>Your freeshell have been created.</p>
-<p>We have sent you: <?=$email?> an confirmation mail.</p>
+<p>Your freeshell is installing.</p>
+<p>We will send you: <?=$email?> an confirmation mail once installation finished.</p>
 <p>Please activate your account by clicking the link inside the mail.</p>
 </div>
 <div id="regbutton" onclick="javascript:document.location.href='http://email.ustc.edu.cn'">

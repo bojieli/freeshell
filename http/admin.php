@@ -102,7 +102,10 @@ if ($num_shells >= 2) {
   <span><button id="btn-manage-start" onclick="manage('start')">Start</button></span>
   <span><button id="btn-manage-stop" onclick="manage('stop')">Shutdown</button></span>
   <span><button id="btn-manage-reboot" onclick="manage('reboot')">Reboot</button></span>
+</p>
+<p class="buttons">
   <span><button id="btn-manage-reset-root" onclick="manage('reset-root')">Reset Root Password</button></span>
+  <span><button id="btn-manage-reinstall" onclick="manage('reinstall')">Reinstall System</button></span>
 </p>
 <p class="smaller">If you need further assistance, please contact lug@ustc.edu.cn</p>
 </p>

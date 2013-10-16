@@ -25,6 +25,14 @@ switch ($_POST['action']) {
     case 'reset-root':
         reset_passwd($email, $a['nodeno'], $id);
         break;
+    case 'reinstall':
+        echo need_email_verification("Reinstalling System",
+            "WARNING: THIS OPERATION WILL ERASE ALL DATA ON YOUR FREESHELL.",
+            "reinstall-freeshell.php",
+            $email,
+            $id
+            );
+        break;
     case 'update-proxy':
         update_proxy($_POST['domain']);
         break;

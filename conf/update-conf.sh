@@ -1,4 +1,5 @@
 #!/bin/bash
+# should be run in freeshell node!
 # update configs from this dir to system dir
 
 BASE="/home/boj/scripts"

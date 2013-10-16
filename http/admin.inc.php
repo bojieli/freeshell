@@ -1,4 +1,6 @@
 <?php
+include_once "nodes.inc.php";
+
 function alert($msg) {
     die("<script>alert('$msg');location.href='index.php';</script>");
 }
@@ -25,6 +27,28 @@ function send_reset_root_email($email, $appid, $new_passwd) {
     $body = "Hello,\n\nYou have requested root password reset for shell ID $appid on http://freeshell.ustc.edu.cn.\n\nNew root password: $new_passwd\n\nPlease login and change it as soon as possible.\n\nIf you did not request this password reset, maybe your web account is stolen, please contact us.\nAny problems, please email us: lug@ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
     $headers = 'From: noreply@blog.ustc.edu.cn';
     mail($email, $title, $body, $headers);
+}
+
+function send_reinstall_success_email($email, $appid, $hostname, $password) {
+    $title = "Your Freeshell is Reinstalled";
+    $body = "Hello,\n\nFreeshell ID $appid is reinstalled.\n\nNew hostname: $hostname\nNew root password: $password\n\nLogin IP and port does not change, so you may need to edit ~/.ssh/known_hosts to avoid conflicting keys.\nPlease login and change root password as soon as possible.\n\nAny problems, please email us: lug@ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
+    $headers = 'From: noreply@blog.ustc.edu.cn';
+    mail($email, $title, $body, $headers);
+}
+
+function need_email_verification($name, $msg, $action, $email, $appid) {
+    $token = random_string(40);
+    mysql_query("INSERT INTO tickets (shellid,create_time,action,token) VALUES ('$appid', NOW(), '$action', '$token')");
+    $id = mysql_insert_id();
+    if (!is_numeric($id) || $id == 0)
+        return "Failed to generate ticket. Please contact lug@ustc.edu.cn";
+
+    $title = "Freeshell Danger Action Confirmation: $name";
+    $body = "Hello,\n\nYou have requested $name for shell ID $appid on http://freeshell.ustc.edu.cn. This is a danger action, so we need your confirmation to proceed.\n\n$msg\n\nFollow this link to perform $name immediately:\nhttp://freeshell.ustc.edu.cn/$action?id=$id&token=$token\n\nIf you did not request this action, maybe your account is stolen, please contact us. Any problems, please email us: lug@ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
+    $headers = 'From: noreply@blog.ustc.edu.cn';
+    mail($email, $title, $body, $headers);
+
+    return "Since this is a danger action, please check your mailbox and follow the link in confirmation email.";
 }
 
 function send_manage_notify_email($email, $appid, $action) {

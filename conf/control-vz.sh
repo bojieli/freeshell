@@ -7,8 +7,8 @@ fi
 action=$1
 id=$2
 
-for act in start stop restart status; do
-    if [ $act = $action ]; then
+for act in start stop restart status destroy; do
+    if [ "$act" = "$action" ]; then
         vzctl $action $id;
         if [ $action = "start" ] || [ $action = "restart" ]; then
             vzctl exec $id "mount -t tmpfs -o noexec,nosuid tmpfs /tmp/"

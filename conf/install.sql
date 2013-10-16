@@ -13,6 +13,17 @@ CREATE TABLE shellinfo (
     KEY key_email (`email`)
 ) AUTO_INCREMENT = 101;
 
+CREATE TABLE tickets (
+    `id` INT(10) NOT NULL AUTO_INCREMENT,
+    `shellid` INT(10) NOT NULL,
+    `token` CHAR(40) NOT NULL,
+    `action` VARCHAR(255) NOT NULL,
+    `create_time` DATETIME,
+    `used_time` DATETIME,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`shellid`) REFERENCES shellinfo (`id`)
+);
+
 CREATE TABLE ssh_log (
     `nodeno` INT(10) NOT NULL,
     `action` VARCHAR(200) NOT NULL,
