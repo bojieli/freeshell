@@ -1,5 +1,6 @@
 #!/bin/bash
 # usage: ./setallvz.sh <option> <value>
+# if need appid in value, use $id
 
 if [ -z $1 ] || [ -z $2 ]; then
     echo "usage: ./setallvz.sh <option> <value>";
@@ -15,5 +16,6 @@ for id in $(seq 101 $max); do
         host=7
     fi
     echo $host:$id
-    ssh scgyshell-$host "sudo vzctl set $id --$option $value --save"
+    realvalue=$(echo $value | sed "s/\$id/$id/g")
+    ssh scgyshell-$host "sudo vzctl set $id --$option $realvalue --save"
 done

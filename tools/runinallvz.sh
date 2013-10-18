@@ -1,11 +1,12 @@
 #!/bin/bash
 # usage: ./runinallvz.sh <command>
+# if need appid in command, use $id
 
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
     echo "usage: ./runinallvz.sh <command>";
     exit 1
 fi
-command=$@
+command="$@"
 
 max=$(curl http://blog.ustc.edu.cn/freeshell/shellmax.php)
 for id in $(seq 101 $max); do
@@ -14,5 +15,6 @@ for id in $(seq 101 $max); do
         host=7
     fi
     echo $host:$id
-    ssh scgyshell-$host "sudo vzctl exec $id $command"
+    realcommand=$(echo $command | sed "s/\$id/$id/g")
+    ssh scgyshell-$host "sudo vzctl exec $id $realcommand"
 done
