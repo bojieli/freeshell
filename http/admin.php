@@ -81,19 +81,20 @@ if ($num_shells >= 2) {
 }
 ?>
 
-<p class="note">Note: IPv4 address of your freeshell is shared and can only be accessed within USTC campus.
 <ul class="table">
   <li><span class="h">Shell ID:</span><strong><?=$appid?></strong>
   <li><span class="h">Status:</span><strong><?=$node['mystatus']?></strong>
-  <li><span class="h">SSH port:</span><strong><?=$info['sshport']?></strong> (mapped to port 22 of your shell)
-  <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['domain']?></span>
-  <li><span class="h">HTTP port:</span><strong><?=$info['httpport']?></strong> (mapped to port 80 of your shell)
-  <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['domain']?>:<?=$info['httpport']?>/</span>
-</ul>
-<p class="note">Note: The IPv6 address is dedicate and can be accessed globally.
-<ul class="table">
   <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong>
   <li><span class="h">SSH command:</span><span class="c">ssh root@<?=$info['ipv6']?></span>
+  <li><span class="h">HTTP address:</span><span class="c">http://[<?=$info['ipv6']?>]/</span>
+</ul>
+
+<p class="note">If IPv6 is not working (e.g. you are using VPN), try the following (RESTRICTED TO USTC CAMPUS):</p>
+<ul class="table">
+  <li><span class="h">SSH port:</span><strong><?=$info['sshport']?></strong> (mapped to port 22 of your freeshell)
+  <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['domain']?></span>
+  <li><span class="h">HTTP port:</span><strong><?=$info['httpport']?></strong> (mapped to port 80 of your freeshell)
+  <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['domain']?>:<?=$info['httpport']?>/</span>
 </ul>
 
 <div id="progbar"></div>
