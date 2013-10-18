@@ -4,6 +4,12 @@
 
 BASE="/home/boj/scripts"
 
+if [ -z "$1" ]; then
+    NODENO=$(hostname | awk 'BEGIN{FS="-"}{print $2}')
+else
+    NODENO=$1
+fi
+
 if [ `whoami` != "root" ]; then
     echo "You are not root!"
     exit 1
@@ -21,10 +27,13 @@ mv $KEY_SRC $KEY_TARGET
 # must ensure perm and owner of sudoers is OK
 chmod 440 $BASE/node-sudoers
 chown root:root $BASE/node-sudoers
-visudo -c -f $BASE/node-sudoers
+output=$(visudo -c -f $BASE/node-sudoers)
 if [ "$?" -eq 0 ]; then
     mv $BASE/node-sudoers /etc/sudoers
-    exit 0
 else
+    echo $output
     exit 1
 fi
+
+# update /etc/network/interfaces
+. /etc/network/interfaces.template

@@ -1,0 +1,24 @@
+# This file should not be run directly
+echo "
+auto eth0
+iface eth0 inet static
+    address $(dig +short s$NODENO.freeshell.ustc.edu.cn)
+    netmask 255.255.255.0
+    gateway $(dig +short s$NODENO.freeshell.ustc.edu.cn | awk 'BEGIN{FS="."}{print $1 "." $2 "." $3 ".254"}')
+
+iface eth0 inet6 static
+    address 2001:da8:d800:71:1::$NODENO
+    netmask 64
+    gateway 2001:da8:d800:71::1
+
+auto eth1
+iface eth1 inet static
+    address 192.168.0.20$NODENO
+    netmask 255.255.255.0
+    #gateway 192.168.0.2
+
+iface eth1 inet6 static
+    address 2001:da8:d800:701:8000::$NODENO
+    netmask 64
+    #gateway 2001:da8:d800:701::1
+" | sudo tee /etc/network/interfaces >/dev/null

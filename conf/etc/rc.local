@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+iptables-restore < /home/boj/iptables-save
+exit 0

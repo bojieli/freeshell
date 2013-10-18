@@ -9,4 +9,4 @@ while read host; do
 done <pssh-hosts
 
 echo "Updating configs..."
-parallel-ssh -h pssh-hosts "sudo /home/boj/scripts/update-conf.sh"
+parallel-ssh -h pssh-hosts -P "sudo /home/boj/scripts/update-conf.sh"
