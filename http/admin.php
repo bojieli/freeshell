@@ -89,7 +89,7 @@ if ($num_shells >= 2) {
   <li><span class="h">HTTP address:</span><span class="c">http://[<?=$info['ipv6']?>]/</span>
 </ul>
 
-<p class="note">If IPv6 is not working (e.g. you are using VPN), try the following (RESTRICTED TO USTC CAMPUS):</p>
+<p class="note">If IPv6 is not working (e.g. you are using VPN), try IPv4 (RESTRICTED TO USTC CAMPUS):</p>
 <ul class="table">
   <li><span class="h">SSH port:</span><strong><?=$info['sshport']?></strong> (mapped to port 22 of your freeshell)
   <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['domain']?></span>
