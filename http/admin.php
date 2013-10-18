@@ -90,9 +90,9 @@ if ($num_shells >= 2) {
   <li><span class="h">HTTP port:</span><strong><?=$info['httpport']?></strong> (mapped to port 80 of your shell)
   <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['domain']?>:<?=$info['httpport']?>/</span>
 </ul>
-<p class="note">Note: The following IPv6 access is experimental.
+<p class="note">Note: The IPv6 address is dedicate and can be accessed globally.
 <ul class="table">
-  <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong> (dedicate)
+  <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong>
   <li><span class="h">SSH command:</span><span class="c">ssh root@<?=$info['ipv6']?></span>
 </ul>
 
@@ -115,7 +115,7 @@ if ($num_shells >= 2) {
 http://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />.freeshell.ustc.edu.cn
 <span><button id="btn-update-proxy" onclick="updateProxy()">Update Subdomain</button></span>
 </p>
-<p><span class="smaller">IPv4 access is limited to USTC. A Web Server should be installed on freeshell.</span></p>
+<p><span class="smaller">IPv4 access is limited to USTC. To use HTTP proxy, a Web Server should be installed on your freeshell.</span></p>
 <div id="progbar"></div>
 <h2>Server status</h2>
 <ul class="table">

@@ -9,7 +9,7 @@ id=$1
 hostname=$2
 password=$3
 localip="10.10.$(echo $id/256 | bc).$(echo $id%256 | bc)"
-ipv6="2001:da8:d800:701:8000::$(echo $id/10000 | bc):$(echo $id%10000 | bc)"
+ipv6="2001:da8:d800:71::$(echo $id/10000 | bc):$(echo $id%10000 | bc)"
 
 vzctl create $id
 vzctl set $id --userpasswd root:$password
