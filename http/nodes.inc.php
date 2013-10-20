@@ -52,8 +52,8 @@ function destroy_vz($nodeno, $id) {
     return call_monitor($nodeno, "destroy", $id);
 }
 
-function create_vz($nodeno, $id, $hostname, $password) {
-    return call_monitor($nodeno, "create-vz", "$id $hostname $password");
+function create_vz($nodeno, $id, $hostname, $password, $diskspace_softlimit, $diskspace_hardlimit) {
+    return call_monitor($nodeno, "create-vz", "$id $hostname $password $diskspace_softlimit $diskspace_hardlimit");
 }
 
 function reactivate_vz($nodeno, $id) {
@@ -69,6 +69,10 @@ function activate_vz($nodeno, $id) {
 
 function control_vz($nodeno, $action, $id) {
     return call_monitor($nodeno, $action, $id);
+}
+
+function set_vz($nodeno, $id, $option, $value) {
+    return call_monitor($nodeno, "setvz", "$id $option $value");
 }
 
 function get_node_info($nodeno, $id) {
