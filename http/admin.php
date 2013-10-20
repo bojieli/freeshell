@@ -74,7 +74,11 @@ p.note {
 <div id="progbar"></div>
 <?php
 if ($_SESSION['isadmin']) { ?>
-<p>Freeshell admin area: <a href="admin/status.php">View status</a> <a href="admin/change-quota.php">Change Disk Quota</a> <a href="admin/find-user.php">Search User</a></p>
+<p>Freeshell admin area:
+<a href="admin/status.php" target="_blank">View status</a>
+<a href="admin/change-quota.php" target="_blank">Change Disk Quota</a>
+<a href="admin/find-user.php" target="_blank">Search User</a>
+</p>
 <div id="progbar"></div>
 <?php
 }

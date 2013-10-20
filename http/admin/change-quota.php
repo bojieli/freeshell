@@ -3,22 +3,21 @@ session_start();
 include_once "../db.php";
 include_once "../nodes.inc.php";
 
-function alert_and_jump($msg) {
-    echo "<script>alert('$msg');window.location.href='../admin.php';</script>";
-    exit();
+function alert($msg) {
+    echo "<script>alert('$msg');</script>";
 }
 
 if (empty($_SESSION['isadmin']))
     exit();
 
-if (is_numeric($_POST['appid']) && isset($_POST['diskspace_softlimit']) && isset($_POST['diskspace_hardlimit']))
+if (is_numeric($_POST['appid']) && !empty($_POST['diskspace_softlimit']) && !empty($_POST['diskspace_hardlimit']))
 {
     $info = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE id=".$_POST['appid']));
     if (empty($info))
-        alert_and_jump("Shell Not Exist");
+        alert("Shell Not Exist");
     mysql_query("UPDATE shellinfo SET diskspace_softlimit='".addslashes($_POST['diskspace_softlimit'])."', diskspace_hardlimit='".addslashes($_POST['diskspace_hardlimit'])."' WHERE id=".$_POST['appid']);
     set_vz($info['nodeno'], $_POST['appid'], "diskspace", $_POST['diskspace_softlimit'].":".$_POST['diskspace_hardlimit']);
-    alert_and_jump("OK");
+    alert("OK");
 }
 ?>
 <h1>Change Disk Quota</h1>
