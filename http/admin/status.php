@@ -1,10 +1,9 @@
 <?php
 session_start();
-include_once "db.php";
-include_once "nodes.inc.php";
+include_once "../db.php";
+include_once "../nodes.inc.php";
 
-$appid = $_SESSION['appid'];
-if (empty($appid))
+if (empty($_SESSION['isadmin']))
     exit();
 
 $attrs = array(

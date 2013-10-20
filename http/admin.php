@@ -72,6 +72,13 @@ p.note {
 
 <p>Welcome, <?=$_SESSION['email']?> <a href="logout.php">Logout</a></p>
 <div id="progbar"></div>
+<?php
+if ($_SESSION['isadmin']) { ?>
+<p>Freeshell admin area: <a href="admin/status.php">View status</a> <a href="admin/change-quota.php">Change Disk Quota</a> <a href="admin/find-user.php">Search User</a></p>
+<div id="progbar"></div>
+<?php
+}
+?>
 
 <?php
 $rs = mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `email`='".addslashes($_SESSION['email'])."'");
