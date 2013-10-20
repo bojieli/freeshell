@@ -70,6 +70,9 @@ p.note {
 }
 </style>
 
+<p>Welcome, <?=$_SESSION['email']?> <a href="logout.php">Logout</a></p>
+<div id="progbar"></div>
+
 <?php
 $rs = mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `email`='".addslashes($_SESSION['email'])."'");
 $num_shells = mysql_result($rs,0);
@@ -137,7 +140,7 @@ foreach ($node as $key => $value) {
 <ul class="table">
   <li><span class="h">Memory</span><?=$info['nodeno']==3?"12G":"16G"?>, unlimited
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
-  <li><span class="h">Disk</span><span class="r">5GB. You can use up to 7GB in a grace period of 24 hours.<br>Please delete unused files as soon as possible :)</span>
+  <li><span class="h">Disk</span><span class="r"><?=$info['diskspace_softlimit']?>. You can use up to <?=$info['diskspace_hardlimit']?> in a grace period of 24 hours.<br>Please delete unused files as soon as possible :)<br>If you need more disk space, email lug@ustc.edu.cn</span>
   <li><span class="h">Process</span>Up to 200 processes, including kernel threads.
   <li><span class="h">TCP sockets</span>100
   <li><span class="h">UDP sockets</span>100
