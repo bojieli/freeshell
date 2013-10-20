@@ -1,4 +1,8 @@
 <?php
+session_start();
+if (!empty($_SESSION['email']))
+    die("<script>window.location.href='login.php';</script>");
+
 include_once "db.php";
 $shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
 ?>

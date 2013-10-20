@@ -32,12 +32,14 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['appid'])) {
         
         $_SESSION['email'] = $email;
         $_SESSION['appid'] = $info['id'];
+        $_SESSION['isadmin'] = $info['isadmin'];
     }
 }
 else {
     $info = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE `id`='".$_SESSION['appid']."'"));
     if (empty($info))
         die("<script>window.location.href='index.php';</script>");
+    $_SESSION['isadmin'] = $info['isadmin'];
 }
     
 if ($info['isactive']) {

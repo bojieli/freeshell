@@ -29,6 +29,9 @@ if ($nodeno == 0)
 
 mysql_query("UPDATE shellinfo SET `nodeno`='$nodeno' WHERE `id`='$appid'");
 
+$info = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'"));
+if (empty($info))
+    die('Failed to create freeshell, please contact us at lug@ustc.edu.cn');
 ?>
 <div id="wrapper">
 <div id="regtitle">
@@ -45,7 +48,7 @@ mysql_query("UPDATE shellinfo SET `nodeno`='$nodeno' WHERE `id`='$appid'");
 </div>
 <?php
 fastcgi_finish_request();
-create_vz($nodeno, $appid, $hostname, $password);
+create_vz($nodeno, $appid, $hostname, $password, $info['diskspace_softlimit'], $info['diskspace_hardlimit']);
 
 $token = random_string(40);
 mysql_query("UPDATE shellinfo SET `token`='$token' WHERE `id`='$appid'");

@@ -6,8 +6,11 @@ CREATE TABLE shellinfo (
     `password` VARCHAR(100) NOT NULL,
     `hostname` VARCHAR(255) NOT NULL,
     `token` CHAR(40),
-    `isactive` TINYINT(1) NOT NULL DEFAULT 0,
+    `isactive` BOOL NOT NULL DEFAULT FALSE,
+    `isadmin` BOOL NOT NULL DEFAULT FALSE,
     `http_subdomain` VARCHAR(50) NOT NULL,
+    `diskspace_softlimit` VARCHAR(20) NOT NULL DEFAULT '5G',
+    `diskspace_hardlimit` VARCHAR(20) NOT NULL DEFAULT '7G',
     PRIMARY KEY (`id`),
     KEY key_nodeno (`nodeno`),
     KEY key_email (`email`)
