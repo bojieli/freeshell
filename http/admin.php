@@ -122,7 +122,7 @@ if ($num_shells >= 2) {
   <span><button id="btn-manage-reset-root" onclick="manage('reset-root')">Reset Root Password</button></span>
   <span><button id="btn-manage-reinstall" onclick="manage('reinstall')">Reinstall System</button></span>
 </p>
-<p class="smaller">If you need further assistance, please contact lug@ustc.edu.cn</p>
+<p class="smaller">If you need further assistance, please contact support@freeshell.ustc.edu.cn</p>
 </p>
 <div id="progbar"></div>
 <h2>HTTP Proxy</h2>
@@ -151,7 +151,7 @@ foreach ($node as $key => $value) {
 <ul class="table">
   <li><span class="h">Memory</span><?=$info['nodeno']==3?"12G":"16G"?>, unlimited
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
-  <li><span class="h">Disk</span><span class="r"><?=$info['diskspace_softlimit']?>. You can use up to <?=$info['diskspace_hardlimit']?> in a grace period of 24 hours.<br>Please delete unused files as soon as possible :)<br>If you need more disk space, email lug@ustc.edu.cn</span>
+  <li><span class="h">Disk</span><span class="r"><?=$info['diskspace_softlimit']?>. You can use up to <?=$info['diskspace_hardlimit']?> in a grace period of 24 hours.<br>Please delete unused files as soon as possible :)<br>If you need more disk space, email support@freeshell.ustc.edu.cn</span>
   <li><span class="h">Process</span>Up to 200 processes, including kernel threads.
   <li><span class="h">TCP sockets</span>100
   <li><span class="h">UDP sockets</span>100
