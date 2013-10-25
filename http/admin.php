@@ -140,9 +140,11 @@ http://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />
 <?php
 unset($node['mystatus']);
 foreach ($node as $key => $value) {
+    if ($key[0] != '#') {
 ?>
   <li><span class="h"><?=$key?></span><span class="c"><?=$value?></span></li>
 <?php
+    }
 }
 ?>
 </ul>
@@ -152,6 +154,15 @@ foreach ($node as $key => $value) {
   <li><span class="h">Memory</span><?=$info['nodeno']==3?"12G":"16G"?>, unlimited
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
   <li><span class="h">Disk</span><span class="r"><?=$info['diskspace_softlimit']?>. You can use up to <?=$info['diskspace_hardlimit']?> in a grace period of 24 hours.<br>Please delete unused files as soon as possible :)<br>If you need more disk space, email support@freeshell.ustc.edu.cn</span>
+<?php
+foreach ($node as $key => $value) {
+    if ($key[0] == '#') {
+?>
+  <li><span class="h"><?=substr($key,1)?></span><span class="c"><?=$value?></span></li>
+<?php
+    }
+}
+?>
 </ul>
 <div id="progbar"></div>
 <h2>For Linux newbies</h2>
