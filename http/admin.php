@@ -152,9 +152,6 @@ foreach ($node as $key => $value) {
   <li><span class="h">Memory</span><?=$info['nodeno']==3?"12G":"16G"?>, unlimited
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
   <li><span class="h">Disk</span><span class="r"><?=$info['diskspace_softlimit']?>. You can use up to <?=$info['diskspace_hardlimit']?> in a grace period of 24 hours.<br>Please delete unused files as soon as possible :)<br>If you need more disk space, email support@freeshell.ustc.edu.cn</span>
-  <li><span class="h">Process</span>Up to 200 processes, including kernel threads.
-  <li><span class="h">TCP sockets</span>100
-  <li><span class="h">UDP sockets</span>100
 </ul>
 <div id="progbar"></div>
 <h2>For Linux newbies</h2>

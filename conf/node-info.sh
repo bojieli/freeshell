@@ -34,3 +34,15 @@ echo "Memory usage"
 echo $FS
 free -m | awk 'NR<=2'
 echo $LS
+echo "# Processes Quota (include kernel threads)"
+echo $FS
+sudo vzlist -n $1 -o numproc -H
+echo $LS
+echo "# TCP sockets Quota"
+echo $FS
+sudo vzlist -n $1 -o numtcpsock -H
+echo $LS
+echo "# Non-TCP sockets Quota"
+echo $FS
+sudo vzlist -n $1 -o numothersock -H
+echo $LS
