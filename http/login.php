@@ -4,22 +4,29 @@ include_once "db.php";
 include_once "nodes.inc.php";
 include_once "admin.inc.php";
 
-if (!isset($_SESSION['email']) || !isset($_SESSION['appid'])) {
+if (!isset($_SESSION['appid'])) {
+
+    if (isset($_SESSION['email'])) {
+    	echo "<script>window.location.href='select-shell.php';</script>";
+        exit();
+    }
 
     $email = addslashes($_POST['email']);
+
     if (!strstr($email,'@'))
         $email .= '@mail.ustc.edu.cn';
     $pass = $_POST['pass'];
     
     $rs = mysql_query("SELECT * FROM shellinfo WHERE `email`='$email'");
+    $info = mysql_fetch_array($rs);
     $verified = array();
-    while ($info = mysql_fetch_array($rs)) {
+    do {
         if (empty($info))
             error('Email account does not exist.');
-        $passes = explode('/', $info['password']);
-        if (sha1(sha1($pass).$passes[1]) === $passes[0])
+        if (check_password($pass, $info['password']))
             $verified[] = $info;
-    }
+    } while ($info = mysql_fetch_array($rs));
+
     if (empty($verified))
         error('Wrong password!');
     if (count($verified) >= 2) {
@@ -35,10 +42,10 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['appid'])) {
         $_SESSION['isadmin'] = $info['isadmin'];
     }
 }
-else {
+else { // appid has been set
     $info = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE `id`='".$_SESSION['appid']."'"));
     if (empty($info))
-        die("<script>window.location.href='index.php';</script>");
+        die("<script>window.location.href='logout.php';</script>");
     $_SESSION['isadmin'] = $info['isadmin'];
 }
     
