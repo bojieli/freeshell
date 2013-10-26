@@ -26,6 +26,7 @@ if (!check_password($_POST['oldpwd'], $info['password'])) {
     goto print_table;
 }
 change_password($appid, generate_password($_POST['newpwd']));
+send_change_password_email($info['email'], $appid);
 echo "<script>alert('Password Changed Successfully');</script>";
 echo "<script>window.location.href='logout.php';</script>";
 

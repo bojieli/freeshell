@@ -79,6 +79,13 @@ function send_manage_notify_email($email, $appid, $action) {
     mail($email, $title, $body, $headers);
 }
 
+function send_change_password_email($email, $appid) {
+    $title = "Freeshell $appid Control Panel Password Changed";
+    $body = "Hello,\n\nThis email is to notify you that Control Panel Password for shell ID $appid has been changed via Web control panel http://freeshell.ustc.edu.cn.\n\nIf you did not request this action, maybe your web account is stolen, please contact us.\nAny problems, please email us: support@freeshell.ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
+    $headers = 'From: "Freeshell Support" <support@freeshell.ustc.edu.cn>';
+    mail($email, $title, $body, $headers);
+}
+
 function send_reset_password_email($email, $appid, $password) {
     $title = "Your Freeshell Control Panel Password is Reset";
     $body = "Hello,\n\nControl panel password for freeshell $appid is reset.\n\nNew password: $password\n\nPlease login to http://freeshell.ustc.edu.cn using your email and new password, and change it as soon as possible.\n\nIf you did not request this action, maybe your web account is stolen, please contact us.\nAny problems, please email us: support@freeshell.ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
