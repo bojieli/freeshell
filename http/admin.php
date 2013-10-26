@@ -2,12 +2,16 @@
 include_once "header.php";
 include_once "db.php";
 include_once "nodes.inc.php";
+include_once "admin.inc.php";
 
 $appid = $_SESSION['appid'];
 if (empty($appid))
     exit();
 $rs = mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
 $info = mysql_fetch_array($rs);
+if (empty($info))
+    exit();
+
 $info['ip'] = get_node_ip(1);
 $info['realip'] = get_node_ip($info['nodeno']);
 $info['ipv6'] = get_node_ipv6($appid);
@@ -70,7 +74,7 @@ p.note {
 }
 </style>
 
-<p>Welcome, <?=$_SESSION['email']?> <a href="logout.php">Logout</a></p>
+<p>Welcome, <?=$_SESSION['email']?> <a href="logout.php">Logout</a> <a href="change-web-pass.php">Change Web Password</a></p>
 <div id="progbar"></div>
 <?php
 if ($_SESSION['isadmin']) { ?>
@@ -78,6 +82,7 @@ if ($_SESSION['isadmin']) { ?>
 <a href="admin/status.php" target="_blank">View status</a>
 <a href="admin/change-quota.php" target="_blank">Change Disk Quota</a>
 <a href="admin/find-user.php" target="_blank">Search User</a>
+<a href="admin/reset-web-pass.php" target="_blank">Reset Web Password</a>
 </p>
 <div id="progbar"></div>
 <?php

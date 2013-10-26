@@ -15,9 +15,7 @@ if (checkhost($hostname) || strlen($password)<6 || checkemail($email)) {
     alert('Sorry, sanity check failed.');
 }
 
-$salt = random_string(20);
-$salted_pass = sha1(sha1($password).$salt) . '/'. $salt;
-
+$salted_pass = generate_password($_POST['regpassword']);
 mysql_query("INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$salted_pass', `email`='$email'");
 $appid = mysql_insert_id();
 if (empty($appid))
