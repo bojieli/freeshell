@@ -9,13 +9,16 @@ function internal_error($msg) {
 }
 function error($msg, $info) {
     if (!$info)
-        $info = "Should you have any problem, please feel free to contact support@freeshell.ustc.edu.cn";
+        $info = "Should you have any problem, please feel free to contact support@freeshell.ustc.edu.cn<p>If you have problem receiving our email or find our email in spam box,<br />please add support@freeshell.ustc.edu.cn to contact list.";
     ?>
 <div id="wrapper">
 <div id="regtitle">
         	<h1><?=$msg?></h1>
         	<div id="progbar">
             </div>
+            <style>
+            p { line-height: 22px }
+            </style>
             <p><?=$info?></p>
 </div>
 <div id="regbutton" onclick="javascript:window.location.href='index.php'">
