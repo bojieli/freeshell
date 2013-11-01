@@ -30,7 +30,9 @@ server {
         listen [::]:80;
         server_name $domain.freeshell.ustc.edu.cn;
         location / {
-                proxy_pass http://s$nodeno.freeshell.ustc.edu.cn:$httpport;
+                proxy_pass       http://s$nodeno.freeshell.ustc.edu.cn:$httpport;
+                proxy_set_header X-Real-IP  \$remote_addr;
+                proxy_set_header Host       \$http_host;
         }
 }";
 }
