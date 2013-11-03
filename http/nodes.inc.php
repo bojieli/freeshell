@@ -48,7 +48,7 @@ function call_monitor($nodeno, $action, $param) {
 }
 
 function destroy_vz($nodeno, $id) {
-    call_monitor($nodeno, "stop", $id);
+    call_monitor($nodeno, "stop --fast", $id);
     return call_monitor($nodeno, "destroy", $id);
 }
 
