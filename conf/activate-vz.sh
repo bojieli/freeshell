@@ -19,6 +19,9 @@ fi
 
 vzctl start $id
 vzctl exec $id "mount -t tmpfs -o noexec,nosuid tmpfs /tmp/"
-cat `dirname $0`/sources.list | vzctl exec $id "cat - > /etc/apt/sources.list"
+cat `dirname $0`/conf-in-vz/sources.list | vzctl exec $id "cat - > /etc/apt/sources.list"
+cat `dirname $0`/conf-in-vz/locale.gen | vzctl exec $id "cat - > /etc/locale.gen"
+vzctl exec $id "locale-gen"
+
 sleep 2 # for network bootstrap
 vzctl exec $id "apt-get update"
