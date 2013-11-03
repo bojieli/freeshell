@@ -130,7 +130,8 @@ if ($num_shells >= 2) {
   <span><button id="btn-manage-reset-root" onclick="manage('reset-root')">Reset Root Password</button></span>
   <span><button id="btn-manage-reinstall" onclick="manage('reinstall')">Reinstall System</button></span>
 </p>
-<p class="smaller">If you need further assistance, please contact support@freeshell.ustc.edu.cn</p>
+<p class="smaller">Want more freeshells? <a href="logout.php">Logout</a> and register a new one :)</p>
+<p class="smaller">If you need further assistance, please feel free to contact <a href="mailto:support@freeshell.ustc.edu.cn">support@freeshell.ustc.edu.cn</a></p>
 </p>
 <div id="progbar"></div>
 <h2>HTTP Proxy</h2>
@@ -138,7 +139,7 @@ if ($num_shells >= 2) {
 http://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />.freeshell.ustc.edu.cn
 <span><button id="btn-update-proxy" onclick="updateProxy()">Update Subdomain</button></span>
 </p>
-<p><span class="smaller">IPv4 access is limited to USTC. To use HTTP proxy, a Web Server should be installed on your freeshell.</span></p>
+<p class="smaller">IPv4 access is limited to USTC. To use HTTP proxy, a Web Server listening IPv4 port 80 should be installed.</p>
 <div id="progbar"></div>
 <h2>Server status</h2>
 <ul class="table">
