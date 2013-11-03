@@ -6,11 +6,11 @@ include_once "admin.inc.php";
 
 $appid = $_SESSION['appid'];
 if (empty($appid))
-    exit();
+    include "logout.php";
 $rs = mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
 $info = mysql_fetch_array($rs);
 if (empty($info))
-    exit();
+    include "logout.php";
 if (empty($_POST['oldpwd']))
     goto print_table;
 if ($_POST['newpwd'] !== $_POST['newpwd_repeat']) {

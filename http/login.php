@@ -7,8 +7,7 @@ include_once "admin.inc.php";
 if (!isset($_SESSION['appid'])) {
 
     if (isset($_SESSION['email'])) {
-    	echo "<script>window.location.href='select-shell.php';</script>";
-        exit();
+    	die("<script>window.location.href='select-shell.php';</script>");
     }
 
     $email = addslashes($_POST['email']);
@@ -31,8 +30,7 @@ if (!isset($_SESSION['appid'])) {
         error('Wrong password!');
     if (count($verified) >= 2) {
         $_SESSION['email'] = $email;
-    	echo "<script>window.location.href='select-shell.php';</script>";
-        exit();
+    	die("<script>window.location.href='select-shell.php';</script>");
     } else {
         // only one shell is verified
         $info = $verified[0];
@@ -50,8 +48,7 @@ else { // appid has been set
 }
     
 if ($info['isactive']) {
-	echo "<script>window.location.href='admin.php';</script>";
-	exit();
+	die("<script>window.location.href='admin.php';</script>");
 }
 
 // not activated

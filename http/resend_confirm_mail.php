@@ -5,11 +5,11 @@ include_once "nodes.inc.php";
 include_once "admin.inc.php";
 
 if (!isset($_SESSION['appid']) || !is_numeric($_SESSION['appid']))
-	exit();
+    include "logout.php";
 $rs = mysql_query("SELECT token FROM shellinfo WHERE `id`='". $_SESSION['appid']. "'");
 $token = mysql_result($rs,0);
 if ($token == "")
-	exit();
+    include "logout.php";
 
 send_activate_mail($_SESSION['email'], $_SESSION['appid'], $token);
 ?>

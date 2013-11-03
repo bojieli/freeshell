@@ -25,9 +25,11 @@ function error($msg, $info) {
         	<p>Go Back</p>
 </div>
 </div>
+</body>
+</html>
 <?php
-    exit();
-}
+    exit(); // exit after error message is output
+} // end function error
 
 function send_activate_mail($email, $appid, $token) {
     $title = "Account Activation for USTC freeshell";

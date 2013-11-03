@@ -6,11 +6,11 @@ include_once "admin.inc.php";
 
 $appid = $_SESSION['appid'];
 if (empty($appid))
-    exit();
+    include "logout.php";
 $rs = mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
 $info = mysql_fetch_array($rs);
 if (empty($info))
-    exit();
+    include "logout.php";
 
 $info['ip'] = get_node_ip(1);
 $info['realip'] = get_node_ip($info['nodeno']);
