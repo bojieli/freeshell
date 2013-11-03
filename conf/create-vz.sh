@@ -13,7 +13,7 @@ diskspace_hardlimit=$5
 localip="10.10.$(echo $id/256 | bc).$(echo $id%256 | bc)"
 ipv6="2001:da8:d800:71::$(echo $id/10000 | bc):$(echo $id%10000 | bc)"
 
-vzctl create $id
+vzctl create $id --ostemplate debian-7.0-x86_64
 vzctl set $id --userpasswd root:$password
 vzctl set $id --kmemsize unlimited --save
 vzctl set $id --privvmpages unlimited --save
