@@ -1,10 +1,8 @@
 deb http://mirrors.ustc.edu.cn/debian/ wheezy main non-free contrib
 deb http://mirrors.ustc.edu.cn/debian/ wheezy-proposed-updates main non-free contrib
+
 deb-src http://mirrors.ustc.edu.cn/debian/ wheezy main non-free contrib
 deb-src http://mirrors.ustc.edu.cn/debian/ wheezy-proposed-updates main non-free contrib
-
-deb http://mirrors.ustc.edu.cn/debian-backports/ wheezy-backports main contrib non-free
-deb-src http://mirrors.ustc.edu.cn/debian-backports/ wheezy-backports main contrib non-free
 
 deb http://mirrors.ustc.edu.cn/debian-security/ wheezy/updates main non-free contrib
 deb-src http://mirrors.ustc.edu.cn/debian-security/ wheezy/updates main non-free contrib
