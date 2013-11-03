@@ -21,7 +21,10 @@ $info['domain'] = 's'.$info['nodeno'].'.freeshell.ustc.edu.cn';
 
 $num_onthisnode = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `nodeno`='".$info['nodeno']."'"),0);
 $node = get_node_info($info['nodeno'], $appid);
-$node['mystatus'] = human_readable_status($node['mystatus']);
+if (isset($node['mystatus']))
+    $node['mystatus'] = human_readable_status($node['mystatus']);
+else
+    $node['mystatus'] = 'Internal error: cannot connect to worker node';
 ?>
 <div id="wrapper">
 <div id="regtitle">
