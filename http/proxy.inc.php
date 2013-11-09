@@ -44,9 +44,9 @@ function runas_monitor($cmd) {
 function ssh_update_proxy_conf($tmpfile) {
     $host = '202.38.70.159';
     $userhost = "scgyshell-client@$host";
-    runas_monitor("scp $tmpfile $userhost:~/freeshell-proxy");
-    runas_monitor("ssh $userhost chmod 644 freeshell-proxy");
-    runas_monitor("ssh $userhost sudo /etc/init.d/nginx reload");
+    runas_monitor("/usr/bin/scp $tmpfile $userhost:~/freeshell-proxy");
+    runas_monitor("/usr/bin/ssh $userhost chmod 644 freeshell-proxy");
+    runas_monitor("/usr/bin/ssh $userhost sudo /etc/init.d/nginx reload");
 }
 
 function subdomain_check_norepeat($domain) {
