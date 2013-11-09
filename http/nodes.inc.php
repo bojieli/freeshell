@@ -57,7 +57,10 @@ function create_vz($nodeno, $id, $hostname, $password, $diskspace_softlimit, $di
 }
 
 function reactivate_vz($nodeno, $id) {
-    return call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno)." renew");
+    global $master_node;
+    call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno)." renew");
+	if ($nodeno != $master_node)
+		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ip($master_node)." ".get_node_ip($nodeno)." renew");
 }
 
 function activate_vz($nodeno, $id) {
