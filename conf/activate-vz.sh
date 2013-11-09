@@ -11,11 +11,13 @@ localip="10.10.$(echo $id/256 | bc).$(echo $id%256 | bc)"
 sshport=$(echo $id + 10000 | bc)
 httpport=$(echo $id + 20000 | bc)
 
-if [ -z "$3" ]; then
-    iptables -t nat -A PREROUTING -i eth0 -p tcp -d $serverip --dport $sshport -j DNAT --to-destination $localip:22
-    iptables -t nat -A PREROUTING -i eth0 -p tcp -d $serverip --dport $httpport -j DNAT --to-destination $localip:80
-    iptables-save > /home/boj/iptables-save
+if [ "$3" == "renew" ]; then
+    iptables -t nat -D PREROUTING -i eth0 -p tcp -d $serverip --dport $sshport -j DNAT --to-destination $localip:22
+    iptables -t nat -D PREROUTING -i eth0 -p tcp -d $serverip --dport $httpport -j DNAT --to-destination $localip:80
 fi
+iptables -t nat -A PREROUTING -i eth0 -p tcp -d $serverip --dport $sshport -j DNAT --to-destination $localip:22
+iptables -t nat -A PREROUTING -i eth0 -p tcp -d $serverip --dport $httpport -j DNAT --to-destination $localip:80
+iptables-save > /home/boj/iptables-save
 
 vzctl start $id
 vzctl exec $id "mount -t tmpfs -o noexec,nosuid tmpfs /tmp/"
