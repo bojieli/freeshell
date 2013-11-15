@@ -108,6 +108,12 @@ if ($num_shells >= 2) {
   <li><span class="h">Status:</span><strong><?=$node['mystatus']?></strong>
   <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong>
   <li><span class="h">Hostname:</span><strong><span id="shell-hostname"><?=$info['hostname']?></span></strong> <button id="hostname-change-btn" onclick="changeHostname()">Change</button>
+  <?php
+  $count = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `hostname`='".addslashes($info['hostname'])."'"), 0);
+  if ($count > 1) {
+    echo "<li><strong>Your Hostname is in conflict with another freeshell.</strong><br /><strong>DNS name may be unavailable. Please change another hostname, thanks.</strong>";
+  }
+  ?>
   <li><span class="h">DNS Name:</span><?=get_node_dns_name($info['hostname'])?> (IPv6 only)
   <li><span class="h">SSH command:</span><span class="c">ssh root@<?=$info['hostname']?>.6.freeshell.ustc.edu.cn</span> (IPv6 only)
   <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['hostname']?>.6.freeshell.ustc.edu.cn</span> (IPv6 only)
