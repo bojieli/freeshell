@@ -8,73 +8,74 @@
 
 <h2>General Policy</h2>
 
-<h3 id="1">1. Who can register freeshell?</h3>
+<h3 id="00">00. Who can register freeshell?</h3>
 <p>USTC staff and students with @ustc.edu.cn or @mail.ustc.edu.cn email address.
 
-<h3 id="2">2. I Want more freeshells.</h3>
+<h3 id="01">01. I Want more freeshells.</h3>
 <p><a href="logout.php">Logout</a> and register a new one :)
 <p>Each email address can register at most 10 freeshells.
 
-<h3 id="3">3. Can I continue to use freeshell after graduation?</h3>
+<h3 id="02">02. Can I continue to use freeshell after graduation?</h3>
 <p>Yes, if we are not running out of disk space.
 <p>Please back up your data periodically to your own device in case of hardware or software failure.
 
-<h3 id="4">4. How much CPU / memory / disk space do I have?</h3>
+<h3 id="03">03. How much CPU / memory / disk space do I have?</h3>
 <p>Disk space is initially limited to 5G. But if you need larger space, please contact us.
 <p>CPU and memory is not limited and fairly shared among freeshells. That means that if no other freeshell on the physical node is busy, you can take over virtually all CPU and memory resource of the hardware.
 <p>Hardware spec (may subject to change): CPU 8 cores, Memory 16G.
 
-<h3 id="5">5. Can I crawl a website using freeshell?</h3>
+<h3 id="04">04. Can I crawl a website using freeshell?</h3>
 <p>It is okay, but do not push the website too hard.
 <p>If we receive complainments or disputes from any organization or individual, it is our sole discretion to limit or block Internet access of your freeshell without prior notification.
 
-<h3 id="6">6. Can I build a public forum?</h3>
+<h3 id="05">05. Can I build a public forum?</h3>
 <p>No. According to USTC Network Policy, anyone building a public forum should get prior written permission from USTC Networking Center.
 <p>It is strongly recommended that you do not provide any UGC (User Generated Content) service on freeshell. You are responsible for any traffic going through HTTP Proxy as well as any content stored on your freeshell.
 
-<h3 id="7">7. Is it okay to put copyrighted material?</h3>
+<h3 id="06">06. Is it okay to put copyrighted material?</h3>
 <p>No. Never put any copyrighted, political or illegal content on freeshell. Note that all HTTP requests will be logged.</p>
 
-<h3 id="8">8. Is freeshell "free" for commercial use?</h3>
+<h3 id="07">07. Is freeshell "free" for commercial use?</h3>
 <p>No. Freeshell is for education and research omly, and we do not have any implied or explicit warranty on Quality of Service, nor are we responsible for any loss caused by service outage, misconfiguration, data corruption, etc.
 
-<h3 id="9">9. I found a vulnerbility of example.com. Can I use freeshell to exploit it?</h3>
+<h3 id="08">08. I found a vulnerbility of example.com. Can I use freeshell to exploit it?</h3>
 <p>Hacker tools are strictly forbidden on freeshell. Once detected, your account may be blocked permanently.
 
-<h3 id="10">10. Is it OK to share USTC resources to Internet?</h3>
+<h3 id="09">09. Is it OK to share USTC resources to Internet?</h3>
 <p>Definitely not, if the resource is copyrighted, confidental or sensitive.
 <p>Be aware not turn your freeshell into a public proxy due to misconfiguration. Creating public proxies on campus network is prohibited by USTC Networking Policy.
 
+
 <h2>Account</h2>
 
-<h3 id="11">11. I registered multiple freeshells with different passwords. Which one will I login to?</h3>
+<h3 id="10">10. I registered multiple freeshells with different passwords. Which one will I login to?</h3>
 <p>If the password matches only one freeshell, that's it.
 <p>If the password matches multiple freeshells, a "Select Freeshell" page will show up and you are free to choose one.
 <p>If you have multiple freeshells, a link to switch shells will show up on Web Control Panel.
 
-<h3 id="12">12. What is my initial SSH password?</h3>
+<h3 id="11">11. What is my initial SSH password?</h3>
 <p>The same as the Web Control Password at registeration.
 
-<h3 id="13">13. I changed password, but cannot SSH using the new password.</h3>
+<h3 id="12">12. I changed password, but cannot SSH using the new password.</h3>
 <p>Note that Web password and SSH password are separate.
 <p>To change SSH password, use "passwd" command. If you forget it, click "Reset Root Password" on Web Control Panel.
 <p>To change Web password, click "Change Web Password" on Web Control Panel. If you forget it, contact support@freeshell.ustc.edu.cn
 
-<h3 id="14">14. I forgot my root password.</h3>
+<h3 id="13">13. I forgot my root password.</h3>
 <p>Login to Web Control Panel and click "Reset Root Password".
 <p>We never store passwords in plain text, so no one can regain your original password if you forget it.
 
-<h3 id="15">15. I received a mail asking me for password.</h3>
+<h3 id="14">14. I received a mail asking me for password.</h3>
 <p>Freeshell admin team will never ask users for password. Please report the incident to support@freeshell.ustc.edu.cn
 
-<h3 id="16">16. My Web account seems to be stolen.</h3>
+<h3 id="15">15. My Web account seems to be stolen.</h3>
 <p>Contact support@freeshell.ustc.edu.cn
 <p>As a special reminder, keep an eye on weak passwords. Do not use dictionary words, birthday or any password that may have leaked elsewhere.
 
-<h3 id="17">17. Can I create SSH accounts for others?</h3>
+<h3 id="16">16. Can I create SSH accounts for others?</h3>
 <p>Please think twice before doing that. You are responsible for all activities, content and traffic on freeshell.
 
-<h3 id="18">18. Can I create users other than root?</h3>
+<h3 id="17">17. Can I create users other than root?</h3>
 <p>Sure! The Linux box is dedicated for you.
 <p>Although using "root" is OK, for security reasons, we recommend the following:
 <ol>
@@ -85,8 +86,9 @@
 <li>Disable root login (sudo passwd -d root)
 </ol>
 
-<h3 id="19">19. Can I use SSH key to login?</h3>
+<h3 id="18">18. Can I use SSH key to login?</h3>
 <p>Sure! "ssh-copy-id" is your friend.
+
 
 <h2>Networking</h2>
 
@@ -123,7 +125,15 @@
 
 <h3 id="29">29. How can I change my hostname?</h3>
 <p>Login to Web Control Panel, click "Change" beside your hostname. You may need to relogin for changes to take effect.
-<p>If you change hostname via "hostname" command, it will revert to the old one on reboot. This is by design.
+<p>If you change hostname via "hostname" command, it will revert to the old one on reboot, and the DNS Name will not be changed.
+
+<h3 id="2A">2A. I have changed my hostname, but still cannot use the new DNS Name.</h3>
+<p>The hostname in your freeshell should be changed immediately, but due to DNS caching and negative caching, it may take 10 minutes or longer for DNS updates to propagate. If your new DNS name still cannot be used after one hour, please contact us.
+
+<h3 id="2B">2B. How can freeshells talk to each other?</h3>
+<p>Just ping6 your peer's hostname. We have set DNS search domain to "6.freeshell.ustc.edu.cn" and "ustc.edu.cn".
+<p>If you cannot SSH to peer on your freeshell, login to Web Control Panel and reset hostname.
+<p>Please use IPv6 for inter-freeshell communication, otherwise you may get confused at DNAT hairpining.
 
 
 <h2>Misc.</h2>
@@ -150,21 +160,36 @@
 <h3 id="35">35. Why my program terminated when I exit the shell?</h3>
 <p>You should install "screen" and run long-live programs in screen.
 
-<h3 id="36">36. I messed up.</h3>
-<p>"Reinstall System" on Web Control Panel. Be sure to backup all your data, because reinstalling system will erase all data permanently!
+<h3 id="36">36. I messed up. How can I reinstall the system?</h3>
+<p>On Control Panel, there is "Reinstall System" button. There are two options:
+<ul>
+<li>If you want to keep /home directory, click "keep /home" button;
+<li>If you want to delete /home as well, click "NOT keep /home" button.
+</ul>
+<p>Be sure to backup all your data outside /home, because reinstalling system will erase all data permanently.
 <p>If you cannot login via SSH, and you do not have a backup, please feel free to contact <a href="mailto:support@freeshell.ustc.edu.cn">support@freeshell.ustc.edu.cn</a></p>
 
+<h3 id="37">37. Why the numbering of this FAQ looks so strange?</h3>
+<p>The first digit is section number, starting from zero and in hexademical.
+<p>The second digit is question number in this section, starting from zero and in hexademical.
 
 <h2>About Us</h2>
 
-<h3 id="37">37. Where is freeshell physically located?</h3>
-<p>Server Room of School of Gifted Young, East Campus, USTC.
+<h3 id="40">40. Where is freeshell physically located?</h3>
+<p>A rack of 7 blade servers, secured in School of Gifted Young (SCGY), East Campus, USTC.
+<p><a href="http://gewu.ustc.edu.cn/tech/index.php?title=%E9%A6%96%E9%A1%B5">More info</a> about SCGY-Tech.
 
-<h3 id="38">38. Who developed freeshell?</h3>
+<h3 id="41">41. Who developed freeshell?</h3>
 <p><a href="http://lug.ustc.edu.cn">LUG@USTC</a>
 
-<h3 id="39">39. I want to contribute to freeshell.</h3>
-<p>Welcome to Freeshell development team! Register an account on <a href="https://gitlab.lug.ustc.edu.cn/">GitLab</a> and contact us at lug AT ustc.edu.cn.
+<h3 id="42">42. Is freeshell code open source?</h3>
+<p>Yes. If you have a GitLab account or want to register one, <a href="https://gitlab.lug.ustc.edu.cn/boj/freeshell">follow this link</a>.
+<p>You may also get the code directly: 
+<pre>git clone https://gitlab.lug.ustc.edu.cn/boj/freeshell.git</pre>
+
+<h3 id="43">43. I want to contribute to freeshell.</h3>
+<p>Welcome to Freeshell development team! Register an account on <a href="https://gitlab.lug.ustc.edu.cn/">GitLab</a> and contact us at
+<pre>base64 -d &lt;&lt;&lt;"bHVnQHVzdGMuZWR1LmNuCg=="</pre>
 
 <hr />
 <p>&copy; 2013 LUG@USTC
