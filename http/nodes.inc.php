@@ -51,12 +51,16 @@ function call_monitor($nodeno, $action, $param) {
     return $output;
 }
 
-function destroy_vz($nodeno, $id) {
+function destroy_vz($nodeno, $id, $keephome = false) {
     call_monitor($nodeno, "stop", "$id --fast");
-    return call_monitor($nodeno, "destroy", $id);
+    if ($keephome)
+        return call_monitor($nodeno, "destroy", "$id keephome");
+    else
+        return call_monitor($nodeno, "destroy", $id);
 }
 
 function create_vz($nodeno, $id, $hostname, $password, $diskspace_softlimit, $diskspace_hardlimit) {
+    include_once "dns.inc.php";
     nsupdate_replace(get_node_dns_name($hostname), 'AAAA', get_node_ipv6($id));
     return call_monitor($nodeno, "create-vz", "$id $hostname $password $diskspace_softlimit $diskspace_hardlimit");
 }

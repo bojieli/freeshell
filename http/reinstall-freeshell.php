@@ -12,8 +12,8 @@ $info = mysql_fetch_array(mysql_query("SELECT tickets.shellid, shellinfo.email, 
 
 if (empty($info) || $info['shellid'] == 0)
     die('Ticket does not exist.');
-//if (strtotime($info['used_time']) > 0)
-//    die('This ticket has been used.');
+if (strtotime($info['used_time']) > 0)
+    die('This ticket has been used.');
 if (time() - strtotime($info['create_time']) > 48*3600)
     die('Sorry, this link has been expired. Please re-perform the action.');
 if ($info['token'] !== $_GET['token'])
@@ -37,7 +37,7 @@ mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
 </div>
 <?php
 fastcgi_finish_request();
-destroy_vz($info['nodeno'], $info['shellid']);
+destroy_vz($info['nodeno'], $info['shellid'], isset($_GET['keephome']));
 $password = random_string(12);
 create_vz($info['nodeno'], $info['shellid'], $info['hostname'], $password, $info['diskspace_softlimit'], $info['diskspace_hardlimit']);
 reactivate_vz($info['nodeno'], $info['shellid']);
