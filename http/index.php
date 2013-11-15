@@ -54,6 +54,7 @@ $shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
         	<li class="headcont 1 titlehighlighted">Free</li>
             <li class="headcont 2">Powerful</li>
             <li class="headcont 3">Safe</li>
+            <li class="headcont 4"><a href="faq.html">FAQ</a></li>
 	    </ul>
         <div id="loginbutton">
         	<div id="logininput" style="display:none">
