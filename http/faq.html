@@ -47,26 +47,34 @@
 
 <h2>Account</h2>
 
-<h3 id="11">11. What is my initial SSH password?</h3>
+<h3 id="11">11. I registered multiple freeshells with different passwords. Which one will I login to?</h3>
+<p>If the password matches only one freeshell, that's it.
+<p>If the password matches multiple freeshells, a "Select Freeshell" page will show up and you are free to choose one.
+<p>If you have multiple freeshells, a link to switch shells will show up on Web Control Panel.
+
+<h3 id="12">12. What is my initial SSH password?</h3>
 <p>The same as the Web Control Password at registeration.
 
-<h3 id="12">12. I changed password, but cannot SSH using the new password.</h3>
+<h3 id="13">13. I changed password, but cannot SSH using the new password.</h3>
 <p>Note that Web password and SSH password are separate.
 <p>To change SSH password, use "passwd" command. If you forget it, click "Reset Root Password" on Web Control Panel.
 <p>To change Web password, click "Change Web Password" on Web Control Panel. If you forget it, contact support@freeshell.ustc.edu.cn
+
+<h3 id="14">14. I forgot my root password.</h3>
+<p>Login to Web Control Panel and click "Reset Root Password".
 <p>We never store passwords in plain text, so no one can regain your original password if you forget it.
 
-<h3 id="13">13. I received a mail asking me for password.</h3>
+<h3 id="15">15. I received a mail asking me for password.</h3>
 <p>Freeshell admin team will never ask users for password. Please report the incident to support@freeshell.ustc.edu.cn
 
-<h3 id="14">14. My Web account seems to be stolen.</h3>
+<h3 id="16">16. My Web account seems to be stolen.</h3>
 <p>Contact support@freeshell.ustc.edu.cn
 <p>As a special reminder, keep an eye on weak passwords. Do not use dictionary words, birthday or any password that may have leaked elsewhere.
 
-<h3 id="15">15. Can I create SSH accounts for others?</h3>
+<h3 id="17">17. Can I create SSH accounts for others?</h3>
 <p>Please think twice before doing that. You are responsible for all activities, content and traffic on freeshell.
 
-<h3 id="16">16. Can I create users other than root?</h3>
+<h3 id="18">18. Can I create users other than root?</h3>
 <p>Sure! The Linux box is dedicated for you.
 <p>Although using "root" is OK, for security reasons, we recommend the following:
 <ol>
@@ -77,82 +85,85 @@
 <li>Disable root login (sudo passwd -d root)
 </ol>
 
-<h3 id="17">17. Can I use SSH key to login?</h3>
+<h3 id="19">19. Can I use SSH key to login?</h3>
 <p>Sure! "ssh-copy-id" is your friend.
 
 <h2>Networking</h2>
 
-<h3 id="18">18. Can I create a VPN on freeshell?</h3>
+<h3 id="20">20. Can I create a VPN on freeshell?</h3>
 <p>Possibly not. We use OpenVZ virtualization technology, and TUN/TAP device will not work.
 
-<h3 id="19">19. I have set up HTTP proxy, but it seems not working.</h3>
+<h3 id="21">21. I have set up HTTP proxy, but it seems not working.</h3>
 <p>To use HTTP proxy, a Web Server listening IPv4 port 80 should be installed.
 
-<h3 id="20">20. Why SSH says "No route to host"?</h3>
+<h3 id="22">22. Why SSH says "No route to host"?</h3>
 <p>Hostname of your freeshell resolves to IPv6 address only.
 <p>If you do not have IPv6 access, try IPv4 port mapping on Web Control Panel. The IPv4 address is shared and only the listed ports are mapped to your port.
 
-<h3 id="21">21. I cannot SSH to IPv4 outside campus.</h3>
+<h3 id="23">23. I cannot SSH to IPv4 outside campus.</h3>
 <p>This is by design. There are too many attacks on Internet.
 <p>If you do have such requirement, please have a look at <a href="http://vpn.lug.ustc.edu.cn">LUG VPN program</a>.
 
-<h3 id="22">22. Can I have a dedicated IPv4 address?</h3>
+<h3 id="24">24. Can I have a dedicated IPv4 address?</h3>
 <p>No. We do not have such a large IPv4 address space.
 <p>Please use HTTP Proxy if you require IPv4 web access.
 
-<h3 id="23">23. Can I have an additional IPv4 port mapping to my freeshell?</h3>
+<h3 id="25">25. Can I have an additional IPv4 port mapping to my freeshell?</h3>
 <p>No. Your IPv6 address is dedicated. Why not use that?
 
-<h3 id="24">24. I want HTTPS secure access to my freeshell.</h3>
+<h3 id="26">26. I want HTTPS secure access to my freeshell.</h3>
 <p>Sure! Use HTTP Proxy and visit https://yourname.freeshell.ustc.edu.cn
 <p>If you want to redirect http to https: In the web server of your freeshell, please check "X-Scheme" HTTP header for "http" or "https".
 
-<h3 id="25">25. I added a network device / IP address but not working.</h3>
+<h3 id="27">27. What is the real IP address behind HTTP proxy?</h3>
+<p>See "X-Real-IP" HTTP header. You should use this header field to identify clients.
+
+<h3 id="28">28. I added a network device / IP address but not working.</h3>
 <p>This is by design.</p>
 
-<h3 id="26">26. How can I change my hostname?</h3>
+<h3 id="29">29. How can I change my hostname?</h3>
 <p>Login to Web Control Panel, click "Change" beside your hostname. You may need to relogin for changes to take effect.
 <p>If you change hostname via "hostname" command, it will revert to the old one on reboot. This is by design.
 
 
 <h2>Misc.</h2>
 
-<h3 id="27">27. I'm using Windows, how to connect?</h3>
+<h3 id="30">30. I'm using Windows, how to connect?</h3>
 <p>If you are using Windows, please download PuTTY <a href="http://lug.ustc.edu.cn/~boj/web_dev/ref/putty.zip">Here</a>. The usage of PuTTY can be found on Google.
 
-<h3 id="28">28. I want to change a newer kernel / insert a kernel module.</h3>
+<h3 id="31">31. I want to change a newer kernel / insert a kernel module.</h3>
 <p>Sorry. We use OpenVZ virtualization technology, and all freeshells (OpenVZ Containers) share a same kernel.
 
-<h3 id="29">29. What Linux Distribution am I using?</h3>
+<h3 id="32">32. What Linux Distribution am I using?</h3>
 <p>If you created freeshell before Nov. 2013, it is a minimal Debian 6.0 "squeeze" system.
 <p>Otherwise, you are using Debian 7.0 "wheezy" minimal system.
 <p>If you are an expert, you may change your freeshell to any distribution supporting 2.6.32 kernel.
 
-<h3 id="30">30. Why command X "not found"?</h3>
+<h3 id="33">33. Why command X "not found"?</h3>
 <p>This Linux box ships with a minimal set of pre-installed software packages. Many utils on normal Linux distributions have to be installed by yourself.
 <p>Remember not to install too many packages, since our disk space is limited :)
 
-<h3 id="31">31. How to install X, GNOME or KDE?</h3>
+<h3 id="34">34. How to install X, GNOME or KDE?</h3>
 <p>While it is technically possible, we are strongly against it.
 <p>You are expected to learn some shell commands. Break shell, touch Linux!
 
-<h3 id="32">32. Why my program terminated when I exit the shell?</h3>
+<h3 id="35">35. Why my program terminated when I exit the shell?</h3>
 <p>You should install "screen" and run long-live programs in screen.
 
-<h3 id="33">33. I messed up.</h3>
+<h3 id="36">36. I messed up.</h3>
 <p>"Reinstall System" on Web Control Panel. Be sure to backup all your data, because reinstalling system will erase all data permanently!
 <p>If you cannot login via SSH, and you do not have a backup, please feel free to contact <a href="mailto:support@freeshell.ustc.edu.cn">support@freeshell.ustc.edu.cn</a></p>
 
 
 <h2>About Us</h2>
 
-<h3 id="34">34. Where is freeshell physically located?</h3>
+<h3 id="37">37. Where is freeshell physically located?</h3>
 <p>Server Room of School of Gifted Young, East Campus, USTC.
 
-<h3 id="35">35. Who developed freeshell?</h3>
+<h3 id="38">38. Who developed freeshell?</h3>
 <p><a href="http://lug.ustc.edu.cn">LUG@USTC</a>
 
-<h3 id="36">36. I want to contribute to freeshell.</h3>
+<h3 id="39">39. I want to contribute to freeshell.</h3>
 <p>Welcome to Freeshell development team! Register an account on <a href="https://gitlab.lug.ustc.edu.cn/">GitLab</a> and contact us at lug AT ustc.edu.cn.
 
 <hr />
