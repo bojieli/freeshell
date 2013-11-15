@@ -133,13 +133,16 @@ if ($num_shells >= 2) {
   <span><button id="btn-manage-start" onclick="manage('start')">Start</button></span>
   <span><button id="btn-manage-stop" onclick="manage('stop')">Shutdown</button></span>
   <span><button id="btn-manage-reboot" onclick="manage('reboot')">Reboot</button></span>
-  <span><button id="btn-manage-reset-root" onclick="manage('reset-root')">Reset Root Password</button></span>
 </p>
+
+<div id="progbar"></div>
+<h2>Recovery</h2>
 <p class="buttons">
+  <span><button id="btn-manage-reset-root" onclick="manage('reset-root')">Reset Root Password</button></span>
   <span><button id="btn-manage-reinstall-keephome" onclick="manage('reinstall-keephome')">Reinstall System (keep /home)</button></span>
   <span><button id="btn-manage-reinstall" onclick="manage('reinstall')">Reinstall System (NOT keep /home)</button></span>
 </p>
-</p>
+
 <div id="progbar"></div>
 <h2>HTTP Proxy</h2>
 <p>
@@ -147,6 +150,7 @@ http(s)://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>"
 <span><button id="btn-update-proxy" onclick="updateProxy()">Update Subdomain</button></span>
 </p>
 <p class="smaller">See <a href="faq.html" target="_blank">FAQ</a> for HTTP Proxy Policy and Help.</p>
+
 <div id="progbar"></div>
 <h2>Server status</h2>
 <ul class="table">
@@ -164,6 +168,7 @@ foreach ($node as $key => $value) {
 }
 ?>
 </ul>
+
 <div id="progbar"></div>
 <h2>Resource Limits</h2>
 <ul class="table">
