@@ -77,7 +77,12 @@ p.note {
 }
 </style>
 
-<p>Welcome, <?=$_SESSION['email']?> <a href="logout.php">Logout</a> <a href="change-web-pass.php">Change Web Password</a></p>
+<p>Welcome, <?=$_SESSION['email']?> &nbsp;&nbsp;
+<a href="logout.php">Logout</a>&nbsp;&nbsp;
+<a href="change-web-pass.php">Change Web Password</a>&nbsp;&nbsp;
+<a href="faq.html">Help</a>
+</p>
+
 <div id="progbar"></div>
 <?php
 if ($_SESSION['isadmin']) { ?>
