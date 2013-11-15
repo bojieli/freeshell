@@ -67,16 +67,9 @@ function need_email_verification($name, $msg, $action, $email, $appid) {
     return "Since this is a danger action, please check your mailbox and follow the link in confirmation email.";
 }
 
-function send_manage_notify_email($email, $appid, $action) {
-    switch ($action) {
-        case 'stop':
-            $actioned = 'stopped';
-            break;
-        default:
-            $actioned = $action . 'ed';
-    }
-    $title = "Your freeshell has $actioned";
-    $body = "Hello,\n\nThis email is to notify you that shell ID $appid has been $actioned via Web control panel https://freeshell.ustc.edu.cn.\n\nIf you did not request this action, maybe your web account is stolen, please contact us.\nAny problems, please email us: support@freeshell.ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
+function send_manage_notify_email($email, $appid, $action, $additional_info) {
+    $title = "Your freeshell has $action";
+    $body = "Hello,\n\nThis email is to notify you that shell ID $appid has been $action via Web control panel https://freeshell.ustc.edu.cn.\n\n$additional_info\nIf you did not request this action, maybe your web account is stolen, please contact us.\nAny problems, please email us: support@freeshell.ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
     $headers = 'From: "Freeshell Support" <support@freeshell.ustc.edu.cn>';
     mail($email, $title, $body, $headers);
 }

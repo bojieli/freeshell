@@ -145,7 +145,7 @@ if ($num_shells >= 2) {
 http(s)://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />.freeshell.ustc.edu.cn
 <span><button id="btn-update-proxy" onclick="updateProxy()">Update Subdomain</button></span>
 </p>
-<p class="smaller">See <a href="faq.html#4" target="_blank">HTTP Proxy Polocy</a> and <a href="faq.html#17" target="_blank">Help</a></p>
+<p class="smaller">See <a href="faq.html" target="_blank">FAQ</a> for HTTP Proxy Policy and Help.</p>
 <div id="progbar"></div>
 <h2>Server status</h2>
 <ul class="table">
@@ -180,7 +180,8 @@ foreach ($node as $key => $value) {
 ?>
 </ul>
 <div id="progbar"></div>
-<h2><a href="FAQ.html" target="_blank">FAQ</a></h2>
+<h2><a href="faq.html" target="_blank">Frequency Asked Questions</a></h2>
+<div id="progbar"></div>
 </div>
 </div>
 </div>

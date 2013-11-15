@@ -22,7 +22,8 @@ switch ($_POST['action']) {
     case 'reboot':
     case 'stop':
         control_vz($a['nodeno'], $_POST['action'], $id);
-        send_manage_notify_email($email, $id, $_POST['action']);
+        send_manage_notify_email($email, $id,
+            ($_POST['action'] == 'stop' ? 'stopped' : $_POST['action'].'ed'));
         break;
     case 'reset-root':
         reset_passwd($email, $a['nodeno'], $id);
@@ -37,9 +38,12 @@ switch ($_POST['action']) {
         break;
     case 'update-proxy':
         update_proxy($_POST['domain']);
+        send_manage_notify_email($email, $appid, "Updated HTTP Proxy");
         break;
     case 'update-hostname':
         update_hostname($_POST['hostname']);
+        send_manage_notify_email($email, $appid, "Updated Hostname",
+            "Due to DNS caches, the new hostname may take up to 10 minutes to be usable.");
         break;
     default:
         die('Unsupported action');
