@@ -107,8 +107,10 @@ if ($num_shells >= 2) {
   <li><span class="h">Shell ID:</span><strong><?=$appid?></strong>
   <li><span class="h">Status:</span><strong><?=$node['mystatus']?></strong>
   <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong>
-  <li><span class="h">SSH command:</span><span class="c">ssh root@<?=$info['ipv6']?></span>
-  <li><span class="h">HTTP address:</span><span class="c">http://[<?=$info['ipv6']?>]/</span>
+  <li><span class="h">Hostname:</span><strong><span id="shell-hostname"><?=$info['hostname']?></span></strong> <button id="hostname-change-btn" onclick="changeHostname()">Change</button>
+  <li><span class="h">DNS Name:</span><?=get_node_dns_name($info['hostname'])?> (IPv6 only)
+  <li><span class="h">SSH command:</span><span class="c">ssh root@<?=$info['hostname']?>.6.freeshell.ustc.edu.cn</span> (IPv6 only)
+  <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['hostname']?>.6.freeshell.ustc.edu.cn</span> (IPv6 only)
 </ul>
 
 <p class="note">If IPv6 is not working (e.g. you are using VPN), try IPv4 (RESTRICTED TO USTC CAMPUS):</p>
@@ -130,16 +132,14 @@ if ($num_shells >= 2) {
   <span><button id="btn-manage-reset-root" onclick="manage('reset-root')">Reset Root Password</button></span>
   <span><button id="btn-manage-reinstall" onclick="manage('reinstall')">Reinstall System</button></span>
 </p>
-<p class="smaller">Want more freeshells? <a href="logout.php">Logout</a> and register a new one :)</p>
-<p class="smaller">If you need further assistance, please feel free to contact <a href="mailto:support@freeshell.ustc.edu.cn">support@freeshell.ustc.edu.cn</a></p>
 </p>
 <div id="progbar"></div>
 <h2>HTTP Proxy</h2>
 <p>
-http://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />.freeshell.ustc.edu.cn
+http(s)://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />.freeshell.ustc.edu.cn
 <span><button id="btn-update-proxy" onclick="updateProxy()">Update Subdomain</button></span>
 </p>
-<p class="smaller">IPv4 access is limited to USTC. To use HTTP proxy, a Web Server listening IPv4 port 80 should be installed.</p>
+<p class="smaller">See <a href="faq.html#4" target="_blank">HTTP Proxy Polocy</a> and <a href="faq.html#17" target="_blank">Help</a></p>
 <div id="progbar"></div>
 <h2>Server status</h2>
 <ul class="table">
@@ -174,20 +174,17 @@ foreach ($node as $key => $value) {
 ?>
 </ul>
 <div id="progbar"></div>
-<h2>For Linux newbies</h2>
-<ul class="help">
-  <li>If you are using Windows, please download PuTTY <a href="http://lug.ustc.edu.cn/~boj/web_dev/ref/putty.zip">Here</a>. The usage of PuTTY can be found on Google.
-  <li>If you are still using ROOT account to login, please create your own user and add it to sudo group. It is also recommended to login with SSH key instead of username and password. If you don't know what this is all about, just ignore this recommendation.
-  <li>This Linux box ships with few pre-installed software packages. It is a minimal debian 6.0 system with USTC mirror configured and "fail2ban", "sudo" installed. Many utils on normal Linux distributions have to be installed by yourself. Remember not to install too many packages, since our disk space is limited :)
-  <li>DO NOT INSTALL X, GNOME OR KDE! This is a command-line based shell, not a graphical desktop environment. You are expected to learn some shell commands. Break shell, touch Linux!
-  <li>Why my HTTP address cannot be accessed? You have not installed a Web server. If you are not in need of Web service, please save our shared resource by leaving it uninstalled.
-  <li>Why my program terminated when I exit the shell? You should install "screen" and run long-live programs in screen.
-</ul>
+<h2><a href="FAQ.html" target="_blank">FAQ</a></h2>
 </div>
 </div>
 </div>
 <script src="js/jquery.js" type="text/javascript"></script>
 <script>
+function ajaxSuccessFunc(msg){
+    if (msg.length > 0)
+        alert(msg);
+    window.location.reload();
+}
 function manage(action) {
     if (!confirm("Do you really want to " + action + " your freeshell?"))
         return;
@@ -198,11 +195,7 @@ function manage(action) {
         type: 'post',
         async: true,
         data: {appid: <?=$info['id']?>, action: action},
-        success: function(msg){
-            if (msg.length > 0)
-                alert(msg);
-            window.location.reload();
-        }
+        success: ajaxSuccessFunc,
     });
 }
 function updateProxy() {
@@ -223,12 +216,32 @@ function updateProxy() {
             action: 'update-proxy',
             domain: new_domain
         },
-        success: function(msg) {
-            if (msg.length > 0)
-                alert(msg);
-            window.location.reload();
-        }
+        success: ajaxSuccessFunc,
     });
+}
+function changeHostname() {
+    var dom = $('#shell-hostname');
+    if (dom.hasClass('input')) {
+        if (dom.find('input') != null && dom.find('input').val().length > 0) {
+            $('#hostname-change-btn').attr('disabled', true);
+            $('#hostname-change-btn').html('Processing...');
+            $.ajax({
+                url: 'manage.php',
+                type: 'post',
+                async: true,
+                data: {
+                    appid: <?=$info['id']?>,
+                    action: 'update-hostname',
+                    hostname: dom.find('input').val(),
+                },
+                success: ajaxSuccessFunc,
+            });
+        }
+        return;
+    }
+    dom.html('<input type="text" value="' + dom.html() + '" />');
+    dom.addClass('input');
+    $('#hostname-change-btn').html('Save');
 }
 </script>
 

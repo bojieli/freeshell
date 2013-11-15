@@ -28,6 +28,10 @@ function get_node_ipv6($nodeno) {
         return $prefix.($nodeno / 10000).':'.($nodeno % 10000);
 }
 
+function get_node_dns_name($hostname) {
+    return "$hostname.6.freeshell.ustc.edu.cn";
+}
+
 function run_in_node($nodeno, $cmd) {
     $cmd = str_replace("'", "\\'", $cmd);
     $cmd = str_replace("\"", "\\\"", $cmd);
@@ -53,6 +57,7 @@ function destroy_vz($nodeno, $id) {
 }
 
 function create_vz($nodeno, $id, $hostname, $password, $diskspace_softlimit, $diskspace_hardlimit) {
+    nsupdate_replace(get_node_dns_name($hostname), 'AAAA', get_node_ipv6($id));
     return call_monitor($nodeno, "create-vz", "$id $hostname $password $diskspace_softlimit $diskspace_hardlimit");
 }
 

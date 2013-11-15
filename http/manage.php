@@ -1,7 +1,9 @@
 <?php
 include_once "nodes.inc.php";
+include_once "verify.inc.php";
 include_once "proxy.inc.php";
 include_once "admin.inc.php";
+include_once "dns.inc.php";
 include_once "db.php";
 
 session_start();
@@ -36,6 +38,9 @@ switch ($_POST['action']) {
     case 'update-proxy':
         update_proxy($_POST['domain']);
         break;
+    case 'update-hostname':
+        update_hostname($_POST['hostname']);
+        break;
     default:
         die('Unsupported action');
 }
@@ -52,16 +57,50 @@ function update_proxy($domain) {
 
     $flag = subdomain_check($domain);
     switch ($flag) {
+    case 0:
+        break;
     case 1:
         die('ERROR: subdomain length should be at least 3, at most 20');
     case 2:
-        die('ERROR: subdomain should only contain lower-case letters and numbers');
+        die('ERROR: subdomain should only contain lower-case letters, hyphen and numbers');
     case 3:
         die('Sorry, this domain name is reserved.');
     case 4:
         die('Sorry, someone else has taken this subdomain.');
+    default:
+        die('Unknown Error '.$flag);
     }
 
     mysql_query("UPDATE shellinfo SET `http_subdomain`='$domain' WHERE `id`='$id'");
     update_proxy_conf();
+}
+
+function update_hostname($hostname) {
+    global $id;
+    global $a;
+
+    if (!is_numeric($id) || !is_numeric($a['nodeno']))
+        die('Sanity check failed');
+
+    $flag = checkhost($hostname);
+    switch ($flag) {
+    case 0:
+        break;
+    case 1:
+        die('ERROR: hostname should only contain lower-case letters, hyphen and numbers');
+    case 2:
+        die('Sorry, this hostname is already taken.');
+    case 3:
+    case 5:
+        die('ERROR: subdomain length should be at least 3, at most 30');
+    default:
+        die('Unknown Error '.$flag);
+    }
+
+    mysql_query("UPDATE shellinfo SET `hostname`='$hostname' WHERE `id`='$id'");
+    set_vz($a['nodeno'], $id, 'hostname', $hostname);
+
+    nsupdate_replace(get_node_dns_name($hostname), 'AAAA', get_node_ipv6($id));
+    if (strlen($a['hostname']) > 0)
+        nsupdate_delete(get_node_dns_name($a['hostname']), 'AAAA');
 }

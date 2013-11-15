@@ -200,7 +200,7 @@ function verify(type,data)
 						{
 							case 1:
 							{
-								$("#hostfail").html("Only letters, digits and '-' are allowed in hostname.");
+								$("#hostfail").html("Only lower-case letters, digits and '-' are allowed in hostname.");
 								break;
 							}
 							case 2:
@@ -211,11 +211,6 @@ function verify(type,data)
 							case 3:
 							{
 								$("#hostfail").html("Sorry, the hostname is too long.");
-								break;
-							}
-							case 4:
-							{
-								$("#hostfail").html("Sorry, only lower case letters (a-z) are allowed.");
 								break;
 							}
 							case 5:
