@@ -44,11 +44,11 @@ switch ($_POST['action']) {
         break;
     case 'update-proxy':
         update_proxy($_POST['domain']);
-        send_manage_notify_email($email, $appid, "Updated HTTP Proxy");
+        send_manage_notify_email($email, $id, "Updated HTTP Proxy");
         break;
     case 'update-hostname':
         update_hostname($_POST['hostname']);
-        send_manage_notify_email($email, $appid, "Updated Hostname",
+        send_manage_notify_email($email, $id, "Updated Hostname",
             "Due to DNS caches, the new hostname may take up to 10 minutes to be usable.");
         break;
     default:
