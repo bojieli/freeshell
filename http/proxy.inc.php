@@ -31,6 +31,8 @@ server {
         listen [::]:80;
         listen [::]:443;
         server_name $domain.freeshell.ustc.edu.cn;
+        access_log /var/log/nginx/freeshell-proxy/access.log logverbose;
+        error_log  /var/log/nginx/freeshell-proxy/error.log;
         location / {
                 proxy_pass       http://s$nodeno.freeshell.ustc.edu.cn:$httpport;
                 proxy_set_header X-Real-IP  \$remote_addr;
