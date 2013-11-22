@@ -18,6 +18,8 @@ fi
 # preserve perms and execution bit, chown as root
 rsync -rpE --exclude=sudoers $BASE/etc/ /etc/
 
+sysctl -p >/dev/null
+
 KEY_SRC="$BASE/scgyshell-client.authorized_keys"
 KEY_TARGET="/home/scgyshell-client/.ssh/authorized_keys"
 chown scgyshell-client:scgyshell-client $KEY_SRC
