@@ -24,6 +24,7 @@ vzctl set $id --quotatime 86400 --save
 vzctl set $id --numproc 500 --save
 vzctl set $id --numtcpsock 500 --save
 vzctl set $id --numothersock 1000 --save
+vzctl set $id --numfile 25000 --save
 vzctl set $id --onboot yes --save
 vzctl set $id --hostname $hostname --save
 vzctl set $id --ipadd $localip --save
