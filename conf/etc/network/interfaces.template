@@ -14,7 +14,7 @@ iface eth0 inet6 static
 auto eth1
 iface eth1 inet static
     address 192.168.0.20$NODENO
-    netmask 255.255.255.0
+    netmask 255.255.252.0
     #gateway 192.168.0.2
 
 iface eth1 inet6 static
