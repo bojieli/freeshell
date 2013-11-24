@@ -1,4 +1,5 @@
 #!/bin/sh -e
 
 iptables-restore < /home/boj/iptables-save
+[ -f /usr/local/sbin/pernode-rc.local ] && /usr/local/sbin/pernode-rc.local
 exit 0
