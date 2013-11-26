@@ -7,7 +7,7 @@ function alert($msg) {
 function internal_error($msg) {
     alert("Internal Error, please retry. Error message: $msg");
 }
-function error($msg, $info) {
+function error($msg, $info = "") {
     if (!$info)
         $info = "Should you have any problem, please feel free to contact support@freeshell.ustc.edu.cn<p>If you have problem receiving our email or find our email in spam box,<br />please add noreply@freeshell.ustc.edu.cn to contact list.";
     ?>
@@ -72,7 +72,7 @@ function need_email_verification($name, $msg, $action, $http_param, $email, $app
     return "Since this is a danger action, please check your mailbox and follow the link in confirmation email.";
 }
 
-function send_manage_notify_email($email, $appid, $action, $additional_info) {
+function send_manage_notify_email($email, $appid, $action, $additional_info = "") {
     global $headers, $footer;
     $title = "Your freeshell has $action";
     $body = "Hello,\n\nThis email is to notify you that shell ID $appid has been $action via Web control panel https://freeshell.ustc.edu.cn.\n\n$additional_info\nIf you did not request this action, maybe your web account is stolen, please contact us.".$footer;
