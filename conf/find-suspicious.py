@@ -26,7 +26,8 @@ def isSuspicious(processid):
         return False
 
 def killSuspicious(processid):
-    os.kill(int(processid),0)
+    os.kill(int(processid),9)
+    print processid,getcmd(processid),"has been killed"
 
 def killFirst():
     pids= [processid for processid in os.listdir('/proc') if processid.isdigit()]
@@ -38,6 +39,7 @@ class EventHandler(pyinotify.ProcessEvent):
     def process_IN_CREATE(self, event):
         if event.isdigit and isSuspicious(event):
             killSuspicious(event)
+            print event,getcmd(event),"has been killed"
 
 def monitor(path="/proc/"):
     wm = pyinotify.WatchManager()
