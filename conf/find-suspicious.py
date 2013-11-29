@@ -1,8 +1,9 @@
 import os
 import re
+import time
 import pyinotify
 
-suspicious = re.compile("wcgrid|cgminer|coin-miner")
+suspicious = re.compile("wcgrid|setiathome|distrrtgen|cgminer|coin-miner|minerd")
 
 def getcmd(id):
     try:
@@ -26,8 +27,9 @@ def isSuspicious(processid):
         return False
 
 def killSuspicious(processid):
+    cmdname = getcmd(processid)
     os.kill(int(processid),9)
-    print processid,getcmd(processid),"has been killed"
+    print time.ctime(), processid,cmdname,"has been killed"
 
 def killFirst():
     pids= [processid for processid in os.listdir('/proc') if processid.isdigit()]
@@ -39,7 +41,6 @@ class EventHandler(pyinotify.ProcessEvent):
     def process_IN_CREATE(self, event):
         if event.isdigit and isSuspicious(event):
             killSuspicious(event)
-            print event,getcmd(event),"has been killed"
 
 def monitor(path="/proc/"):
     wm = pyinotify.WatchManager()
