@@ -39,8 +39,8 @@ def killFirst():
 
 class EventHandler(pyinotify.ProcessEvent):
     def process_IN_CREATE(self, event):
-        if event.isdigit and isSuspicious(event):
-            killSuspicious(event)
+        if event.name.isdigit and isSuspicious(event.name):
+            killSuspicious(event.name)
 
 def monitor(path="/proc/"):
     wm = pyinotify.WatchManager()
