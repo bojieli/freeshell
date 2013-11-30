@@ -3,7 +3,7 @@ import re
 import time
 import pyinotify
 
-suspicious = re.compile("wcgrid|setiathome|distrrtgen|cgminer|coin-miner|minerd")
+suspicious = re.compile("boinc|wcgrid|setiathome|distrrtgen|cgminer|coin-miner|minerd")
 
 def getcmd(id):
     try:
