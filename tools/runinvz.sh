@@ -11,4 +11,4 @@ host=$(echo $id % 7 | bc)
 if [ $host -eq 0 ]; then
     host=7
 fi
-ssh s$host.freeshell.ustc.edu.cn "sudo vzctl exec $id $@"
+ssh s$host.freeshell.ustc.edu.cn "sudo vzctl exec $id '$@'"
