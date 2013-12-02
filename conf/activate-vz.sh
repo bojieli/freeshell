@@ -25,5 +25,9 @@ cat `dirname $0`/conf-in-vz/sources.list | vzctl exec $id "cat - > /etc/apt/sour
 cat `dirname $0`/conf-in-vz/locale.gen | vzctl exec $id "cat - > /etc/locale.gen"
 vzctl exec $id "locale-gen"
 
+# fix timezone
+vzctl exec $id "ln -sf /usr/share/zoneinfo/Asia/Chongqing /etc/localtime"
+vzctl exec $id "echo Asia/Chongqing > /etc/timezone"
+
 sleep 2 # for network bootstrap
 vzctl exec $id "apt-get update"
