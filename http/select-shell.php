@@ -5,8 +5,11 @@ include_once "db.php";
 if (!isset($_SESSION['email']))
 	die("<script>window.location.href='index.php';</script>");
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $_SESSION['appid'] = $_GET['id'];
-    die("<script>window.location.href='login.php';</script>");
+    $email = mysql_result(mysql_query("SELECT email FROM shellinfo WHERE id='".$_GET['id']."'"), 0);
+    if ($email == $_SESSION['email']) {
+        $_SESSION['appid'] = $_GET['id'];
+        die("<script>window.location.href='login.php';</script>");
+    }
 }
 
 $email = addslashes($_SESSION['email']);
