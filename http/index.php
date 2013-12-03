@@ -37,17 +37,6 @@ $shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
 </head>
 
 <body>
-    <div id="banner">
-    	<div id="inbanner">
-    		<img src="img/logo.png" />
-            <ul class="bannerright">
-            	<li><a href="http://dev.blog.ustc.edu.cn/">Dev Blog</a></li>
-            	<li><a href="http://dev.blog.ustc.edu.cn/">F&amp;Q</a></li>
-                <li><a href="http://dev.blog.ustc.edu.cn/">About</a></li>
-            </ul>
-        </div>
-    </div>
-
 	<div id="wrapper">
     <div id="header">
 	    <ul>
@@ -125,7 +114,7 @@ $shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
             <p><span>E-Mail: </span><input type="text" name="regemail" id="regemail" onchange="verify('email',$(this).val())"/><span class="regcheck" id="emailfail"></span></p>
             <p><span>Password:</span><input type="password" name="regpassword" id="regpassword" onchange="if(passcheck){checkpass($(this).val(),'password')}"/><span class="regcheck"></span></p>
             <p><span>Confirm:</span><input type="password" name="regconfpass" id="regconfpass" onchange="checkpass($(this).val())"/><span class="regcheck" id="passfail"></span></p>
-            <p><span>Hostname: </span><input type="text" name="hostname" id="hostname" onkeyup="checkhost();" onchange="verify('host',$(this).val());" /><span class="regcheck" id="hostfail"></span></p>
+            <p><span>Hostname: </span><input type="text" name="hostname" id="hostname" onchange="verify('host',$(this).val());" /><span class="regcheck" id="hostfail"></span></p>
             
             <div id="regsend">
         		<p>Register!</p>

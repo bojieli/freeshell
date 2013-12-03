@@ -78,7 +78,10 @@ $(document).ready(function(){
 					$("#regform").submit();
 				else
 				{
-					alert("Please complete the form.");
+                    verify('email', $('#regemail').val());
+                    checkpass($('#regpassword').val());
+                    verify('host', $('#hostname').val());
+                    setTimeout(function(){ $('#regbutton').click() }, 1000);
                     e.stopPropagation();
 				}
 		});
@@ -139,7 +142,7 @@ function verify(type,data)
 				data:{email:data},
 				success:function(data){
 					errcode=parseInt(data.substr(-1));
-					if(!errcode)
+					if(data && !errcode)
 					{
 							$("#emailfail").html("This address will be confirmed later.");
 							$("#regemail").css("border-color","#4ecd74");
@@ -170,6 +173,11 @@ function verify(type,data)
 								$("#emailfail").html("Email too long. Sorry><");
 								break;
                             }
+                            default:
+                            {
+                                $("#emailfail").html("Please input your USTC email.");
+                                break;
+                            }
 						}
 					}
 				}
@@ -187,7 +195,7 @@ function verify(type,data)
 				success:function(data){
 					//alert(data);
 					errcode=parseInt(data.substr(-1));
-					if(!errcode)
+					if(data && !errcode)
 					{
 							$("#hostfail").html("Great hostname.");
 							$("#hostname").css("border-color","#4ecd74");
@@ -223,6 +231,11 @@ function verify(type,data)
 								$("#hostfail").html("Sorry, this domain is reserved, please try another one.");
 								break;
 							}
+                            default:
+                            {
+                                $("#hostfail").html("Please input your desired hostname.");
+                                break;
+                            }
 						}
 					}
 				}
