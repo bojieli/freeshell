@@ -30,7 +30,7 @@ server {
         listen 443;
         listen [::]:80;
         listen [::]:443;
-        server_name $domain.freeshell.ustc.edu.cn;
+        server_name $domain.freeshell.ustc.edu.cn *.$domain.freeshell.ustc.edu.cn;
         access_log /var/log/nginx/freeshell-proxy/access.log logverbose;
         error_log  /var/log/nginx/freeshell-proxy/error.log;
         location / {
