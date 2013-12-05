@@ -1,7 +1,6 @@
 import os
 import re
 import time
-import pyinotify
 
 suspicious = re.compile("boinc|wcgrid|setiathome|distrrtgen|cgminer|coin-miner|minerd")
 
@@ -28,28 +27,23 @@ def isSuspicious(processid):
 
 def killSuspicious(processid):
     cmdname = getcmd(processid)
+    root = getroot(processid)
     os.kill(int(processid),9)
-    print time.ctime(), processid,cmdname,"has been killed"
+    print time.ctime(),",killed",",process = ",processid,",cmd = ",cmdname,",user = ",root
 
-def killFirst():
-    pids= [processid for processid in os.listdir('/proc') if processid.isdigit()]
-    tokill = [processid for processid in pids if isSuspicious(processid)]
-    for processid in tokill:
-        killSuspicious(processid)
-
-class EventHandler(pyinotify.ProcessEvent):
-    def process_IN_CREATE(self, event):
-        if event.name.isdigit and isSuspicious(event.name):
-            killSuspicious(event.name)
-
-def monitor(path="/proc/"):
-    wm = pyinotify.WatchManager()
-    mask = pyinotify.IN_CREATE
-    hander = EventHandler()
-    notifier = pyinotify.Notifier(wm,hander)
-    wm.add_watch(path,mask,rec=True)
-    notifier.loop()
+def kill():
+    pids = []
+    i = 0
+    while(i < 60):
+        tpids = [processid for processid in os.listdir('/proc') if processid.isdigit()]
+        tokill = [processid for processid in tpids if processid not in pids and isSuspicious(processid)]
+        for processid in tokill:
+            killSuspicious(processid)
+            tpids.remove(processid)
+        pids.extend(tpids)
+        i+=1
+        time.sleep(60)
 
 if __name__ == "__main__":
-    killFirst()
-    monitor()
+    while(True):
+        kill()
