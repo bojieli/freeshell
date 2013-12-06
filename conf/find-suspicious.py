@@ -36,6 +36,7 @@ def kill():
     i = 0
     while(i < 60):
         tpids = [processid for processid in os.listdir('/proc') if processid.isdigit()]
+        pids = [processid for processid in pids if processid in tpids]
         tokill = [processid for processid in tpids if processid not in pids and isSuspicious(processid)]
         for processid in tokill:
             killSuspicious(processid)
