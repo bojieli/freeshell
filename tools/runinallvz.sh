@@ -16,5 +16,5 @@ for id in $(seq 101 $max); do
     fi
     echo $host:$id
     realcommand=$(echo "$command" | sed "s/\$id/$id/g")
-    ssh scgyshell-$host "sudo vzctl exec $id '$realcommand'"
+    ssh s$host.freeshell.ustc.edu.cn "sudo vzctl exec $id '$realcommand'"
 done
