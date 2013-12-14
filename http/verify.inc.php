@@ -4,7 +4,7 @@ function checkemail($email) {
         return 4;
     if (!preg_match('/^[a-zA-Z0-9._-]+@[a-zA-Z._-]+$/', $email))
         return 2;
-    if (!preg_match('/^[a-zA-Z0-9._-]+@(mail.)?ustc.edu(.cn)?$/', $email))
+    if (!preg_match('/^[a-zA-Z0-9._-]+@(lug.ustc.edu.cn|mail.ustc.edu.cn|ustc.edu.cn|ustc.edu)$/', $email))
         return 3;
     if (!check_email_count($email))
         return 1;
