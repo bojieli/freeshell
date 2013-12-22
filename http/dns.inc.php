@@ -10,6 +10,7 @@ function __nsupdate($commands) {
     fclose($fp);
     chmod($tmpfile, 0644);
     exec("nsupdate -k /etc/freeshell/default-update-key.key $tmpfile");
+    exec("nsupdate -k /etc/freeshell/chinanet-update-key.key $tmpfile");
     unlink($tmpfile);
 }
 function nsupdate_add($fqdn, $record, $content) {
