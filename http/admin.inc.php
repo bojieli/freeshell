@@ -1,6 +1,9 @@
 <?php
 include_once "nodes.inc.php";
 
+function alert_noredirect($msg) {
+    echo "<script>alert('$msg');</script>";
+}
 function alert($msg) {
     die("<script>alert('$msg');location.href='index.php';</script>");
 }
@@ -105,4 +108,10 @@ function change_password($id, $salted_password) {
 function check_password($plain, $salted) {
     $passes = explode('/', $salted);
     return (sha1(sha1($plain).$passes[1]) === $passes[0]);
+}
+
+function send_admin_email($email, $appid, $title, $body) {
+    global $headers, $footer;
+    $body = "Hello freeshell $appid,\n\n".$body.$footer;
+    mail($email, $title, $body, $headers);
 }
