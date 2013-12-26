@@ -2,4 +2,32 @@
 
 iptables-restore < /home/boj/iptables-save
 [ -f /usr/local/sbin/pernode-rc.local ] && /usr/local/sbin/pernode-rc.local
+
+# USTC routes
+GATEWAY=$(ip route | awk '{if($1=="default")print $3}')
+ip route add 218.104.71.160/28 via $GATEWAY table 999
+ip route add 218.22.21.0/27 via $GATEWAY table 999
+ip route add 210.72.22.0/24 via $GATEWAY table 999
+ip route add 210.45.64.0/20 via $GATEWAY table 999
+ip route add 210.45.112.0/20 via $GATEWAY table 999
+ip route add 211.86.144.0/20 via $GATEWAY table 999
+ip route add 202.141.176.0/20 via $GATEWAY table 999
+ip route add 202.141.160.0/20 via $GATEWAY table 999
+ip route add 114.214.160.0/19 via $GATEWAY table 999
+ip route add 202.38.64.0/19 via $GATEWAY table 999
+ip route add 222.195.64.0/19 via $GATEWAY table 999
+ip route add 114.214.192.0/18 via $GATEWAY table 999
+ip route add 121.255.0.0/16 via $GATEWAY table 999
+
+# scgy routes
+ip route add 114.214.197.0/24 dev eth0 table 999
+ip route add 202.38.70.0/24   dev eth0 table 999
+
+# outbound traffic go through MYIP
+MYIP=$(ip addr show dev eth0 | awk '{if($1=="inet")print $2}' | awk 'BEGIN{FS="/"}{print $1}')
+ip route add default via $GATEWAY table 1000
+ip rule add from $MYIP lookup 1000
+
+ip rule add from all lookup 999 # table 999 is higher priority
+
 exit 0
