@@ -57,14 +57,13 @@ if (!empty($_POST['title']) && !empty($_POST['content'])) {
 }
 ?>
 <h1>Send Email to Users</h1>
-<p>Multiple shell IDs or Node IDs can be separated by comma.</p>
-<p>If to all users, use 'all' in shell ID or Node ID.</p>
-<p>If no shell ID and Node ID is specified, or no such is found, email is sent to you as a test.</p>
+<p>If to all users, use "all" (without quote) in shell ID or Node ID.</p>
+<p>If no shell ID and Node ID is specified, or no such shell is found, email is sent to you as a test.</p>
 <form action="sendmail.php" method="post">
 <table>
-<tr><td>Shell ID</td><td><input name="shells" /></td></tr>
-<tr><td>Node ID</td><td><input name="nodes" /></td></tr>
-<tr><td>Title</td><td><input name="title" style="width:400px" value="<?=$_POST['title']?>" /></td></tr>
+<tr><td>Shell ID</td><td><input name="shells" /> (comma separated list of IDs)</td></tr>
+<tr><td>Node ID</td><td><input name="nodes" /> (comma separated list of IDs)</td></tr>
+<tr><td>Title</td><td><input name="title" style="width:400px" value="<?=$_POST['title']?>" /> (NO Chinese chars please)</td></tr>
 <tr><td>Content</td><td><textarea name="content" rows="20" cols="80"><?=$_POST['content']?></textarea></td></tr>
 <tr><td></td><td><button type="submit">Send</button></td></tr>
 </table>
