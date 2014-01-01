@@ -24,7 +24,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
 fi
 
-ssh $host "sudo vzctl stop $appid"
+ssh $host "sudo vzctl stop $appid --fast"
 ssh $host "sudo vzctl destroy $appid"
 passwd=$(openssl rand -base64 9 | tr -d '\n\r')
 ssh $host "sudo /home/boj/scripts/create-vz.sh $appid $hostname $passwd"
