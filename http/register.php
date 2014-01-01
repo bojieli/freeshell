@@ -16,10 +16,24 @@ if (checkhost($hostname) || strlen($password)<6 || checkemail($email)) {
 }
 
 $salted_pass = generate_password($_POST['regpassword']);
-mysql_query("INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$salted_pass', `email`='$email'");
+
+$query = "INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$salted_pass', `email`='$email'";
+
+if ($_POST['nodeno'] && is_numeric($_POST['nodeno'])) {
+    $nodeno = $_POST['nodeno'];
+    if ($nodeno <= 0 || $nodeno > nodes_num())
+        alert('Invalid nodeno');
+    $max = mysql_result(mysql_query("SELECT MAX(id) FROM shellinfo"),0);
+    $appid = $max ? $max + 1 : 1;
+    while ($appid % nodes_num() != $nodeno)
+        ++$appid;
+    $query .= ",`id`='$appid'";
+}
+
+mysql_query($query);
 $appid = mysql_insert_id();
 if (empty($appid))
-    alert('Database error!');
+    alert('Database error, please retry. If the problem persists, please contact support@freeshell.ustc.edu.cn');
 
 $nodeno = $appid % nodes_num();
 if ($nodeno == 0)

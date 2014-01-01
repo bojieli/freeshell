@@ -392,3 +392,8 @@ body{
 	font-size:16px !important;	
 	margin-left:200px;
 }
+#regform select {
+    font-size: 18px;
+	font-family:"Segoe UI","Helvetica Neue", Helvetica, Ubuntu;
+    line-height:24px;
+}
