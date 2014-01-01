@@ -2,10 +2,7 @@
 session_start();
 include_once "../db.php";
 include_once "../nodes.inc.php";
-
-function alert($msg) {
-    echo "<script>alert('$msg');</script>";
-}
+include_once "../admin.inc.php";
 
 if (empty($_SESSION['isadmin']))
     exit();
@@ -16,8 +13,9 @@ if (is_numeric($_POST['appid']) && !empty($_POST['diskspace_softlimit']) && !emp
     if (empty($info))
         alert("Shell Not Exist");
     mysql_query("UPDATE shellinfo SET diskspace_softlimit='".addslashes($_POST['diskspace_softlimit'])."', diskspace_hardlimit='".addslashes($_POST['diskspace_hardlimit'])."' WHERE id=".$_POST['appid']);
-    set_vz($info['nodeno'], $_POST['appid'], "diskspace", $_POST['diskspace_softlimit'].":".$_POST['diskspace_hardlimit']);
-    alert("OK");
+    set_vz($info['nodeno'], $info['id'], "diskspace", $_POST['diskspace_softlimit'].":".$_POST['diskspace_hardlimit']);
+    send_change_quota_email($info['email'], $info['id'], $info['diskspace_softlimit'], $_POST['diskspace_softlimit']);
+    alert_noredirect("OK");
 }
 ?>
 <h1>Change Disk Quota</h1>
