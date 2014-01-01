@@ -163,10 +163,11 @@ for VEID in $VEIDS; do
     #ssh ${REMOTE_HOST} "[ -f ${REMOTE_DIR}${VEID}.1.tar.gz ] && mv -f ${REMOTE_DIR}${VEID}.1.tar.gz ${REMOTE_DIR}${VEID}.2.tar.gz"
     #ssh ${REMOTE_HOST} "[ -f ${REMOTE_DIR}${VEID}.0.tar.gz ] && mv -f ${REMOTE_DIR}${VEID}.0.tar.gz ${REMOTE_DIR}${VEID}.1.tar.gz"
 
-    # Create a remote tar archive - note you can remove the ampersand from the end if you
-    # don't want multiple tar processes running on the remote host simultaneously.
-    e "Making a g-zip compresssed tar archive on remote host (this process will run in the background on the remote host)."
-    ssh ${REMOTE_HOST} "tar czf ${REMOTE_DIR}${VEID}.0.tar.gz --numeric-owner -C ${REMOTE_DIR}${VEID} ./ 2>/dev/null " &
+    # creating gzips is CPU intensive. Don't do it!
+    ## Create a remote tar archive - note you can remove the ampersand from the end if you
+    ## don't want multiple tar processes running on the remote host simultaneously.
+    #e "Making a g-zip compresssed tar archive on remote host (this process will run in the background on the remote host)."
+    #ssh ${REMOTE_HOST} "tar czf ${REMOTE_DIR}${VEID}.0.tar.gz --numeric-owner -C ${REMOTE_DIR}${VEID} ./ 2>/dev/null " &
   fi
 
   e "Done."
