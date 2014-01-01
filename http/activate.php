@@ -17,25 +17,19 @@ if ($info['isactive']) {
 if ($info['token'] !== $_GET['token'])
     die('Incorrect token. Please copy the link to the address bar of your browser and retry.');
 
-activate_vz($info['nodeno'], $appid);
-
-mysql_query("UPDATE shellinfo SET `isactive`=1 WHERE `id`='$appid'");
-
 // auto login
 $_SESSION['email'] = $info['email'];
 $_SESSION['appid'] = $info['id'];
 ?>
 <div id="wrapper">
 <div id="regtitle">
-        	<h1>Congratulations!</h1>
+        	<h1>Freeshell Activated</h1>
         	<div id="progbar">
             </div>
-<p>All things done.</p>
-<p>You can login to your shell with SSH now:</p>
-<p style="font:Courier New">ssh <?php echo get_node_ipv6($appid) ?></p>
-<p>The root password is the same as the login password of control panel.</p>
-<p>It is recommended that you create your own account and login with it instead of root.</p>
-<p>Also you can login to the control panel for more info:</p>
+<p>Your freeshell is starting. You can login with SSH in a minute:</p>
+<p style="font:Courier New">ssh root@<?=get_node_dns_name($info['hostname'])?></p>
+<p>The root password is the same as the login password you have just set.</p>
+<p>Also you go to the control panel for more info:</p>
 </div>
 <div id="regbutton" onclick="javascript:document.location.href='admin.php'">
         	<p>Let's Rock!</p>
@@ -43,3 +37,8 @@ $_SESSION['appid'] = $info['id'];
 </div>
 </body>
 </html>
+<?php
+fastcgi_finish_request();
+activate_vz($info['nodeno'], $appid);
+mysql_query("UPDATE shellinfo SET `isactive`=1 WHERE `id`='$appid'");
+?>
