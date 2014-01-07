@@ -23,6 +23,7 @@ vzctl start $id
 cat `dirname $0`/conf-in-vz/sources.list | vzctl exec $id "cat - > /etc/apt/sources.list"
 cat `dirname $0`/conf-in-vz/locale.gen | vzctl exec $id "cat - > /etc/locale.gen"
 vzctl exec $id "locale-gen"
+vzctl exec $id "update-locale LANG=en_US.utf8"
 
 # fix timezone
 vzctl exec $id "ln -sf /usr/share/zoneinfo/Asia/Chongqing /etc/localtime"
