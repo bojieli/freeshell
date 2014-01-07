@@ -64,7 +64,8 @@
 <p>We monitor (but not record) the executive of all running processes through /proc interface to discover potentially harmful processes. Other files are not touched.
 
 <h3 id="13">13. Is my data backuped?</h3>
-<p>A daily snapshot of file system is saved. It occurs at 03:20 every morning and all processes in freeshell are suspended for several seconds to ensure data consistency.</p>
+<p>A daily snapshot of file system is saved. It occurs at 03:20 every morning and all processes in freeshell are suspended for several seconds to ensure data consistency.
+<p>Because syncing the file system requires many disk reads, system load could be high in the morning. If you encounter any problem due to high disk utilization, please feel free to contact us.
 
 <h3 id="14">14. Where do my software come from?</h3>
 <p>New freeshells are based on OpenVZ official Debian 7.0 template (<a href="http://mirrors.ustc.edu.cn/openvz/template/precreated/contrib/debian-7.0-amd64-minimal.tar.gz">Download</a>). Freeshells created before October 2013 are based on OpenVZ Official Debian 6.0 template (<a href="http://mirrors.ustc.edu.cn/openvz/template/precreated/contrib/debian-6.0-amd64-minimal.tar.gz">Download</a>).
@@ -102,13 +103,11 @@
 
 <h3 id="27">27. Can I create users other than root?</h3>
 <p>Sure! The Linux box is dedicated for you.
-<p>Although using "root" is OK, for security reasons, we recommend the following:
+<p>To add a user with root privilege:
 <ol>
-<li>Create your own user (adduser)
-<li>Install sudo (apt-get install sudo)
-<li>Add the new user to sudo and adm group (usermod -aG)
-<li>Try login using new user and password. Try sudo.
-<li>Disable root login (sudo passwd -d root)
+<li>adduser [username]
+<li>apt-get install sudo
+<li>usermod -aG sudo,adm [username]
 </ol>
 
 <h3 id="28">28. Can I use SSH key to login?</h3>
@@ -142,6 +141,7 @@
 
 <h3 id="36">36. Why my IP address appears outside China?</h3>
 <p>See <a href="#11">FAQ #11</a>
+
 
 <h2>Running Network Services</h2>
 
@@ -185,16 +185,20 @@
 
 <h3 id="53">53. Why command X "not found"?</h3>
 <p>This Linux box ships with a minimal set of pre-installed software packages. Many utils on normal Linux distributions have to be installed by yourself.
-<p>Remember not to install too many packages, since our disk space is limited :)
+<p>See <a href="http://home.ustc.edu.cn/~yousong/freeshell-basicsetup.html">Basic Setup for Freeshell</a> by yousong.
+<p>Please not to install too many packages, since our disk space is limited :)
 
-<h3 id="54">54. How to install X, GNOME or KDE?</h3>
+<h3 id="54">54. "apt-get install" says "404 not found".</h3>
+<p>run "apt-get update" to update software index.
+
+<h3 id="55">55. How to install X, GNOME or KDE?</h3>
 <p>While it is technically possible, we are strongly against it.
 <p>You are expected to learn some shell commands. Break shell, touch Linux!
 
-<h3 id="55">55. Why my program terminated when I exit the shell?</h3>
+<h3 id="56">56. Why my program terminated when I exit the shell?</h3>
 <p>You should install "screen" and run long-live programs in screen.
 
-<h3 id="56">56. I messed up. How can I reinstall the system?</h3>
+<h3 id="57">57. I messed up. How can I reinstall the system?</h3>
 <p>On Control Panel, there is "Reinstall System" button. There are two options:
 <ul>
 <li>If you want to keep /home directory, click "keep /home" button;
@@ -203,7 +207,7 @@
 <p>Be sure to backup all your data outside /home, because reinstalling system will erase all data permanently.
 <p>If you cannot login via SSH, and you do not have a backup, please feel free to contact <a href="mailto:support@freeshell.ustc.edu.cn">support@freeshell.ustc.edu.cn</a></p>
 
-<h3 id="57">57. Why the numbering of this FAQ looks so strange?</h3>
+<h3 id="58">58. Why the numbering of this FAQ looks so strange?</h3>
 <p>The first digit is section number, starting from zero and in hexademical.
 <p>The second digit is question number in this section, starting from zero and in hexademical.
 
