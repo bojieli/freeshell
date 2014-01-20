@@ -10,6 +10,8 @@ $nodes2ip = array(
 );
 $master_node = 1;
 
+$SSH_TIMEOUT = 3; // in seconds
+
 function nodes_num() {
     global $nodes2ip;
     return count($nodes2ip);
@@ -36,7 +38,8 @@ function run_in_node($nodeno, $cmd) {
     $cmd = str_replace("'", "\\'", $cmd);
     $cmd = str_replace("\"", "\\\"", $cmd);
     // force fork terminal
-    $local_cmd = "/bin/sh -c 'echo \"$cmd\" | /usr/bin/sudo -u scgyshell-monitor /usr/bin/ssh -t -t scgyshell-client@s$nodeno.freeshell.ustc.edu.cn'";
+    global $SSH_TIMEOUT;
+    $local_cmd = "/bin/sh -c 'echo \"$cmd\" | /usr/bin/sudo -u scgyshell-monitor /usr/bin/ssh -o ConnectTimeout=$SSH_TIMEOUT -t -t scgyshell-client@s$nodeno.freeshell.ustc.edu.cn'";
     $output = array();
     exec($local_cmd, $output);
     return implode("\n", $output);
