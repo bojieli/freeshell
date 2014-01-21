@@ -14,10 +14,23 @@ function is_numlist($str) {
 }
 
 $targets = array();
+
+function _add_target($key, $value) {
+    global $targets;
+    if ($targets[$key])
+        $targets[$key][] = $value;
+    else
+        $targets[$key] = array($value);
+}
+function add_target($row) {
+    if ($row['email'] && $row['id'])
+        _add_target($row['email'], $row['id']);
+}
+
 if ($_POST['shells'] == 'all' || $_POST['nodes'] == 'all') {
     $rs = mysql_query("SELECT id, email from shellinfo WHERE isactive=1");
     while ($row = mysql_fetch_array($rs))
-        $targets[$row['id']] = $row['email'];
+        add_target($row);
 }
 else {
     if (!empty($_POST['shells'])) {
@@ -27,7 +40,7 @@ else {
         }
         $rs = mysql_query("SELECT id, email FROM shellinfo WHERE isactive=1 AND id IN (".$_POST['shells'].")");
         while ($row = mysql_fetch_array($rs))
-            $targets[$row['id']] = $row['email'];
+            add_target($row);
     }
     if (!empty($_POST['nodes'])) {
         if (!is_numlist($_POST['nodes'])) {
@@ -36,7 +49,7 @@ else {
         }
         $rs = mysql_query("SELECT id, email FROM shellinfo WHERE isactive=1 AND nodeno IN (".$_POST['nodes'].")");
         while ($row = mysql_fetch_array($rs))
-            $targets[$row['id']] = $row['email'];
+            add_target($row);
     }
 }
 
@@ -46,9 +59,9 @@ if (empty($targets)) {
 
 if (!empty($_POST['title']) && !empty($_POST['content'])) {
     $idlist = array();
-    foreach ($targets as $id => $email) {
-        send_admin_email($email, $id, $_POST['title'], $_POST['content']);
-        $idlist[] = $id;
+    foreach ($targets as $email => $id_arr) {
+        send_admin_email($email, implode(', ', $id_arr), $_POST['title'], $_POST['content']);
+        $idlist = array_merge($idlist, $id_arr);
     }
     alert_noredirect("Email sent to freeshells ".implode(',', $idlist));
 } else {
