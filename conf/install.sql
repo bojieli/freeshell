@@ -11,6 +11,7 @@ CREATE TABLE shellinfo (
     `http_subdomain` VARCHAR(50) NOT NULL,
     `diskspace_softlimit` VARCHAR(20) NOT NULL DEFAULT '5G',
     `diskspace_hardlimit` VARCHAR(20) NOT NULL DEFAULT '7G',
+    `http_cname` TEXT,
     PRIMARY KEY (`id`),
     KEY key_nodeno (`nodeno`),
     KEY key_email (`email`)

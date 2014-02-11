@@ -43,11 +43,11 @@ switch ($_POST['action']) {
             $email, $id);
         break;
     case 'update-proxy':
-        update_proxy($_POST['domain']);
+        update_proxy(trim($_POST['domain']), trim($_POST['cname']));
         send_manage_notify_email($email, $id, "Updated HTTP Proxy");
         break;
     case 'update-hostname':
-        update_hostname($_POST['hostname']);
+        update_hostname(trim($_POST['hostname']));
         send_manage_notify_email($email, $id, "Updated Hostname",
             "Due to DNS caches, the new hostname may take up to 10 minutes to be usable.");
         break;
@@ -62,10 +62,10 @@ function reset_passwd($email, $nodeno, $id) {
     echo 'New root password has been sent to your email. If not found, please check the Spam box.';
 }
 
-function update_proxy($domain) {
+function update_proxy($domain, $cname) {
     global $id;
 
-    $flag = subdomain_check($domain);
+    $flag = subdomain_check($id, $domain);
     switch ($flag) {
     case 0:
         break;
@@ -76,12 +76,26 @@ function update_proxy($domain) {
     case 3:
         die('Sorry, this domain name is reserved.');
     case 4:
-        die('Sorry, someone else has taken this subdomain.');
+        die('Sorry, another freeshell has taken this subdomain.');
     default:
         die('Unknown Error '.$flag);
     }
 
-    mysql_query("UPDATE shellinfo SET `http_subdomain`='$domain' WHERE `id`='$id'");
+    $flag = cname_check($id, $cname);
+    switch ($flag) {
+    case 0:
+        break;
+    case 1:
+        die('ERROR: CNAME is not a valid domain name. Please use lower-case letters.');
+    case 2:
+        die('ERROR: CNAME is not allowed to contain ustc.edu.cn');
+    case 3:
+        die('Sorry, this CNAME has been taken by another freeshell. Please contact us if you are the owner of the domain.');
+    default:
+        die('Unknown Error '.$flag);
+    }
+
+    mysql_query("UPDATE shellinfo SET `http_subdomain`='$domain', `http_cname`='$cname' WHERE `id`='$id'");
     update_proxy_conf();
 }
 

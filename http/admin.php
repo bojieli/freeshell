@@ -151,11 +151,14 @@ if ($num_shells >= 2) {
 
 <div id="progbar"></div>
 <h2>HTTP Proxy</h2>
-<p>
+<p class="note">
 http(s)://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />.freeshell.ustc.edu.cn
-<span><button id="btn-update-proxy" onclick="updateProxy()">Update Subdomain</button></span>
+<br />
+Your own domain: <input id="http-cname" value="<?=$info['http_cname'] ?>" /> (CNAME to proxy.freeshell.ustc.edu.cn)
+<br />
+<button id="btn-update-proxy" onclick="updateProxy()">Update</button>
 </p>
-<p class="smaller">See <a href="faq.html" target="_blank">FAQ</a> for HTTP Proxy Policy and Help.</p>
+<p class="smaller">See <a href="faq.html#40" target="_blank">FAQ</a> for HTTP Proxy Policy and Help.</p>
 
 <div id="progbar"></div>
 <h2>Server status</h2>
@@ -220,7 +223,9 @@ function manage(action) {
 function updateProxy() {
     var old_domain = "<?=$info['http_subdomain'] ?>";
     var new_domain = $('#http-proxy-subdomain').val();
-    if (old_domain == new_domain) {
+    var old_cname = "<?=$info['http_cname'] ?>";
+    var new_cname = $('#http-cname').val();
+    if (old_domain == new_domain && old_cname == new_cname) {
         alert('Domain Name Unchanged');
         return;
     }
@@ -233,7 +238,8 @@ function updateProxy() {
         data: {
             appid: <?=$info['id']?>,
             action: 'update-proxy',
-            domain: new_domain
+            domain: new_domain,
+            cname: new_cname,
         },
         success: ajaxSuccessFunc,
     });

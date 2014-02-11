@@ -169,6 +169,12 @@
 <p>vsftpd / proftpd or other FTP server will work. Please use IPv6 (hostname.6.freeshell.ustc.edu.cn) to connect to your FTP server. IPv4 does not work, because FTP ports are not mapped for IPv4 shared address.
 <p>FTP protocol is in plaintext and your password may be easily eavesdropped. It is recommended to use SFTP (secure FTP) instead. SFTP is supported by sshd, so there is no need to install "SFTP server". Most FTP clients also support SFTP, just use your SSH username and password to login.
 
+<h3 id="47">47. How to use my own domain name for HTTP proxy?</h3>
+<ol>
+<li>Add a DNS "CNAME" record to proxy.freeshell.ustc.edu.cn at your domain registrar. (DO NOT USE "A" RECORD) It may take some time for DNS changes to take effect.</li>
+<li>Fill your own domain in "HTTP Proxy" in Control Panel.</li>
+</ol>
+<p>HTTPS access to your own domain name will get a SSL certificate error.
 
 <h2>Misc.</h2>
 
