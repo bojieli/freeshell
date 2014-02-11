@@ -142,6 +142,10 @@
 <h3 id="36">36. Why my IP address appears outside China?</h3>
 <p>See <a href="#11">FAQ #11</a>
 
+<h3 id="37">37. How to share files with another machine?</h3>
+<p>Take a look at <a href="http://www.samba.org/" target="_blank">Samba</a>. It is fully user-space, able to work in freeshell and can be connected from both Linux and Windows.
+<p>Since freeshells share a common kernel, kernel-mode NFS will not work.
+
 
 <h2>Running Network Services</h2>
 
@@ -159,22 +163,26 @@
 <p>To use HTTP proxy, a Web Server listening IPv4 port 80 should be installed.
 
 <h3 id="44">44. I want HTTPS secure access to my freeshell.</h3>
-<p>Sure! Use HTTP Proxy and visit https://yourname.freeshell.ustc.edu.cn
+<p>Sure! Setup HTTP Proxy in Control Panel and visit <strong>https://&lt;yourname&gt;.freeshell.ustc.edu.cn</strong>
 <p>If you want to redirect http to https: In the web server of your freeshell, please check "X-Scheme" HTTP header for "http" or "https".
 
 <h3 id="45">45. How to see the client's real IP behind HTTP proxy?</h3>
 <p>See "X-Real-IP" HTTP header. You should use this header field to identify clients.
 
 <h3 id="46">46. How to set up a FTP server?</h3>
-<p>vsftpd / proftpd or other FTP server will work. Please use IPv6 (hostname.6.freeshell.ustc.edu.cn) to connect to your FTP server. IPv4 does not work, because FTP ports are not mapped for IPv4 shared address.
+<p>vsftpd / proftpd or other FTP server will work. Please use IPv6 (<strong>&lt;hostname&gt;.6.freeshell.ustc.edu.cn</strong>) to connect to your FTP server. IPv4 does not work, because FTP ports are not mapped for IPv4 shared address.
 <p>FTP protocol is in plaintext and your password may be easily eavesdropped. It is recommended to use SFTP (secure FTP) instead. SFTP is supported by sshd, so there is no need to install "SFTP server". Most FTP clients also support SFTP, just use your SSH username and password to login.
 
 <h3 id="47">47. How to use my own domain name for HTTP proxy?</h3>
 <ol>
-<li>Add a DNS "CNAME" record to proxy.freeshell.ustc.edu.cn at your domain registrar. (DO NOT USE "A" RECORD) It may take some time for DNS changes to take effect.</li>
+<li>Add a DNS "CNAME" record to <strong>proxy.freeshell.ustc.edu.cn</strong> at your domain registrar. (DO NOT USE "A" RECORD) It may take some time for DNS changes to take effect.</li>
 <li>Fill your own domain in "HTTP Proxy" in Control Panel.</li>
 </ol>
-<p>HTTPS access to your own domain name will get a SSL certificate error.
+<p>Access is HTTP only. HTTPS access to your own domain name will get a SSL certificate error.
+
+<h3 id="48">48. How to use my own domain name to SSH into freeshell?</h3>
+<p>Add a DNS "CNAME" record to <strong>&lt;hostname&gt;.6.freeshell.ustc.edu.cn</strong>. Since the IPv6 address is dedicated, you do not need to do anything in control panel.
+
 
 <h2>Misc.</h2>
 
