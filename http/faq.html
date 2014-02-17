@@ -212,7 +212,11 @@
 <h3 id="56">56. Why my program terminated when I exit the shell?</h3>
 <p>You should install "screen" and run long-live programs in screen.
 
-<h3 id="57">57. I messed up. How can I reinstall the system?</h3>
+<h3 id="57">57. Why udev does not work?</h3>
+<p>Due to security concerns, freeshells are not allowed to touch hardware, kernel modules, etc. directly. We have created necessary devices in <strong>/dev</strong> on system startup.
+<p>If there is any error while installing or starting udev, it is safe to ignore it.
+
+<h3 id="58">58. I messed up. How can I reinstall the system?</h3>
 <p>On Control Panel, there is "Reinstall System" button. There are two options:
 <ul>
 <li>If you want to keep /home directory, click "keep /home" button;
@@ -221,7 +225,7 @@
 <p>Be sure to backup all your data outside /home, because reinstalling system will erase all data permanently.
 <p>If you cannot login via SSH, and you do not have a backup, please feel free to contact <a href="mailto:support@freeshell.ustc.edu.cn">support@freeshell.ustc.edu.cn</a></p>
 
-<h3 id="58">58. Why the numbering of this FAQ looks so strange?</h3>
+<h3 id="59">59. Why the numbering of this FAQ looks so strange?</h3>
 <p>The first digit is section number, starting from zero and in hexademical.
 <p>The second digit is question number in this section, starting from zero and in hexademical.
 
