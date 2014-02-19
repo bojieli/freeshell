@@ -21,7 +21,9 @@ $info['domain'] = 's'.$info['nodeno'].'.freeshell.ustc.edu.cn';
 
 $num_onthisnode = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `nodeno`='".$info['nodeno']."'"),0);
 $node = get_node_info($info['nodeno'], $appid);
-if (isset($node['mystatus']))
+if ($node['locked'])
+    $node['mystatus'] = 'Locked';
+else if (isset($node['mystatus']))
     $node['mystatus'] = human_readable_status($node['mystatus']);
 else
     $node['mystatus'] = 'Internal error: cannot connect to worker node';
@@ -113,6 +115,7 @@ if ($num_shells >= 2) {
   <li><span class="h">Shell ID:</span><strong><?=$appid?></strong>
   <li><span class="h">Status:</span><strong><?=$node['mystatus']?></strong>
   <?php if ($node['mystatus'] == "Not exist") echo 'Oops! There seems to be some problem. <button onclick="manage(\'reinstall\')">Reinstall Freeshell</button>'; ?>
+  <?php if ($node['mystatus'] == "Locked") echo 'Oops! There seems to be some problem. Please register a new freeshell, sorry for the inconvenience. If you need to migrate the data, please contact us.'; ?>
   <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong>
   <li><span class="h">Hostname:</span><strong><span id="shell-hostname"><?=$info['hostname']?></span></strong> <button id="hostname-change-btn" onclick="changeHostname()">Change</button>
   <?php
