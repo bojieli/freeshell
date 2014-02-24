@@ -20,6 +20,9 @@ iptables -t nat -A PREROUTING -i eth0 -p tcp -d $serverip --dport $httpport -j D
 iptables-save > /home/boj/iptables-save
 
 vzctl start $id
+vzctl exec $id mknod /dev/ppp c 108 0
+vzctl exec $id chmod 600 /dev/ppp
+
 cat `dirname $0`/conf-in-vz/sources.list | vzctl exec $id "cat - > /etc/apt/sources.list"
 cat `dirname $0`/conf-in-vz/locale.gen | vzctl exec $id "cat - > /etc/locale.gen"
 vzctl exec $id "locale-gen"

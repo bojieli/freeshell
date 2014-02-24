@@ -31,6 +31,8 @@ vzctl set $id --ipadd $localip --save
 vzctl set $id --ipadd $ipv6 --save
 vzctl set $id --nameserver 202.141.160.99 --nameserver 202.141.176.99 --save
 vzctl set $id --searchdomain 6.freeshell.ustc.edu.cn --searchdomain ustc.edu.cn --save
+vzctl set $id --features ppp:on --save
+vzctl set $id --devices c:108:0:rw --save
 
 # if home directory was backuped, recover it
 if [ -d "/home/vz/backup/$id/home" ]; then
