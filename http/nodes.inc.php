@@ -12,6 +12,8 @@ $master_node = 1;
 
 $SSH_TIMEOUT = 3; // in seconds
 
+$errno = 0;
+
 function nodes_num() {
     global $nodes2ip;
     return count($nodes2ip);
@@ -35,13 +37,14 @@ function get_node_dns_name($hostname) {
 }
 
 function run_in_node($nodeno, $cmd) {
+    global $errno;
     $cmd = str_replace("'", "\\'", $cmd);
     $cmd = str_replace("\"", "\\\"", $cmd);
     // force fork terminal
     global $SSH_TIMEOUT;
     $local_cmd = "/bin/sh -c 'echo \"$cmd\" | /usr/bin/sudo -u scgyshell-monitor /usr/bin/ssh -4 -o ConnectTimeout=$SSH_TIMEOUT -t -t scgyshell-client@s$nodeno.freeshell.ustc.edu.cn'";
     $output = array();
-    exec($local_cmd, $output);
+    exec($local_cmd, $output, $errno);
     return implode("\n", $output);
 }
 
