@@ -155,7 +155,7 @@ function verify(type,data)
 						{
 							case 1:
 							{
-								$("#emailfail").html("Sorry, only one Linux box is allowed for each email.");
+								$("#emailfail").html("Sorry, you have registered too many freeshells.");
 								break;
 							}
 							case 2:
