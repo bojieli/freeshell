@@ -20,11 +20,11 @@ $salted_pass = generate_password($_POST['regpassword']);
 $query = "INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$salted_pass', `email`='$email'";
 
 if ($_POST['nodeno'] && is_numeric($_POST['nodeno'])) {
-    $nodeno = $_POST['nodeno'];
-    if ($nodeno <= 0 || $nodeno > nodes_num())
+    $nodeno = (int)$_POST['nodeno'] % nodes_num();
+    if ($nodeno < 0)
         alert('Invalid nodeno');
     $max = mysql_result(mysql_query("SELECT MAX(id) FROM shellinfo"),0);
-    $appid = $max ? $max + 1 : 1;
+    $appid = $max ? (int)$max + 1 : 1;
     while ($appid % nodes_num() != $nodeno)
         ++$appid;
     $query .= ",`id`='$appid'";
