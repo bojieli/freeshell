@@ -73,7 +73,8 @@ RSYNC_DEFAULT="rsync -raH --delete-after --delete-excluded"
 RSYNC_EXCLUDE=""
 
 # Path to vzctl executable
-VZCTL="vzctl"
+VZCTL="/usr/sbin/vzctl"
+VZLIST="/usr/sbin/vzlist"
 
 # Nice debugging messages...
 function e {
@@ -92,7 +93,7 @@ e "`hostname` - VZ backup for containers $VEIDS started." > /tmp/vzbackuptimes
 # Loop through each VEID
 for VEID in $VEIDS; do
 
-  VEHOSTNAME=`vzlist -o hostname $VEID -H`
+  VEHOSTNAME=`$VZLIST -o hostname $VEID -H`
   echo ""
   e "Beginning backup of VEID: $VEID";
 
