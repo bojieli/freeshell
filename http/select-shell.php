@@ -13,7 +13,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 }
 
 $email = addslashes($_SESSION['email']);
-$rs = mysql_query("SELECT * FROM shellinfo WHERE `email`='$email'");
+$rs = mysql_query("SELECT * FROM shellinfo WHERE `email`='$email' ORDER BY id");
 ?>
 <style>
 .shell-list {
