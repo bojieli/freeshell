@@ -37,5 +37,10 @@ else
     exit 1
 fi
 
+KEYS=/root/.ssh/authorized_keys
+mv $BASE/scgyshell-root.authorized_keys $KEYS
+chmod 600 $KEYS
+chown root:root $KEYS
+
 # update /etc/network/interfaces
 . /etc/network/interfaces.template

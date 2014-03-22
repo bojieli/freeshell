@@ -10,6 +10,7 @@ serverip=$2
 localip="10.10.$(echo $id/256 | bc).$(echo $id%256 | bc)"
 sshport=$(echo $id + 10000 | bc)
 httpport=$(echo $id + 20000 | bc)
+ipv6="2001:da8:d800:71::$(echo $id/10000 | bc):$(echo $id%10000 | bc)"
 
 if [ "$3" == "renew" ]; then
     iptables -t nat -D PREROUTING -i eth0 -p tcp -d $serverip --dport $sshport -j DNAT --to-destination $localip:22
@@ -18,6 +19,10 @@ fi
 iptables -t nat -A PREROUTING -i eth0 -p tcp -d $serverip --dport $sshport -j DNAT --to-destination $localip:22
 iptables -t nat -A PREROUTING -i eth0 -p tcp -d $serverip --dport $httpport -j DNAT --to-destination $localip:80
 iptables-save > /home/boj/iptables-save
+
+vzctl set $id --ipdel all --save
+vzctl set $id --ipadd $localip --save
+vzctl set $id --ipadd $ipv6 --save
 
 vzctl start $id
 vzctl exec $id mknod /dev/ppp c 108 0
