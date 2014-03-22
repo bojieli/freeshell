@@ -126,3 +126,52 @@ function send_admin_email($email, $appid, $title, $body) {
     $body = "Hello freeshell $appid,\n\n".$body.$footer;
     mail($email, $title, $body, $headers);
 }
+
+function get_next_appid($nodeno) {
+    $nodeno = (int)$nodeno % nodes_num();
+    if ($nodeno < 0)
+        return null;
+    $max = mysql_result(mysql_query("SELECT MAX(id) FROM shellinfo"),0);
+    $appid = $max ? (int)$max + 1 : 1;
+    while ($appid % nodes_num() != $nodeno)
+        ++$appid;
+    return $appid;
+}
+
+function create_freeshell_in_db($hostname, $salted_pass, $email, $nodeno = null) {
+    $query = "INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$salted_pass', `email`='$email'";
+    
+    if ($nodeno && is_numeric($nodeno)) {
+        $query .= ",id=".get_next_appid($nodeno);
+    }
+    
+    mysql_query($query);
+    $appid = mysql_insert_id();
+
+    $real_nodeno = $appid % nodes_num();
+    if ($real_nodeno == 0)
+        $real_nodenonodeno = nodes_num();
+    mysql_query("UPDATE shellinfo SET nodeno=$real_nodeno WHERE id=$appid");
+
+    return array($appid, $real_nodeno);
+}
+
+function move_freeshell_in_db($old_id, $nodeno) {
+    $appid = get_next_appid($nodeno);
+    mysql_query("UPDATE shellinfo SET id=$appid, nodeno=$nodeno WHERE id=$old_id");
+    return $appid;
+}
+
+function copy_freeshell_config($old_id, $new_id)
+{
+    $fields = array("diskspace_softlimit", "diskspace_hardlimit");
+    $info = mysql_fetch_array(mysql_query("SELECT ".implode(',',$fields)." FROM shellinfo WHERE id=$old_id"));
+    if (empty($info))
+        return false;
+    $values = array();
+    foreach ($fields as $field) {
+        $values[] = "`$field`='".addslashes($info[$field])."'";
+    }
+    mysql_query("UPDATE shellinfo SET ".implode(',', $values)." WHERE id=$new_id");
+    return (mysql_affected_rows() == 1);
+}

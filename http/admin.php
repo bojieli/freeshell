@@ -143,6 +143,7 @@ if ($num_shells >= 2) {
   <span><button id="btn-manage-start" onclick="manage('start')">Start</button></span>
   <span><button id="btn-manage-stop" onclick="manage('stop')">Shutdown</button></span>
   <span><button id="btn-manage-reboot" onclick="manage('reboot')">Reboot</button></span>
+  <span><button id="btn-manage-destroy" onclick="manage('destroy')">Destroy</button></span>
 </p>
 
 <div id="progbar"></div>
@@ -151,6 +152,45 @@ if ($num_shells >= 2) {
   <span><button id="btn-manage-reset-root" onclick="manage('reset-root')">Reset Root Password</button></span>
   <span><button id="btn-manage-reinstall-keephome" onclick="manage('reinstall-keephome')">Reinstall System (keep /home)</button></span>
   <span><button id="btn-manage-reinstall" onclick="manage('reinstall')">Reinstall System (NOT keep /home)</button></span>
+</p>
+<p>
+  <span><button id="btn-manage-rescue" onclick="manage('rescue')">Rescue</button></span>
+  <span class="smaller">(If your freeshell is not responding and Reboot does not help, try Rescue. <a href="faq.html#29" target="_blank">Details</a>)</span>
+</p>
+
+<div id="progbar"></div>
+<h2>Copy / Move</h2>
+<p class="note">Use Copy to duplicate freeshells, use Move to switch hardware node. Both operations require complete data copy and take a long time.</p>
+<p>
+<span>
+<select id="copy-nodeno">
+<option>-- Select Target Node --</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select>
+</span>
+<span><input type="text" id="copy-hostname" value="Input New HostName" /></span>
+<span><button id="btn-manage-copy" onclick="manage('copy')">Copy</button></span>
+</p>
+<p>
+<span>
+<select id="move-nodeno">
+<option>-- Select Target Node --</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select>
+</span>
+<span><button id="btn-manage-move" onclick="manage('move')">Move</button></span>
 </p>
 
 <div id="progbar"></div>
@@ -216,11 +256,19 @@ function manage(action) {
         return;
     $('#btn-manage-'+action).attr('disabled', true);
     $('#btn-manage-'+action).html('Processing...');
+    var data = {appid: <?=$info['id']?>, action: action};
+    if (action == "copy") {
+        data.nodeno = $('#copy-nodeno').val();
+        data.hostname = $('#copy-hostname').val();
+    }
+    else if (action == "move") {
+        data.nodeno = $('#move-nodeno').val();
+    }
     $.ajax({
         url: 'manage.php',
         type: 'post',
         async: true,
-        data: {appid: <?=$info['id']?>, action: action},
+        data: data,
         success: ajaxSuccessFunc,
     });
 }

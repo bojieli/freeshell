@@ -40,5 +40,4 @@ $_SESSION['appid'] = $info['id'];
 <?php
 fastcgi_finish_request();
 activate_vz($info['nodeno'], $appid);
-mysql_query("UPDATE shellinfo SET `isactive`=1 WHERE `id`='$appid'");
 ?>

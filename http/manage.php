@@ -15,7 +15,7 @@ $id = $_POST['appid'];
 $email = $_SESSION['email'];
 $a = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE `email`='$email' AND `id`='$id'"));
 if (empty($a))
-    die("shell do not exist");
+    die("Freeshell does not exist");
 
 switch ($_POST['action']) {
     case 'start':
@@ -42,6 +42,13 @@ switch ($_POST['action']) {
             "",
             $email, $id);
         break;
+    case 'destroy':
+        echo need_email_verification("Destroy Freeshell",
+            "WARNING: THIS OPERATION WILL ERASE ALL DATA ON YOUR FREESHELL.",
+            "destroy-freeshell.php",
+            "",
+            $email, $id);
+        break;
     case 'update-proxy':
         update_proxy(trim($_POST['domain']), trim($_POST['cname']));
         send_manage_notify_email($email, $id, "Updated HTTP Proxy");
@@ -49,10 +56,46 @@ switch ($_POST['action']) {
     case 'update-hostname':
         update_hostname(trim($_POST['hostname']));
         send_manage_notify_email($email, $id, "Updated Hostname",
-            "Due to DNS caches, the new hostname may take up to 10 minutes to be usable.");
+            "Due to DNS cache, the new hostname may take several minutes to be usable.");
+        break;
+    case 'copy':
+        check_hostname_and_fail($_POST['hostname']);
+        check_nodeno_and_fail($_POST['nodeno']);
+        list($appid, $nodeno) = create_freeshell_in_db($_POST['hostname'], $a['password'], $email, $_POST['nodeno']);
+        if (!$appid)
+            die("Failed to create new entry in database.");
+        copy_freeshell_config($id, $appid);
+        goto_background();
+        copy_vz($a['nodeno'], $id, $nodeno, $appid, $_POST['hostname']);
+        send_manage_notify_email($email, $id, "been Copied to node ".$nodeno,
+            "The new freeshell ID is $appid, new hostname is ".get_node_dns_name($_POST['hostname']));
+        break;
+    case 'rescue':
+        $_POST['nodeno'] = $a['nodeno'];
+        // fall through
+    case 'move':
+        check_nodeno_and_fail($_POST['nodeno']);
+        $appid = move_freeshell_in_db($id, $_POST['nodeno']);
+        if (!$appid)
+            die("Failed to move freeshell in database.");
+        goto_background();
+        update_proxy_conf();
+        move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname']);
+        send_manage_notify_email($email, $id, "been Moved to node ".$_POST['nodeno'],
+            "The new freeshell ID is $appid and the original ID $id is deprecated. You can still access your freeshell via ".get_node_dns_name($a['hostname']).", but due to DNS cache, you may have to wait several minutes for DNS to refresh. Please note that the IPv6 address and IPv4 SSH/HTTP port have changed.");
         break;
     default:
         die('Unsupported action');
+}
+
+function goto_background() {
+    echo "Your request is being processed in background and you will receive an email upon completion.";
+    fastcgi_finish_request();
+}
+
+function check_nodeno_and_fail($nodeno) {
+    if (!is_valid_nodeno($nodeno))
+        die('Invalid node number');
 }
 
 function reset_passwd($email, $nodeno, $id) {
@@ -99,13 +142,7 @@ function update_proxy($domain, $cname) {
     update_proxy_conf();
 }
 
-function update_hostname($hostname) {
-    global $id;
-    global $a;
-
-    if (!is_numeric($id) || !is_numeric($a['nodeno']))
-        die('Sanity check failed');
-
+function check_hostname_and_fail($hostname) {
     $flag = checkhost($hostname);
     switch ($flag) {
     case 0:
@@ -120,11 +157,21 @@ function update_hostname($hostname) {
     default:
         die('Unknown Error '.$flag);
     }
+}
+
+function update_hostname($hostname) {
+    global $id;
+    global $a;
+
+    if (!is_numeric($id) || !is_numeric($a['nodeno']))
+        die('Sanity check failed');
+
+    check_hostname_and_fail($hostname);
 
     mysql_query("UPDATE shellinfo SET `hostname`='$hostname' WHERE `id`='$id'");
     set_vz($a['nodeno'], $id, 'hostname', $hostname);
 
-    nsupdate_replace(get_node_dns_name($hostname), 'AAAA', get_node_ipv6($id));
     if (strlen($a['hostname']) > 0)
-        nsupdate_delete(get_node_dns_name($a['hostname']), 'AAAA');
+        delete_dns($a['hostname']);
+    update_dns($hostname, $id);
 }

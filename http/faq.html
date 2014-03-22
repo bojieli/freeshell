@@ -113,6 +113,27 @@
 <h3 id="28">28. Can I use SSH key to login?</h3>
 <p>Sure! "ssh-copy-id" is your friend.
 
+<h3 id="29">29. How does "Rescue" feature work?</h3>
+<p>"Rescue" is essentially a "Move" operation to the same hardware node. It allocates a new freeshell, copies data and configuration and starts the new freeshell. It takes a long time and the IP address of your freeshell will be changed. If your freeshell is stuck in the kernel and "Reboot" does not help, "Rescue" should be the last resort.
+
+<h3 id="2A">2A. How does "Copy" feature work?</h3>
+<ol>
+<li>Setup DNS for new freeshell.
+<li>Copy the data in the source freeshell to destination node.
+<li>Suspend the source freeshell (if running).
+<li>Differentially sync the data from the source freeshell to destination node.
+<li>Resume the source freeshell (if running).
+<li>Set the hostname, IP addresses and NAT rules for new freeshell (i.e. redo freeshell activation task).
+<li>Start the new freeshell.
+</ol>
+
+<h3 id="2B">2B. How does "Move" feature work?</h3>
+<ol>
+<li>Update proxy config.
+<li>Do the same thing as "Copy" feature.
+<li>Destroy the source freeshell.
+</ol>
+
 
 <h2>Networking</h2>
 

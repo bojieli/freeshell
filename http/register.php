@@ -6,7 +6,7 @@ include_once "nodes.inc.php";
 include_once "admin.inc.php";
 
 $password = $_POST['regpassword'];
-if ($password != $_POST['regconfpass'])
+if ($password !== $_POST['regconfpass'])
     alert('Passwords mismatch.');
 $email = $_POST['regemail'];
 $hostname = addslashes($_POST['hostname']);
@@ -15,31 +15,9 @@ if (checkhost($hostname) || strlen($password)<6 || checkemail($email)) {
     alert('Sorry, sanity check failed.');
 }
 
-$salted_pass = generate_password($_POST['regpassword']);
-
-$query = "INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$salted_pass', `email`='$email'";
-
-if ($_POST['nodeno'] && is_numeric($_POST['nodeno'])) {
-    $nodeno = (int)$_POST['nodeno'] % nodes_num();
-    if ($nodeno < 0)
-        alert('Invalid nodeno');
-    $max = mysql_result(mysql_query("SELECT MAX(id) FROM shellinfo"),0);
-    $appid = $max ? (int)$max + 1 : 1;
-    while ($appid % nodes_num() != $nodeno)
-        ++$appid;
-    $query .= ",`id`='$appid'";
-}
-
-mysql_query($query);
-$appid = mysql_insert_id();
-if (empty($appid))
+list($appid, $nodeno) = create_freeshell_in_db($hostname, generate_password($password), $email, $_POST['nodeno']);
+if (!$appid)
     alert('Database error, please retry. If the problem persists, please contact support@freeshell.ustc.edu.cn');
-
-$nodeno = $appid % nodes_num();
-if ($nodeno == 0)
-    $nodeno = nodes_num();
-
-mysql_query("UPDATE shellinfo SET `nodeno`='$nodeno' WHERE `id`='$appid'");
 
 $info = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'"));
 if (empty($info))

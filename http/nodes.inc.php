@@ -19,6 +19,15 @@ function nodes_num() {
     return count($nodes2ip);
 }
 
+function is_valid_nodeno($nodeno) {
+    if (!is_numeric($nodeno))
+        return false;
+    $int = (int)$nodeno;
+    if ($int != $nodeno)
+        return false;
+    return $int > 0 && $int <= nodes_num();
+}
+
 function get_node_ip($nodeno) {
     global $nodes2ip;
     return $nodes2ip[$nodeno];
@@ -65,12 +74,48 @@ function destroy_vz($nodeno, $id, $keephome = false) {
         return call_monitor($nodeno, "destroy", $id);
 }
 
-function create_vz($nodeno, $id, $hostname, $password, $diskspace_softlimit, $diskspace_hardlimit) {
+function delete_dns($hostname) {
     include_once "dns.inc.php";
-    nsupdate_replace(get_node_dns_name($hostname), 'AAAA', get_node_ipv6($id));
+    nsupdate_delete(get_node_dns_name($hostname), 'AAAA');
+    nsupdate_delete('*.'.get_node_dns_name($hostname), 'AAAA');
+}
+
+function update_dns($hostname, $appid) {
+    include_once "dns.inc.php";
+    nsupdate_replace(get_node_dns_name($hostname), 'AAAA', get_node_ipv6($appid));
     // wildcard domains are also supported
-    nsupdate_replace('*.'.get_node_dns_name($hostname), 'AAAA', get_node_ipv6($id));
+    nsupdate_replace('*.'.get_node_dns_name($hostname), 'AAAA', get_node_ipv6($appid));
+}
+
+function create_vz($nodeno, $id, $hostname, $password, $diskspace_softlimit, $diskspace_hardlimit) {
+    update_dns($hostname, $id);
     return call_monitor($nodeno, "create-vz", "$id $hostname $password $diskspace_softlimit $diskspace_hardlimit");
+}
+
+function copy_vz($old_node, $old_id, $new_node, $new_id, $hostname) {
+    update_dns($hostname, $new_id);
+    $ret = call_monitor($old_node, "copy-vz", "$old_id $new_node $new_id");
+    set_vz($new_node, $new_id, 'hostname', $hostname);
+    activate_vz($new_node, $new_id);
+    return $ret;
+}
+
+function move_vz($old_node, $old_id, $new_node, $new_id, $hostname) {
+    /* do not use fast move because vzquota may fail when old VZ cannot be stopped
+     * copying files is slow, but safer
+     *
+    if ($new_node == $old_node) {
+        update_dns($hostname, $new_id);
+        $ret = call_monitor($old_node, "move-vz", "$old_id $new_id");
+        activate_vz($new_node, $new_id);
+    } else {
+    */
+        $ret = copy_vz($old_node, $old_id, $new_node, $new_id, $hostname);
+        destroy_vz($old_node, $old_id);
+    /*
+    }
+    */
+    return $ret;
 }
 
 function reactivate_vz($nodeno, $id) {
@@ -82,6 +127,7 @@ function reactivate_vz($nodeno, $id) {
 
 function activate_vz($nodeno, $id) {
     global $master_node;
+    mysql_query("UPDATE shellinfo SET isactive=1 WHERE id=$id");
     call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno));
 	if ($nodeno != $master_node)
 		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ip($master_node)." ".get_node_ip($nodeno));
