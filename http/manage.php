@@ -59,8 +59,8 @@ switch ($_POST['action']) {
             "Due to DNS cache, the new hostname may take several minutes to be usable.");
         break;
     case 'copy':
-        check_hostname_and_fail($_POST['hostname']);
         check_nodeno_and_fail($_POST['nodeno']);
+        check_hostname_and_fail($_POST['hostname']);
         list($appid, $nodeno) = create_freeshell_in_db($_POST['hostname'], $a['password'], $email, $_POST['nodeno']);
         if (!$appid)
             die("Failed to create new entry in database.");
@@ -95,7 +95,7 @@ function goto_background() {
 
 function check_nodeno_and_fail($nodeno) {
     if (!is_valid_nodeno($nodeno))
-        die('Invalid node number');
+        die('Please select target node!');
 }
 
 function reset_passwd($email, $nodeno, $id) {
