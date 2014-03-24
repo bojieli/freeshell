@@ -125,12 +125,23 @@ function reactivate_vz($nodeno, $id) {
 		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ip($master_node)." ".get_node_ip($nodeno)." renew");
 }
 
+function add_local_port_forwarding($local_port, $remote_ip, $remote_port) {
+    if ($local_port < 1024)
+        die('Request tainted');
+    exec("sudo /usr/local/bin/port-forward $local_port $remote_ip $remote_port");
+}
+
+function add_ssh_port_forwarding($id, $nodeno) {
+    add_local_port_forwarding(30000 + $id, get_node_ip($nodeno), 10000 + $id);
+}
+
 function activate_vz($nodeno, $id) {
     global $master_node;
     mysql_query("UPDATE shellinfo SET isactive=1 WHERE id=$id");
     call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno));
 	if ($nodeno != $master_node)
 		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ip($master_node)." ".get_node_ip($nodeno));
+    add_ssh_port_forwarding($id, $nodeno);
 }
 
 function control_vz($nodeno, $action, $id) {
