@@ -132,7 +132,7 @@ function add_local_port_forwarding($local_port, $remote_ip, $remote_port) {
 }
 
 function add_ssh_port_forwarding($id, $nodeno) {
-    add_local_port_forwarding(30000 + $id, get_node_ip($nodeno), 10000 + $id);
+    add_local_port_forwarding(appid2gsshport($id), get_node_ip($nodeno), appid2sshport($id));
 }
 
 function activate_vz($nodeno, $id) {
@@ -187,6 +187,9 @@ function random_string($length) {
 
 function appid2sshport($appid) {
     return 10000 + $appid;
+}
+function appid2gsshport($appid) {
+    return 30000 + $appid;
 }
 function appid2httpport($appid) {
     return 20000 + $appid;

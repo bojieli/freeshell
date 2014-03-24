@@ -16,6 +16,7 @@ $info['ip'] = get_node_ip(1);
 $info['realip'] = get_node_ip($info['nodeno']);
 $info['ipv6'] = get_node_ipv6($appid);
 $info['sshport'] = appid2sshport($appid);
+$info['global_sshport'] = appid2gsshport($appid);
 $info['httpport'] = appid2httpport($appid);
 $info['domain'] = 's'.$info['nodeno'].'.freeshell.ustc.edu.cn';
 
@@ -129,11 +130,11 @@ if ($num_shells >= 2) {
   <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['hostname']?>.6.freeshell.ustc.edu.cn</span> (IPv6 only)
 </ul>
 
-<p class="note">If IPv6 is not working (e.g. you are using VPN), try IPv4 (RESTRICTED TO USTC CAMPUS):</p>
+<p class="note">If you do not have IPv6 access, try IPv4:</p>
 <ul class="table">
-  <li><span class="h">SSH port:</span><strong><?=$info['sshport']?></strong> (mapped to port 22 of your freeshell)
-  <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['sshport']?> root@<?=$info['domain']?></span>
-  <li><span class="h">HTTP port:</span><strong><?=$info['httpport']?></strong> (mapped to port 80 of your freeshell)
+  <li><span class="h">SSH port:</span><strong><?=$info['global_sshport']?></strong> (mapped to port 22 of your freeshell, global access)
+  <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['global_sshport']?> root@ssh.freeshell.ustc.edu.cn</span>
+  <li><span class="h">HTTP port:</span><strong><?=$info['httpport']?></strong> (mapped to port 80 of your freeshell, USTC campus only)
   <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['domain']?>:<?=$info['httpport']?>/</span>
 </ul>
 
