@@ -110,17 +110,17 @@ for VEID in $VEIDS; do
   # If the VE is running, suspend, re-rsync and then resume it ...
   if [ -n "$(${VZCTL} status ${VEID} | grep running)" ]; then
 
-    e "Suspending VEID: $VEID"
-    before="$(date +%s)"
-    timeout -k 30 10 ${VZCTL} chkpnt $VEID --suspend
+    #e "Suspending VEID: $VEID"
+    #before="$(date +%s)"
+    #timeout -k 30 10 ${VZCTL} chkpnt $VEID --suspend
 
     e "Commencing second pass rsync ..."
     ${RSYNC} ${VZ_PRIVATE}${VEID} ${REMOTE_HOST}:${REMOTE_DIR}
 
-    e "Resuming VEID: $VEID"
-    timeout -k 30 10 ${VZCTL} chkpnt $VEID --resume
-    after="$(date +%s)"
-    elapsed_seconds="$(expr $after - $before)"
+    #e "Resuming VEID: $VEID"
+    #timeout -k 30 10 ${VZCTL} chkpnt $VEID --resume
+    #after="$(date +%s)"
+    #elapsed_seconds="$(expr $after - $before)"
 
     e "Done."
     e "Container ${VEID} ($VEHOSTNAME) was down $elapsed_seconds seconds during backup process." >> /tmp/vzbackuptimes
