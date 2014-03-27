@@ -32,5 +32,7 @@ function check_email_count($email) {
 }
 
 function sanitize_url($url) {
+    if (!preg_match('/^[a-zA-Z0-9:_&+%=?\/.-]+$/', $url))
+        return "";
     return filter_var($url, FILTER_VALIDATE_URL);
 }
