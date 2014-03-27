@@ -201,9 +201,9 @@ http(s)://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>"
 <br />
 Your own domain: <input id="http-cname" value="<?=$info['http_cname'] ?>" /> (CNAME to proxy.freeshell.ustc.edu.cn)
 <br />
-40x error page: <input id="40x-page" value="<?=$info['40x_page'] ?>" />
+40x error page URL: <input id="40x-page" value="<?=$info['40x_page'] ?>" />
 <br />
-50x error page: <input id="50x-page" value="<?=$info['50x_page'] ?>" />
+50x error page URL: <input id="50x-page" value="<?=$info['50x_page'] ?>" />
 <br />
 <button id="btn-update-proxy" onclick="updateProxy()">Update</button>
 </p>
