@@ -30,3 +30,7 @@ function check_email_count($email) {
     $rs = mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `email`='$email'");
     return mysql_result($rs,0) < 14;
 }
+
+function sanitize_url($url) {
+    return filter_var($url, FILTER_VALIDATE_URL);
+}

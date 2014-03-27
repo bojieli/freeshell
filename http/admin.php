@@ -201,6 +201,10 @@ http(s)://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>"
 <br />
 Your own domain: <input id="http-cname" value="<?=$info['http_cname'] ?>" /> (CNAME to proxy.freeshell.ustc.edu.cn)
 <br />
+40x error page: <input id="40x-page" value="<?=$info['40x_page'] ?>" />
+<br />
+50x error page: <input id="50x-page" value="<?=$info['50x_page'] ?>" />
+<br />
 <button id="btn-update-proxy" onclick="updateProxy()">Update</button>
 </p>
 <p class="smaller">See <a href="faq.html#40" target="_blank">FAQ</a> for HTTP Proxy Policy and Help.</p>
@@ -278,10 +282,8 @@ function updateProxy() {
     var new_domain = $('#http-proxy-subdomain').val();
     var old_cname = "<?=$info['http_cname'] ?>";
     var new_cname = $('#http-cname').val();
-    if (old_domain == new_domain && old_cname == new_cname) {
-        alert('Domain Name Unchanged');
-        return;
-    }
+    var new_40x_page = $('#40x-page').val();
+    var new_50x_page = $('#50x-page').val();
     $('#btn-update-proxy').attr('disabled', true);
     $('#btn-update-proxy').html('Processing...');
     $.ajax({
@@ -293,6 +295,8 @@ function updateProxy() {
             action: 'update-proxy',
             domain: new_domain,
             cname: new_cname,
+            '40x_page': new_40x_page,
+            '50x_page': new_50x_page,
         },
         success: ajaxSuccessFunc,
     });

@@ -50,7 +50,7 @@ switch ($_POST['action']) {
             $email, $id);
         break;
     case 'update-proxy':
-        update_proxy(trim($_POST['domain']), trim($_POST['cname']));
+        update_proxy(trim($_POST['domain']), trim($_POST['cname']), trim($_POST['40x_page']), trim($_POST['50x_page']));
         send_manage_notify_email($email, $id, "Updated HTTP Proxy");
         break;
     case 'update-hostname':
@@ -105,7 +105,7 @@ function reset_passwd($email, $nodeno, $id) {
     echo 'New root password has been sent to your email. If not found, please check the Spam box.';
 }
 
-function update_proxy($domain, $cname) {
+function update_proxy($domain, $cname, $page_40x, $page_50x) {
     global $id;
 
     $flag = subdomain_check($id, $domain);
@@ -138,7 +138,10 @@ function update_proxy($domain, $cname) {
         die('Unknown Error '.$flag);
     }
 
-    mysql_query("UPDATE shellinfo SET `http_subdomain`='$domain', `http_cname`='$cname' WHERE `id`='$id'");
+    $page_40x = addslashes(sanitize_url($page_40x));
+    $page_50x = addslashes(sanitize_url($page_50x));
+
+    mysql_query("UPDATE shellinfo SET `http_subdomain`='$domain', `http_cname`='$cname', `40x_page`='$page_40x', `50x_page`='$page_50x' WHERE `id`='$id'");
     update_proxy_conf();
 }
 

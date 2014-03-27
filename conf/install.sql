@@ -13,6 +13,8 @@ CREATE TABLE shellinfo (
     `diskspace_softlimit` VARCHAR(20) NOT NULL DEFAULT '5G',
     `diskspace_hardlimit` VARCHAR(20) NOT NULL DEFAULT '7G',
     `http_cname` TEXT,
+    `40x_page` TEXT,
+    `50x_page` TEXT,
     PRIMARY KEY (`id`),
     KEY key_nodeno (`nodeno`),
     KEY key_email (`email`)
