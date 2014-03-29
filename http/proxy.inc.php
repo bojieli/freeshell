@@ -1,4 +1,6 @@
 <?php
+include_once "verify.inc.php";
+
 function update_proxy_conf() {
     $localfile = "/etc/nginx/autogen-conf/freeshell.conf";
     $fp = fopen($localfile, "w");

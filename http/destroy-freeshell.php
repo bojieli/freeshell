@@ -26,15 +26,15 @@ mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
 ?>
 <div id="wrapper">
 <div id="regtitle">
-        	<h1>Destroyed</h1>
+        	<h1>Destroy Confirmed</h1>
         	<div id="progbar">
             </div>
-<p>Your freeshell #<?=$info['shellid'] ?> has been destroyed.</p>
+<p>Your freeshell #<?=$info['shellid'] ?> is being deleted.</p>
 </div>
 </div>
 <?php
 fastcgi_finish_request();
-mysql_query("DELETE FROM shellinfo WHERE id='".$info['shellid']."'");
 delete_dns($info['hostname']);
 update_proxy_conf();
 destroy_vz($info['nodeno'], $info['shellid']);
+mysql_query("DELETE FROM shellinfo WHERE id='".$info['shellid']."'");
