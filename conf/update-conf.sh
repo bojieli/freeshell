@@ -15,6 +15,8 @@ if [ `whoami` != "root" ]; then
     exit 1
 fi
 
+export PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+
 # preserve perms and execution bit, chown as root
 rsync -rpE --exclude=sudoers $BASE/etc/ /etc/
 
