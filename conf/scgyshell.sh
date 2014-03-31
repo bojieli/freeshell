@@ -15,6 +15,8 @@ if [ -z "$action" ]; then
     exit 1
 fi
 
+export PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+
 if [ -f `dirname $0`/${action}.sh ]; then
     `dirname $0`/${action}.sh $params
 elif [ "$action" == "vzlist" ]; then
