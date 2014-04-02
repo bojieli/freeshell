@@ -55,6 +55,10 @@ while ($info = mysql_fetch_array($rs)) {
 }
 ?>
 </table>
+<div class="progbar"></div>
+<p>
+Need more freeshells? <a href="logout.php">Logout</a> and register a new one.
+</p>
 </div>
 </div>
 <script src="js/jquery.js" type="text/javascript"></script>

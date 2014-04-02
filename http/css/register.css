@@ -62,7 +62,7 @@ body{
 	margin-left:100px;
 	margin-top:20px;
 }
-#progbar{
+#progbar, .progbar{
 	width:800px;
 	height:2px;
 	margin:20px auto;
