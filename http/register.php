@@ -10,12 +10,13 @@ if ($password !== $_POST['regconfpass'])
     alert('Passwords mismatch.');
 $email = $_POST['regemail'];
 $hostname = addslashes($_POST['hostname']);
+$distribution = addslashes($_POST['distribution']);
 
-if (checkhost($hostname) || strlen($password)<6 || checkemail($email)) {
+if (checkhost($hostname) || strlen($password)<6 || checkemail($email) || check_distribution($distribution)) {
     alert('Sorry, sanity check failed.');
 }
 
-list($appid, $nodeno) = create_freeshell_in_db($hostname, generate_password($password), $email, $_POST['nodeno']);
+list($appid, $nodeno) = create_freeshell_in_db($hostname, generate_password($password), $email, $_POST['nodeno'], $distribution);
 if (!$appid)
     alert('Database error, please retry. If the problem persists, please contact support@freeshell.ustc.edu.cn');
 
@@ -38,7 +39,7 @@ if (empty($info))
 </div>
 <?php
 fastcgi_finish_request();
-create_vz($nodeno, $appid, $hostname, $password, $info['diskspace_softlimit'], $info['diskspace_hardlimit']);
+create_vz($nodeno, $appid, $hostname, $password, $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution']);
 
 $token = random_string(40);
 mysql_query("UPDATE shellinfo SET `token`='$token' WHERE `id`='$appid'");

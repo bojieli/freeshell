@@ -161,7 +161,7 @@ if ($num_shells >= 2) {
 
 <div id="progbar"></div>
 <h2>Copy / Move</h2>
-<p class="note">Use Copy to duplicate freeshells, use Move to switch hardware node. Both operations require complete data copy and take a long time.</p>
+<p class="note">Use Copy to duplicate freeshells, use Move to switch hardware node. Both operations require complete data copy and take a long time. Your current node is #<?=$info['nodeno'] ?>.</p>
 <p>
 <span>
 <select id="copy-nodeno">
@@ -228,8 +228,9 @@ foreach ($node as $key => $value) {
 </ul>
 
 <div id="progbar"></div>
-<h2>Resource Limits</h2>
+<h2>Resource Limits & Configurations</h2>
 <ul class="table">
+  <li><span class="h">Distribution</span><?=$info['distribution']?>
   <li><span class="h">Memory</span><?=$info['nodeno']==3?"12G":"16G"?>, unlimited
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
   <li><span class="h">Disk</span><span class="r"><?=$info['diskspace_softlimit']?>. You can use up to <?=$info['diskspace_hardlimit']?> in a grace period of 24 hours.<br>Please delete unused files as soon as possible :)<br>If you need more disk space, email support@freeshell.ustc.edu.cn</span>

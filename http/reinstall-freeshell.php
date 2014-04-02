@@ -8,7 +8,7 @@ if (!is_numeric($_GET['id']))
     die('Invalid request');
 $ticket_id = $_GET['id'];
 
-$info = mysql_fetch_array(mysql_query("SELECT tickets.shellid, shellinfo.email, shellinfo.nodeno, shellinfo.hostname, shellinfo.diskspace_softlimit, shellinfo.diskspace_hardlimit, tickets.create_time, tickets.used_time, tickets.token, tickets.action FROM tickets, shellinfo WHERE tickets.id='$ticket_id' AND tickets.shellid=shellinfo.id"));
+$info = mysql_fetch_array(mysql_query("SELECT tickets.shellid, shellinfo.email, shellinfo.nodeno, shellinfo.hostname, shellinfo.diskspace_softlimit, shellinfo.diskspace_hardlimit, shellinfo.distribution, tickets.create_time, tickets.used_time, tickets.token, tickets.action FROM tickets, shellinfo WHERE tickets.id='$ticket_id' AND tickets.shellid=shellinfo.id"));
 
 if (empty($info) || $info['shellid'] == 0)
     die('Ticket does not exist.');
@@ -39,6 +39,6 @@ mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
 fastcgi_finish_request();
 destroy_vz($info['nodeno'], $info['shellid'], isset($_GET['keephome']));
 $password = random_string(12);
-create_vz($info['nodeno'], $info['shellid'], $info['hostname'], $password, $info['diskspace_softlimit'], $info['diskspace_hardlimit']);
-reactivate_vz($info['nodeno'], $info['shellid']);
+create_vz($info['nodeno'], $info['shellid'], $info['hostname'], $password, $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution']);
+reactivate_vz($info['nodeno'], $info['shellid'], $info['distribution']);
 send_reinstall_success_email($info['email'], $info['shellid'], $info['hostname'], $password);

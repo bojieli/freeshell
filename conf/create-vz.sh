@@ -1,7 +1,7 @@
 #!/bin/bash
-# usage: ./create-vz.sh <id> <hostname> <password> <diskspace_softlimit> <diskspace_hardlimit>
+# usage: ./create-vz.sh <id> <hostname> <password> <diskspace_softlimit> <diskspace_hardlimit> <distribution>
 
-if [ -z $1 ] || [ -z $2 ] || [ -z $3 ] || [ -z $4 ] || [ -z $5 ]; then
+if [ -z $1 ] || [ -z $2 ] || [ -z $3 ] || [ -z $4 ] || [ -z $5 ] || [ -z $6 ]; then
     exit 1
 fi
 
@@ -10,8 +10,9 @@ hostname=$2
 password=$3
 diskspace_softlimit=$4
 diskspace_hardlimit=$5
+distribution=$6
 
-vzctl create $id --ostemplate debian-7.0-amd64-minimal
+vzctl create $id --ostemplate $distribution
 vzctl set $id --userpasswd root:$password
 vzctl set $id --kmemsize unlimited --save
 vzctl set $id --privvmpages unlimited --save

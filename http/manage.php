@@ -61,12 +61,12 @@ switch ($_POST['action']) {
     case 'copy':
         check_nodeno_and_fail($_POST['nodeno']);
         check_hostname_and_fail($_POST['hostname']);
-        list($appid, $nodeno) = create_freeshell_in_db($_POST['hostname'], $a['password'], $email, $_POST['nodeno']);
+        list($appid, $nodeno) = create_freeshell_in_db($_POST['hostname'], $a['password'], $email, $_POST['nodeno'], $a['distribution']);
         if (!$appid)
             die("Failed to create new entry in database.");
         copy_freeshell_config($id, $appid);
         goto_background();
-        copy_vz($a['nodeno'], $id, $nodeno, $appid, $_POST['hostname']);
+        copy_vz($a['nodeno'], $id, $nodeno, $appid, $_POST['hostname'], $a['distribution']);
         send_manage_notify_email($email, $id, "been Copied to node ".$nodeno,
             "The new freeshell ID is $appid, new hostname is ".get_node_dns_name($_POST['hostname']));
         break;
@@ -80,7 +80,7 @@ switch ($_POST['action']) {
             die("Failed to move freeshell in database.");
         goto_background();
         update_proxy_conf();
-        move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname']);
+        move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution']);
         send_manage_notify_email($email, $id, "been Moved to node ".$_POST['nodeno'],
             "The new freeshell ID is $appid and the original ID $id is deprecated. You can still access your freeshell via ".get_node_dns_name($a['hostname']).", but due to DNS cache, you may have to wait several minutes for DNS to refresh. Please note that the IPv6 address and IPv4 SSH/HTTP port have changed.");
         break;

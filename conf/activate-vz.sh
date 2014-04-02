@@ -1,12 +1,13 @@
 #!/bin/bash
-# usage: ./activate-vz.sh <id> <serverip> [renew]
+# usage: ./activate-vz.sh <id> <serverip> <distribution> [renew]
 
-if [ -z $1 ] || [ -z $2 ]; then
+if [ -z $1 ] || [ -z $2 ] || [ -z $3 ]; then
     exit 1
 fi
 
 id=$1
 serverip=$2
+distribution=$3
 localip="10.10.$(echo $id/256 | bc).$(echo $id%256 | bc)"
 sshport=$(echo $id + 10000 | bc)
 httpport=$(echo $id + 20000 | bc)
@@ -28,7 +29,9 @@ vzctl start $id
 vzctl exec $id mknod /dev/ppp c 108 0
 vzctl exec $id chmod 600 /dev/ppp
 
-cat `dirname $0`/conf-in-vz/sources.list | vzctl exec $id "cat - > /etc/apt/sources.list"
+if [ "$distribution" == "debian-7.0-amd64-minimal" ]; then
+    cat `dirname $0`/conf-in-vz/sources.list | vzctl exec $id "cat - > /etc/apt/sources.list"
+fi
 cat `dirname $0`/conf-in-vz/locale.gen | vzctl exec $id "cat - > /etc/locale.gen"
 vzctl exec $id "locale-gen"
 vzctl exec $id "update-locale LANG=en_US.utf8"
@@ -38,4 +41,7 @@ vzctl exec $id "ln -sf /usr/share/zoneinfo/Asia/Chongqing /etc/localtime"
 vzctl exec $id "echo Asia/Chongqing > /etc/timezone"
 
 sleep 2 # for network bootstrap
-vzctl exec $id "apt-get update"
+
+if [ "$distribution" == "debian-7.0-amd64-minimal" ]; then
+    vzctl exec $id "apt-get update"
+fi

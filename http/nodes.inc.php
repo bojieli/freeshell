@@ -87,30 +87,30 @@ function update_dns($hostname, $appid) {
     nsupdate_replace('*.'.get_node_dns_name($hostname), 'AAAA', get_node_ipv6($appid));
 }
 
-function create_vz($nodeno, $id, $hostname, $password, $diskspace_softlimit, $diskspace_hardlimit) {
+function create_vz($nodeno, $id, $hostname, $password, $diskspace_softlimit, $diskspace_hardlimit, $distribution) {
     update_dns($hostname, $id);
-    return call_monitor($nodeno, "create-vz", "$id $hostname $password $diskspace_softlimit $diskspace_hardlimit");
+    return call_monitor($nodeno, "create-vz", "$id $hostname $password $diskspace_softlimit $diskspace_hardlimit $distribution");
 }
 
-function copy_vz($old_node, $old_id, $new_node, $new_id, $hostname) {
+function copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution) {
     update_dns($hostname, $new_id);
     $ret = call_monitor($old_node, "copy-vz", "$old_id $new_node $new_id");
     set_vz($new_node, $new_id, 'hostname', $hostname);
-    activate_vz($new_node, $new_id);
+    activate_vz($new_node, $new_id, $distribution);
     return $ret;
 }
 
-function move_vz($old_node, $old_id, $new_node, $new_id, $hostname) {
+function move_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution) {
     /* do not use fast move because vzquota may fail when old VZ cannot be stopped
      * copying files is slow, but safer
      *
     if ($new_node == $old_node) {
         update_dns($hostname, $new_id);
         $ret = call_monitor($old_node, "move-vz", "$old_id $new_id");
-        activate_vz($new_node, $new_id);
+        activate_vz($new_node, $new_id, $distribution);
     } else {
     */
-        $ret = copy_vz($old_node, $old_id, $new_node, $new_id, $hostname);
+        $ret = copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution);
         destroy_vz($old_node, $old_id);
     /*
     }
@@ -118,9 +118,9 @@ function move_vz($old_node, $old_id, $new_node, $new_id, $hostname) {
     return $ret;
 }
 
-function reactivate_vz($nodeno, $id) {
+function reactivate_vz($nodeno, $id, $distribution) {
     global $master_node;
-    call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno)." renew");
+    call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno)." $distribution renew");
 	if ($nodeno != $master_node)
 		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ip($master_node)." ".get_node_ip($nodeno)." renew");
 }
@@ -135,10 +135,10 @@ function add_ssh_port_forwarding($id, $nodeno) {
     add_local_port_forwarding(appid2gsshport($id), get_node_ip($nodeno), appid2sshport($id));
 }
 
-function activate_vz($nodeno, $id) {
+function activate_vz($nodeno, $id, $distribution) {
     global $master_node;
     mysql_query("UPDATE shellinfo SET isactive=1 WHERE id=$id");
-    call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno));
+    call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno)." $distribution");
 	if ($nodeno != $master_node)
 		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ip($master_node)." ".get_node_ip($nodeno));
     add_ssh_port_forwarding($id, $nodeno);

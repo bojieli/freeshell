@@ -138,8 +138,8 @@ function get_next_appid($nodeno) {
     return $appid;
 }
 
-function create_freeshell_in_db($hostname, $salted_pass, $email, $nodeno = null) {
-    $query = "INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$salted_pass', `email`='$email'";
+function create_freeshell_in_db($hostname, $salted_pass, $email, $nodeno, $distribution) {
+    $query = "INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$salted_pass', `email`='$email', `distribution`='$distribution'";
     
     if ($nodeno && is_numeric($nodeno)) {
         $query .= ",id=".get_next_appid($nodeno);

@@ -39,5 +39,5 @@ $_SESSION['appid'] = $info['id'];
 </html>
 <?php
 fastcgi_finish_request();
-activate_vz($info['nodeno'], $appid);
+activate_vz($info['nodeno'], $appid, $info['distribution']);
 ?>

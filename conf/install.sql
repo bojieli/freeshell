@@ -12,6 +12,7 @@ CREATE TABLE shellinfo (
     `http_subdomain` VARCHAR(50) NOT NULL,
     `diskspace_softlimit` VARCHAR(20) NOT NULL DEFAULT '5G',
     `diskspace_hardlimit` VARCHAR(20) NOT NULL DEFAULT '7G',
+    `distribution` VARCHAR(255) NOT NULL,
     `http_cname` TEXT,
     `40x_page` TEXT,
     `50x_page` TEXT,

@@ -36,3 +36,11 @@ function sanitize_url($url) {
         return "";
     return filter_var($url, FILTER_VALIDATE_URL);
 }
+
+function check_distribution($name) {
+    if (!preg_match('/^[a-z0-9_.-]+$/', $name))
+        return 1;
+    if (!preg_match('/^(centos|debian|fedora|suse|ubuntu)/', $name))
+        return 2;
+    return 0;
+}
