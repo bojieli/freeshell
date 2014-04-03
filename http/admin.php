@@ -229,7 +229,7 @@ while ($row = mysql_fetch_array($rs)) {
 <td><button id="btn-add-endpoint" onclick="addEndpoint()">Add</button></td>
 </tr>
 </table>
-<p class="note">Public IP is ssh.freeshell.ustc.edu.cn. Public port must be in range 40000-49999. Private port should not be 22 or 80.</p>
+<p class="note">Public IP is ssh.freeshell.ustc.edu.cn.<br />Public port must be in range 40000-49999.<br />Private port should not be 22 or 80.</p>
 
 <div id="progbar"></div>
 <h2>Server status</h2>

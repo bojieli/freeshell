@@ -102,7 +102,7 @@ switch ($_POST['action']) {
                 die('Unknown error');
         }
         add_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint']);
-        send_manage_notify_email($email, $id, "Added Endpoint ".$_POST['public_endpoint']." => ".$_POST['private_endpoint']);
+        send_manage_notify_email($email, $id, "Added Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
         break;
     case 'remove-endpoint':
         if (!is_valid_public_endpoint($_POST['public_endpoint']))
@@ -112,7 +112,7 @@ switch ($_POST['action']) {
         if (!db_remove_endpoint($id, $_POST['public_endpoint'], $_POST['private_endpoint']))
             die('The endpoints does not exist');
         remove_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint']);
-        send_manage_notify_email($email, $id, "Removed Endpoint ".$_POST['public_endpoint']." => ".$_POST['private_endpoint']);
+        send_manage_notify_email($email, $id, "Removed Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
         break;
     default:
         die('Unsupported action');
