@@ -37,4 +37,7 @@ fastcgi_finish_request();
 delete_dns($info['hostname']);
 update_proxy_conf();
 destroy_vz($info['nodeno'], $info['shellid']);
+remove_all_endpoints($info['nodeno'], $info['shellid']);
+db_remove_all_endpoints($info['shellid']);
 mysql_query("DELETE FROM shellinfo WHERE id='".$info['shellid']."'");
+

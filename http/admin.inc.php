@@ -175,3 +175,30 @@ function copy_freeshell_config($old_id, $new_id)
     mysql_query("UPDATE shellinfo SET ".implode(',', $values)." WHERE id=$new_id");
     return (mysql_affected_rows() == 1);
 }
+
+/* return 0 for success
+ * return 1 for too many endpoints
+ * return 2 for endpoint already taken
+ * return 3 for database error
+ */
+function db_add_endpoint($id, $public_endpoint, $private_endpoint) {
+    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM endpoint WHERE `id`='$id'"), 0);
+    if ($count >= 10)
+        return 1;
+    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM endpoint WHERE `public_endpoint`='$public_endpoint'"), 0);
+    if ($count != 0)
+        return 2;
+    mysql_query("INSERT INTO endpoint SET `id`='$id', `public_endpoint`='$public_endpoint', `private_endpoint`='$private_endpoint'");
+    if (mysql_affected_rows() == 1)
+        return 0;
+    return 3;
+}
+
+function db_remove_endpoint($id, $public_endpoint, $private_endpoint) {
+    mysql_query("DELETE FROM endpoint WHERE `id`='$id' AND `public_endpoint`='$public_endpoint' AND `private_endpoint`='$private_endpoint'");
+    return (mysql_affected_rows() == 1);
+}
+
+function db_remove_all_endpoints($id) {
+    mysql_query("DELETE FROM endpoint WHERE `id`='$id'");
+}

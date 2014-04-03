@@ -35,7 +35,7 @@ else
         	<div id="progbar">
             </div>
 <style>
-ul.table, ul.help, p.note {
+table, ul.table, ul.help, p.note {
 	font-size: 16px !important;
 	font-family: "Segoe UI","Helvetica Neue", Helvetica, Ubuntu;
 	margin-left: 100px !important;
@@ -210,6 +210,28 @@ Your own domain: <input id="http-cname" value="<?=$info['http_cname'] ?>" /> (CN
 <p class="smaller">See <a href="faq.html#40" target="_blank">FAQ</a> for HTTP Proxy Policy and Help.</p>
 
 <div id="progbar"></div>
+<h2>Public Endpoint (Port Forwarding)</h2>
+<table>
+<tr><th>Public Port</th><th>Private Port</th><th></th></tr>
+<?php
+$rs = mysql_query("SELECT * FROM endpoint WHERE id='$appid'");
+while ($row = mysql_fetch_array($rs)) {
+    echo "<tr>";
+    echo "<td>".$row['public_endpoint']."</td>";
+    echo "<td>".$row['private_endpoint']."</td>";
+    echo '<td><button onclick="removeEndpoint('.$row['public_endpoint'].','.$row['private_endpoint'].')">Remove</button></td>';
+    echo "</tr>\n";
+}
+?>
+<tr>
+<td><input type="text" id="public-endpoint" /></td>
+<td><input type="text" id="private-endpoint" /></td>
+<td><button id="btn-add-endpoint" onclick="addEndpoint()">Add</button></td>
+</tr>
+</table>
+<p class="note">Public IP is ssh.freeshell.ustc.edu.cn. Public port must be in range 40000-49999. Private port should not be 22 or 80.</p>
+
+<div id="progbar"></div>
 <h2>Server status</h2>
 <ul class="table">
   <li><span class="h">Node</span><strong>#<?=$info['nodeno']?></strong>
@@ -257,6 +279,19 @@ function ajaxSuccessFunc(msg){
         alert(msg);
     window.location.reload();
 }
+function ajaxErrorFunc() {
+    alert('Failed to connect to server!');
+}
+function ajaxManage(data) {
+    $.ajax({
+        url: 'manage.php',
+        type: 'post',
+        async: true,
+        data: data,
+        success: ajaxSuccessFunc,
+        error: ajaxErrorFunc,
+    });
+}
 function manage(action) {
     if (!confirm("Do you really want to " + action + " your freeshell?"))
         return;
@@ -270,12 +305,22 @@ function manage(action) {
     else if (action == "move") {
         data.nodeno = $('#move-nodeno').val();
     }
-    $.ajax({
-        url: 'manage.php',
-        type: 'post',
-        async: true,
-        data: data,
-        success: ajaxSuccessFunc,
+    ajaxManage(data);
+}
+function removeEndpoint(public_endpoint, private_endpoint) {
+    ajaxManage({
+        appid: <?=$info['id']?>,
+        action: 'remove-endpoint',
+        public_endpoint: public_endpoint,
+        private_endpoint: private_endpoint,
+    });
+}
+function addEndpoint() {
+    ajaxManage({
+        appid: <?=$info['id']?>,
+        action: 'add-endpoint',
+        public_endpoint: $('#public-endpoint').val(),
+        private_endpoint: $('#private-endpoint').val(),
     });
 }
 function updateProxy() {

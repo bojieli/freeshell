@@ -80,9 +80,39 @@ switch ($_POST['action']) {
             die("Failed to move freeshell in database.");
         goto_background();
         update_proxy_conf();
+        move_endpoints($a['nodeno'], $id, $_POST['nodeno'], $appid);
         move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution']);
         send_manage_notify_email($email, $id, "been Moved to node ".$_POST['nodeno'],
             "The new freeshell ID is $appid and the original ID $id is deprecated. You can still access your freeshell via ".get_node_dns_name($a['hostname']).", but due to DNS cache, you may have to wait several minutes for DNS to refresh. Please note that the IPv6 address and IPv4 SSH/HTTP port have changed.");
+        break;
+    case 'add-endpoint':
+        if (!is_valid_public_endpoint($_POST['public_endpoint']))
+            die('Invalid public endpoint');
+        if (!is_valid_private_endpoint($_POST['private_endpoint']))
+            die('Invalid private endpoint'); 
+        $status = db_add_endpoint($id, $_POST['public_endpoint'], $_POST['private_endpoint']);
+        switch ($status) {
+            case 0:
+                break;
+            case 1:
+                die('You have created too many endpoints.');
+            case 2:
+                die('The public endpoint has been taken, please use another one');
+            default:
+                die('Unknown error');
+        }
+        add_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint']);
+        send_manage_notify_email($email, $id, "Added Endpoint ".$_POST['public_endpoint']." => ".$_POST['private_endpoint']);
+        break;
+    case 'remove-endpoint':
+        if (!is_valid_public_endpoint($_POST['public_endpoint']))
+            die('Invalid public endpoint');
+        if (!is_valid_private_endpoint($_POST['private_endpoint']))
+            die('Invalid private endpoint'); 
+        if (!db_remove_endpoint($id, $_POST['public_endpoint'], $_POST['private_endpoint']))
+            die('The endpoints does not exist');
+        remove_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint']);
+        send_manage_notify_email($email, $id, "Removed Endpoint ".$_POST['public_endpoint']." => ".$_POST['private_endpoint']);
         break;
     default:
         die('Unsupported action');
@@ -177,4 +207,13 @@ function update_hostname($hostname) {
     if (strlen($a['hostname']) > 0)
         delete_dns($a['hostname']);
     update_dns($hostname, $id);
+}
+
+function move_endpoints($old_node, $old_id, $new_node, $new_id) {
+    $rs = mysql_query("SELECT * FROM endpoint WHERE `id`='$old_id'");
+    while ($row = mysql_fetch_array($rs)) {
+        remove_endpoint($old_id, $old_node, $row['public_endpoint'], $row['private_endpoint']);
+        add_endpoint($new_id, $new_node, $row['public_endpoint'], $row['private_endpoint']);
+    }
+    mysql_query("UPDATE endpoint SET `id`='$new_id' WHERE `id`='$old_id'");
 }

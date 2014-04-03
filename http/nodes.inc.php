@@ -125,14 +125,57 @@ function reactivate_vz($nodeno, $id, $distribution) {
 		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ip($master_node)." ".get_node_ip($nodeno)." renew");
 }
 
+function add_node_port_forwarding($nodeno, $public_port, $shellid, $private_port) {
+    call_monitor($nodeno, "port-forward", "add $public_port $shellid $private_port");
+}
+
+function remove_node_port_forwarding($nodeno, $public_port, $shellid, $private_port) {
+    call_monitor($nodeno, "port-forward", "remove $public_port $shellid $private_port");
+}
+
 function add_local_port_forwarding($local_port, $remote_ip, $remote_port) {
     if ($local_port < 1024)
         die('Request tainted');
-    exec("sudo /usr/local/bin/port-forward $local_port $remote_ip $remote_port");
+    exec("sudo /usr/local/bin/port-forward add $local_port $remote_ip $remote_port");
+}
+
+function remove_local_port_forwarding($local_port, $remote_ip, $remote_port) {
+    exec("sudo /usr/local/bin/port-forward remove $local_port $remote_ip $remote_port");
 }
 
 function add_ssh_port_forwarding($id, $nodeno) {
     add_local_port_forwarding(appid2gsshport($id), get_node_ip($nodeno), appid2sshport($id));
+}
+
+function is_valid_public_endpoint($port) {
+    return (is_numeric($port) && $port >= 40000 && $port < 50000);
+}
+
+function is_valid_private_endpoint($port) {
+    return (is_numeric($port) && $port != 22 && $port != 80 && $port > 0 && $port < 65536);
+}
+
+function add_endpoint($id, $nodeno, $public_port, $private_port) {
+    if (!is_valid_public_endpoint($public_port) || !is_valid_private_endpoint($private_port))
+        return false;
+    add_node_port_forwarding($nodeno, $public_port, $id, $private_port);
+    add_local_port_forwarding($public_port, get_node_ip($nodeno), $public_port);
+    return true;
+}
+
+function remove_endpoint($id, $nodeno, $public_port, $private_port) {
+    if (!is_valid_public_endpoint($public_port) || !is_valid_private_endpoint($private_port))
+        return false;
+    remove_node_port_forwarding($nodeno, $public_port, $id, $private_port);
+    remove_local_port_forwarding($public_port, get_node_ip($nodeno), $public_port);
+    return true;
+}
+
+function remove_all_endpoints($nodeno, $id) {
+    $rs = mysql_query("SELECT * FROM endpoint WHERE `id`='$id'");
+    while ($row = mysql_fetch_array($rs)) {
+        remove_endpoint($id, $nodeno, $row['public_port'], $row['private_port']);
+    }
 }
 
 function activate_vz($nodeno, $id, $distribution) {

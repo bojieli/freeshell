@@ -40,3 +40,11 @@ CREATE TABLE ssh_log (
     `log_time` INT(10),
     KEY key_nodeno (`nodeno`)
 );
+
+CREATE TABLE endpoint (
+    `id` INT(10) NOT NULL,
+    `public_endpoint` INT(5) NOT NULL,
+    `private_endpoint` INT(5) NOT NULL,
+    UNIQUE KEY key_public_endpoint (`public_endpoint`),
+    FOREIGN KEY (`id`) REFERENCES shellinfo (`id`)
+);
