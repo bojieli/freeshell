@@ -164,7 +164,7 @@ function move_freeshell_in_db($old_id, $nodeno) {
 
 function copy_freeshell_config($old_id, $new_id)
 {
-    $fields = array("diskspace_softlimit", "diskspace_hardlimit");
+    $fields = array("diskspace_softlimit", "diskspace_hardlimit", "distribution");
     $info = mysql_fetch_array(mysql_query("SELECT ".implode(',',$fields)." FROM shellinfo WHERE id=$old_id"));
     if (empty($info))
         return false;
