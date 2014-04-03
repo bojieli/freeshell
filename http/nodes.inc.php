@@ -57,11 +57,19 @@ function run_in_node($nodeno, $cmd) {
     return implode("\n", $output);
 }
 
-function call_monitor($nodeno, $action, $param) {
+function hide_password($str, $password) {
+    return str_replace($password, "********", $str);
+}
+
+function call_monitor($nodeno, $action, $param, $password_to_hide = "") {
     if (!is_numeric($nodeno))
         return;
     $cmd = "$action $param";
     $output = run_in_node($nodeno, $cmd);
+    if ($password_to_hide) {
+        $cmd = hide_password($cmd, $password_to_hide);
+        $output = hide_password($output, $password_to_hide);
+    }
     mysql_query("INSERT INTO ssh_log SET `nodeno`='$nodeno', `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `output`='".addslashes($output)."', `log_time`='".time()."'");
     return $output;
 }
@@ -89,7 +97,7 @@ function update_dns($hostname, $appid) {
 
 function create_vz($nodeno, $id, $hostname, $password, $diskspace_softlimit, $diskspace_hardlimit, $distribution) {
     update_dns($hostname, $id);
-    return call_monitor($nodeno, "create-vz", "$id $hostname $password $diskspace_softlimit $diskspace_hardlimit $distribution");
+    return call_monitor($nodeno, "create-vz", "$id $hostname $password $diskspace_softlimit $diskspace_hardlimit $distribution", $password);
 }
 
 function copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution) {
