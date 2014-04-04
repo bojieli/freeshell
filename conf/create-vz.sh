@@ -18,7 +18,7 @@ vzctl set $id --kmemsize unlimited --save
 vzctl set $id --privvmpages unlimited --save
 vzctl set $id --shmpages unlimited --save
 vzctl set $id --diskspace $diskspace_softlimit:$diskspace_hardlimit --save
-vzctl set $id --diskinodes unlimited --save
+vzctl set $id --diskinodes 10000000 --save
 vzctl set $id --quotatime 86400 --save
 vzctl set $id --numproc 500 --save
 vzctl set $id --numtcpsock 500 --save
