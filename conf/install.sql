@@ -26,6 +26,7 @@ CREATE TABLE tickets (
     `shellid` INT(10) NOT NULL,
     `token` CHAR(40) NOT NULL,
     `action` VARCHAR(255) NOT NULL,
+    `param` TEXT,
     `create_time` DATETIME,
     `used_time` DATETIME,
     PRIMARY KEY (`id`),

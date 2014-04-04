@@ -28,18 +28,41 @@ switch ($_POST['action']) {
     case 'reset-root':
         reset_passwd($email, $a['nodeno'], $id);
         break;
-    case 'reinstall-keephome':
-        echo need_email_verification("Reinstalling System",
-            "WARNING: THIS OPERATION WILL ERASE ALL DATA ON YOUR FREESHELL, EXCEPT HOME DIRECTORY.",
-            "reinstall-freeshell.php",
-            "keephome",
-            $email, $id);
-        break;
     case 'reinstall':
+        if (check_distribution($_POST['distribution']))
+            die("Invalid Distribution!");
+
+        $keep_dir_str = trim($_POST['keep_directories']);
+        $keep_dirs = explode(',', trim($_POST['keep_directories']));
+        foreach ($keep_dirs as $i => $d) {
+            $keep_dirs[$i] = trim($d);
+        }
+        $keep_dir_str = implode(',', $keep_dirs);
+        switch (check_keep_dirs($keep_dir_str)) {
+            case 0:
+                break;
+            case 1:
+                die("No empty directory could be keeped");
+            case 2:
+                die("Root directory cannot be keeped");
+            case 3:
+                die("Directory must start with /");
+            case 4:
+                die("Directory must not contain ..");
+            case 5:
+                die("Special chars not supported in directory name. Directory name could only contain letters, digits, '_', '-' and '/'");
+            case 6:
+                die("Directory path too long");
+            case 7:
+                die("Too many directories to keep");
+        }
+
         echo need_email_verification("Reinstalling System",
-            "WARNING: THIS OPERATION WILL ERASE ALL DATA ON YOUR FREESHELL.",
+            "Distribution: ".$_POST['distribution']."\n".
+            "WARNING: THIS OPERATION WILL ERASE ALL DATA ON YOUR FREESHELL".
+                ($keep_dir_str ? " EXCEPT THE FOLLOWING DIRECTORIES:\n".implode("\n", $keep_dirs) : "."),
             "reinstall-freeshell.php",
-            "",
+            $_POST['distribution']."\n".$keep_dir_str,
             $email, $id);
         break;
     case 'destroy':

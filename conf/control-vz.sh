@@ -6,13 +6,26 @@ if [ -z $1 ] || [ -z $2 ]; then
 fi
 action=$1
 id=$2
+param=$3
 
 for act in start stop restart status destroy; do
     if [ "$act" = "$action" ]; then
-        if [ "$action" = "destroy" ] && [ "$3" = "keephome" ]; then
-            echo "Backing up /home..."
-            mkdir -p /home/vz/backup/$id
-            mv /home/vz/private/$id/home /home/vz/backup/$id/
+        if [ "$action" = "destroy" ]; then
+            if [ ! -z "$param" ]; then
+                rm -rf /home/vz/backup/$id 2>/dev/null # clean directory
+                mkdir -p /home/vz/backup/$id
+                echo "$param" > /home/vz/backup/$id/backup-dirlist
+                IFS="," read -ra dir <<< "$param"
+                for d in "${dir[@]}"; do
+                    if [ -e "/home/vz/private/$id/$d" ]; then
+                        echo "Backing up $d ..."
+                        mkdir -p /home/vz/backup/$id/$(dirname $d)
+                        mv /home/vz/private/$id/$d /home/vz/backup/$id/$(dirname $d)/
+                    else
+                        echo "$d not exist, skipping backup"
+                    fi
+                done
+            fi
         fi
         # set 3 minute timeout in case the freeshell is locked
         timeout 180 vzctl $action $id;

@@ -3,6 +3,7 @@ include_once "header.php";
 include_once "db.php";
 include_once "nodes.inc.php";
 include_once "admin.inc.php";
+include_once "distributions.inc.php";
 
 $appid = $_SESSION['appid'];
 if (empty($appid))
@@ -151,13 +152,29 @@ if ($num_shells >= 2) {
 <h2>Recovery</h2>
 <p class="buttons">
   <span><button id="btn-manage-reset-root" onclick="manage('reset-root')">Reset Root Password</button></span>
-  <span><button id="btn-manage-reinstall-keephome" onclick="manage('reinstall-keephome')">Reinstall System (keep /home)</button></span>
-  <span><button id="btn-manage-reinstall" onclick="manage('reinstall')">Reinstall System (NOT keep /home)</button></span>
-</p>
-<p>
   <span><button id="btn-manage-rescue" onclick="manage('rescue')">Rescue</button></span>
-  <span class="smaller">(If your freeshell is not responding and Reboot does not help, try Rescue. <a href="faq.html#29" target="_blank">Details</a>)</span>
+  <span class="smaller">(If your freeshell does not respond to <strong>Reboot</strong>, try Rescue. <a href="faq.html#29" target="_blank">Details</a>)</span>
 </p>
+
+<div id="progbar"></div>
+<h2>Reinstall System</h2>
+<ul class="table">
+<li>
+  <span class="h">Distribution</span>
+  <span class="c">
+    <select id="reinstall-distribution">
+    <?php echo distribution_option_html($info['distribution']); ?>
+    </select>
+  </span>
+</li>
+<li>
+  <span class="h">Keep Directories</span>
+  <span class="c"><input type="text" id="reinstall-keep-directories" value="/home,/root" /> (separate by ',')</span>
+</li>
+<li>
+  <span class="h"><button id="btn-manage-reinstall" onclick="manage('reinstall')">Reinstall System</button></span>
+</li>
+</ul>
 
 <div id="progbar"></div>
 <h2>Copy / Move</h2>
@@ -304,6 +321,10 @@ function manage(action) {
     }
     else if (action == "move") {
         data.nodeno = $('#move-nodeno').val();
+    }
+    else if (action == "reinstall") {
+        data.distribution = $('#reinstall-distribution').val();
+        data.keep_directories = $('#reinstall-keep-directories').val();
     }
     ajaxManage(data);
 }

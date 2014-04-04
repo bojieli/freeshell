@@ -4,6 +4,7 @@ if (!empty($_SESSION['email']))
     die("<script>window.location.href='login.php';</script>");
 
 include_once "db.php";
+include_once "distributions.inc.php";
 $shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
 ?>
 <!docTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -127,15 +128,7 @@ $shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
                 </select>
             </p>
             <p><span>Distribution:</span><select name="distribution" id="distribution">
-                <option value="debian-7.0-amd64-minimal" selected="selected">Debian 7.0 wheezy (Recommended)</option>
-                <option value="debian-6.0-amd64-minimal">Debian 6.0 squeeze</option>
-                <option value="centos-6-x86_64">CentOS 6</option>
-                <option value="centos-5-x86_64">CentOS 5</option>
-                <option value="ubuntu-12.04-x86_64">Ubuntu 12.04 LTS</option>
-                <option value="ubuntu-13.10-x86_64">Ubuntu 13.10</option>
-                <option value="fedora-20-x86_64">Fedora 20</option>
-                <option value="suse-13.1-x86_64">OpenSUSE 13.1</option>
-                <option value="suse-12.3-x86_64">OpenSUSE 12.3</option>
+                <?php echo distribution_option_html(); ?>
                 </select>
             </p>
             

@@ -74,12 +74,9 @@ function call_monitor($nodeno, $action, $param, $password_to_hide = "") {
     return $output;
 }
 
-function destroy_vz($nodeno, $id, $keephome = false) {
+function destroy_vz($nodeno, $id, $keep_dirs = "") {
     call_monitor($nodeno, "stop", "$id --fast");
-    if ($keephome)
-        return call_monitor($nodeno, "destroy", "$id keephome");
-    else
-        return call_monitor($nodeno, "destroy", $id);
+    return call_monitor($nodeno, "destroy", "$id $keep_dirs");
 }
 
 function delete_dns($hostname) {

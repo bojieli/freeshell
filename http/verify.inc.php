@@ -1,4 +1,6 @@
 <?php
+include_once "distributions.inc.php";
+
 function checkemail($email) {
     if (strlen($email) > 50)
         return 4;
@@ -40,7 +42,33 @@ function sanitize_url($url) {
 function check_distribution($name) {
     if (!preg_match('/^[a-z0-9_.-]+$/', $name))
         return 1;
-    if (!preg_match('/^(centos|debian|fedora|suse|ubuntu)/', $name))
-        return 2;
+    global $supported_distributions;
+    foreach ($supported_distributions as $distribution) {
+        if ($name == $distribution)
+            return 0;
+    }
+    return 2;
+}
+
+function check_keep_dirs($dirlist) {
+    if ($dirlist == "")
+        return 0; // empty is allowed
+    $keep_dirs = explode(',', $dirlist);
+    if (count($keep_dirs) > 100)
+        return 7;
+    foreach ($keep_dirs as $dir) {
+        if ($dir == "")
+            return 1;
+        if ($dir == "/")
+            return 2;
+        if ($dir[0] != '/')
+            return 3;
+        if (strpos($dir, "..") !== false)
+            return 4;
+        if (!preg_match('/^[\/a-zA-Z0-9_-]+$/', $dir))
+            return 5;
+        if (strlen($dir) > 100)
+            return 6;
+    }
     return 0;
 }

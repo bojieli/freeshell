@@ -66,18 +66,16 @@ function send_reinstall_success_email($email, $appid, $hostname, $password) {
     mail($email, $title, $body, $headers);
 }
 
-function need_email_verification($name, $msg, $action, $http_param, $email, $appid) {
+function need_email_verification($name, $msg, $action, $param, $email, $appid) {
     global $headers, $footer;
     $token = random_string(40);
-    mysql_query("INSERT INTO tickets (shellid,create_time,action,token) VALUES ('$appid', NOW(), '$action', '$token')");
+    mysql_query("INSERT INTO tickets (shellid,create_time,action,token,param) VALUES ('$appid', NOW(), '".addslashes($action)."', '$token', '".addslashes($param)."')");
     $id = mysql_insert_id();
     if (!is_numeric($id) || $id == 0)
         return "Failed to generate ticket. Please contact support@freeshell.ustc.edu.cn";
-    if ($http_param == "")
-        $http_param = "verify";
 
     $title = "Freeshell Danger Action Confirmation: $name";
-    $body = greetings($appid)."You have requested $name for shell ID $appid on ".site_baseurl().". This is a DANGER action, so we need your confirmation to proceed.\n\n$msg\n\nFollow this link to perform $name immediately and irreversibly:\n".site_baseurl()."/$action?$http_param&id=$id&token=$token\n\nThis link will expire in 48 hours.\nIf you did not request this action, maybe your account is stolen, please contact us.".$footer;
+    $body = greetings($appid)."You have requested $name for shell ID $appid on ".site_baseurl().". This is a DANGER action, so we need your confirmation to proceed.\n\n$msg\n\nFollow this link to perform $name immediately and irreversibly:\n".site_baseurl()."/$action?id=$id&token=$token\n\nThis link will expire in 48 hours.\nIf you did not request this action, maybe your account is stolen, please contact us.".$footer;
     mail($email, $title, $body, $headers);
 
     return "Since this is a danger action, please check your mailbox and follow the link in confirmation email.";
