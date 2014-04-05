@@ -16,3 +16,16 @@ USTC Freeshell is maintained by Linux User Group @ USTC (http://lug.ustc.edu.cn)
 - 2013-09-19, Allow multiple shells per account, sub-domain HTTP proxy.
 
 Enjoy Freeshell at http://freeshell.ustc.edu.cn
+
+
+Deployment Tips
+---------------
+
+On installation of each hardware node, download the following precreated templates as ```root```:
+
+```
+cd /home/vz/template/cache
+wget http://mirrors.ustc.edu.cn/openvz/template/precreated/contrib/debian-6.0-amd64-minimal.tar.gz
+wget http://mirrors.ustc.edu.cn/openvz/template/precreated/contrib/debian-7.0-amd64-minimal.tar.gz
+wget http://mirrors.ustc.edu.cn/openvz/template/precreated/contrib/arch-20131014-x86_64.tar.xz
+```
