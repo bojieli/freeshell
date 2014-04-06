@@ -34,15 +34,27 @@ function get_node_ip($nodeno) {
 }
 
 function get_node_ipv6($nodeno) {
-    $prefix = "2001:da8:d800:71::";
-    if ($nodeno < 10000)
-        return $prefix.($nodeno % 10000);
-    else
-        return $prefix.($nodeno / 10000).':'.($nodeno % 10000);
+    return "2001:da8:d800:71::".$nodeno;
 }
 
-function get_node_dns_name($hostname) {
+function get_shell_ipv6($id) {
+    $prefix = "2001:da8:d800:71::";
+    if ($id < 10000)
+        return $prefix.($id % 10000);
+    else
+        return $prefix.intval($id / 10000).':'.($id % 10000);
+}
+
+function get_shell_ipv4($id) {
+    return "10.10.".intval($id / 256).".".($id % 256);
+}
+
+function get_node_v6_dns_name($hostname) {
     return "$hostname.6.freeshell.ustc.edu.cn";
+}
+
+function get_node_v4_dns_name($hostname) {
+    return "$hostname.4.freeshell.ustc.edu.cn";
 }
 
 function run_in_node($nodeno, $cmd) {
@@ -81,15 +93,23 @@ function destroy_vz($nodeno, $id, $keep_dirs = "") {
 
 function delete_dns($hostname) {
     include_once "dns.inc.php";
-    nsupdate_delete(get_node_dns_name($hostname), 'AAAA');
-    nsupdate_delete('*.'.get_node_dns_name($hostname), 'AAAA');
+    $ns = new nsupdate();
+    $ns->delete(get_node_v6_dns_name($hostname), 'AAAA');
+    $ns->delete('*.'.get_node_v6_dns_name($hostname), 'AAAA');
+    $ns->delete(get_node_v4_dns_name($hostname), 'A');
+    $ns->delete('*.'.get_node_v4_dns_name($hostname), 'A');
+    $ns->commit();
 }
 
 function update_dns($hostname, $appid) {
     include_once "dns.inc.php";
-    nsupdate_replace(get_node_dns_name($hostname), 'AAAA', get_node_ipv6($appid));
+    $ns = new nsupdate();
+    $ns->replace(get_node_v6_dns_name($hostname), 'AAAA', get_shell_ipv6($appid));
     // wildcard domains are also supported
-    nsupdate_replace('*.'.get_node_dns_name($hostname), 'AAAA', get_node_ipv6($appid));
+    $ns->replace('*.'.get_node_v6_dns_name($hostname), 'AAAA', get_shell_ipv6($appid));
+    $ns->replace(get_node_v4_dns_name($hostname), 'A', get_shell_ipv4($appid));
+    $ns->replace('*.'.get_node_v4_dns_name($hostname), 'A', get_shell_ipv4($appid));
+    $ns->commit();
 }
 
 function create_vz($nodeno, $id, $hostname, $password, $diskspace_softlimit, $diskspace_hardlimit, $distribution) {

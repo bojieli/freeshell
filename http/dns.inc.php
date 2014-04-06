@@ -1,4 +1,5 @@
 <?php
+
 function __nsupdate($commands) {
     $tmpfile = tempnam('/tmp', 'freeshell_ns_');
     $fp = fopen($tmpfile, "w");
@@ -13,13 +14,19 @@ function __nsupdate($commands) {
     exec("nsupdate -k /etc/freeshell/chinanet-update-key.key $tmpfile");
     unlink($tmpfile);
 }
-function nsupdate_add($fqdn, $record, $content) {
-    __nsupdate(array("add $fqdn $record $content"));
-}
-function nsupdate_replace($fqdn, $record, $content) {
-    $ttl = 600;
-    __nsupdate(array("delete $fqdn $record", "add $fqdn $ttl $record $content"));
-}
-function nsupdate_delete($fqdn, $record) {
-    __nsupdate(array("delete $fqdn $record"));
+
+class nsupdate {
+    var $commands = array();
+
+    function replace($fqdn, $record, $content) {
+        $ttl = 600;
+        $this->nsupdate_commands[] = "delete $fqdn $record";
+        $this->nsupdate_commands[] = "add $fqdn $ttl $record $content";
+    }
+    function delete($fqdn, $record) {
+        $this->nsupdate_commands[] = "delete $fqdn $record";
+    }
+    function commit() {
+        __nsupdate($this->nsupdate_commands);
+    }
 }
