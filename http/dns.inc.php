@@ -1,5 +1,4 @@
 <?php
-
 function __nsupdate($commands) {
     $tmpfile = tempnam('/tmp', 'freeshell_ns_');
     $fp = fopen($tmpfile, "w");
@@ -20,13 +19,13 @@ class nsupdate {
 
     function replace($fqdn, $record, $content) {
         $ttl = 600;
-        $this->nsupdate_commands[] = "delete $fqdn $record";
-        $this->nsupdate_commands[] = "add $fqdn $ttl $record $content";
+        $this->commands[] = "delete $fqdn $record";
+        $this->commands[] = "add $fqdn $ttl $record $content";
     }
     function delete($fqdn, $record) {
-        $this->nsupdate_commands[] = "delete $fqdn $record";
+        $this->commands[] = "delete $fqdn $record";
     }
     function commit() {
-        __nsupdate($this->nsupdate_commands);
+        __nsupdate($this->commands);
     }
 }
