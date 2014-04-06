@@ -30,4 +30,7 @@ ip rule add from $MYIP lookup 1000
 
 ip rule add from all lookup 999 # table 999 is higher priority
 
+# inter-vz traffic go through internal interface
+ip route add 10.10.0.0/16 dev eth1
+
 exit 0
