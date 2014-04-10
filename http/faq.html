@@ -53,7 +53,7 @@
 <p>It is okay, but do not push the website too hard.
 <p>If we receive complainments or disputes from any organization or individual, it is our sole discretion to limit or block Internet access of your freeshell without prior notification.
 
-<h3 id="0A">05. Are miners / World Community Grid / SETI@home allowed?</h3>
+<h3 id="05">05. Are miners / World Community Grid / SETI@home allowed?</h3>
 <p>No. Miners for digital currencies and World Community Grid projects are in blacklist. Once detected, the suspicious process will be terminated immediately.
 <p>Our computation resource is not idle enough to contribute to projects like SETI@home. Thanks for your understanding.
 
@@ -122,27 +122,6 @@
 <h3 id="28">28. Can I use SSH key to login?</h3>
 <p>Sure! "ssh-copy-id" is your friend.
 
-<h3 id="29">29. How does "Rescue" feature work?</h3>
-<p>"Rescue" is essentially a "Move" operation to the same hardware node. It allocates a new freeshell, copies data and configuration and starts the new freeshell. It takes a long time and the IP address of your freeshell will be changed. If your freeshell is stuck in the kernel and "Reboot" does not help, "Rescue" should be the last resort.
-
-<h3 id="2A">2A. How does "Copy" feature work?</h3>
-<ol>
-<li>Setup DNS for new freeshell.
-<li>Copy the data in the source freeshell to destination node.
-<li>Suspend the source freeshell (if running).
-<li>Differentially sync the data from the source freeshell to destination node.
-<li>Resume the source freeshell (if running).
-<li>Set the hostname, IP addresses and NAT rules for new freeshell (i.e. redo freeshell activation task).
-<li>Start the new freeshell.
-</ol>
-
-<h3 id="2B">2B. How does "Move" feature work?</h3>
-<ol>
-<li>Update proxy config.
-<li>Do the same thing as "Copy" feature.
-<li>Destroy the source freeshell.
-</ol>
-
 
 <h2>Networking</h2>
 
@@ -207,39 +186,68 @@
 <p>Add a DNS "CNAME" record to <strong>&lt;hostname&gt;.6.freeshell.ustc.edu.cn</strong>. Since the IPv6 address is dedicated, you do not need to do anything in control panel.
 
 
+<h2>Freeshell Management</h2>
+
+<h3 id="50">50. What is the difference between "reboot" and "force reboot", "stop" and "force stop"?</h3>
+<p>"Stop" is like executing "init 0" in your freeshell and all processes shut down gracefully. "Force stop" is like pulling the power out of your freeshell and implemented with SIGKILL.
+<p>"Reboot" is like executing "init 6" in your freeshell. "Force reboot" is essentially a "Force stop" followed by a "Start" operation.
+<p>Please note that "Force stop" and "Force reboot" may not work if "Stop" or "Reboot" is in process and some process in your freeshell refuses to exit. You have to wait the pending stop or reboot to timeout in order to perform force-actions.
+
+<h3 id="51">51. How does "Rescue" feature work?</h3>
+<p>"Rescue" is essentially a "Move" operation to the same hardware node. It allocates a new freeshell, copies data and configuration and starts the new freeshell. It takes a long time and the IP address of your freeshell will be changed. If your freeshell is stuck in the kernel and "Reboot" does not help, "Rescue" should be the last resort.
+
+<h3 id="52">52. How does "Copy" feature work?</h3>
+<ol>
+<li>Setup DNS for new freeshell.
+<li>Copy the data in the source freeshell to destination node.
+<li>Suspend the source freeshell (if running).
+<li>Differentially sync the data from the source freeshell to destination node.
+<li>Resume the source freeshell (if running).
+<li>Set the hostname, IP addresses and NAT rules for new freeshell (i.e. redo freeshell activation task).
+<li>Start the new freeshell.
+</ol>
+
+<h3 id="53">53. How does "Move" feature work?</h3>
+<ol>
+<li>Update proxy config.
+<li>Do the same thing as "Copy" feature.
+<li>Destroy the source freeshell.
+</ol>
+
+
+
 <h2>Misc.</h2>
 
-<h3 id="50">50. I'm using Windows, how to connect?</h3>
+<h3 id="60">60. I'm using Windows, how to connect?</h3>
 <p>If you are using Windows, please download PuTTY <a href="http://lug.ustc.edu.cn/~boj/web_dev/ref/putty.zip">Here</a>. The usage of PuTTY can be found on Google.
 
-<h3 id="51">51. I want to change a newer kernel / insert a kernel module.</h3>
+<h3 id="61">61. I want to change a newer kernel / insert a kernel module.</h3>
 <p>Sorry. We use OpenVZ virtualization technology, and all freeshells (OpenVZ Containers) share a same kernel.
 
-<h3 id="52">52. What Linux Distribution am I using?</h3>
+<h3 id="62">62. What Linux Distribution am I using?</h3>
 <p>If you created freeshell before Nov. 2013, it is a minimal Debian 6.0 "squeeze" system.
 <p>Otherwise, you are using Debian 7.0 "wheezy" minimal system.
-<p>If you are an expert, you may change your freeshell to any distribution supporting 2.6.32 kernel.
 
-<h3 id="53">53. Why command X "not found"?</h3>
+<h3 id="63">63. Why command X "not found"?</h3>
 <p>This Linux box ships with a minimal set of pre-installed software packages. Many utils on normal Linux distributions have to be installed by yourself.
 <p>See <a href="http://home.ustc.edu.cn/~yousong/freeshell-basicsetup.html">Basic Setup for Freeshell</a> by yousong.
 <p>Please not to install too many packages, since our disk space is limited :)
 
-<h3 id="54">54. "apt-get install" says "404 not found".</h3>
+<h3 id="64">64. "apt-get install" says "404 not found".</h3>
 <p>run "apt-get update" to update software index.
 
-<h3 id="55">55. How to install X, GNOME or KDE?</h3>
+<h3 id="65">65. How to install X, GNOME or KDE?</h3>
 <p>While it is technically possible, we are strongly against it.
 <p>You are expected to learn some shell commands. Break shell, touch Linux!
 
-<h3 id="56">56. Why my program terminated when I exit the shell?</h3>
+<h3 id="66">66. Why my program terminated when I exit the shell?</h3>
 <p>You should install "screen" and run long-live programs in screen.
 
-<h3 id="57">57. Why udev does not work?</h3>
+<h3 id="67">67. Why udev does not work?</h3>
 <p>Due to security concerns, freeshells are not allowed to touch hardware, kernel modules, etc. directly. We have created necessary devices in <strong>/dev</strong> on system startup.
 <p>If there is any error while installing or starting udev, it is safe to ignore it.
 
-<h3 id="58">58. I messed up. How can I reinstall the system?</h3>
+<h3 id="68">68. I messed up. How can I reinstall the system?</h3>
 <p>On Control Panel, there is "Reinstall System" button. There are two options:
 <ul>
 <li>If you want to keep /home directory, click "keep /home" button;
@@ -248,34 +256,34 @@
 <p>Be sure to backup all your data outside /home, because reinstalling system will erase all data permanently.
 <p>If you cannot login via SSH, and you do not have a backup, please feel free to contact <a href="mailto:support@freeshell.ustc.edu.cn">support@freeshell.ustc.edu.cn</a></p>
 
-<h3 id="59">59. Why the numbering of this FAQ looks so strange?</h3>
+<h3 id="69">69. Why the numbering of this FAQ looks so strange?</h3>
 <p>The first digit is section number, starting from zero and in hexademical.
 <p>The second digit is question number in this section, starting from zero and in hexademical.
 
 
 <h2>About Us</h2>
 
-<h3 id="60">60. Where is freeshell physically located?</h3>
+<h3 id="70">70. Where is freeshell physically located?</h3>
 <p>A rack of 7 blade servers, secured in School of Gifted Young (SCGY), East Campus, USTC.
 <p><a href="http://gewu.ustc.edu.cn/tech/index.php?title=%E9%A6%96%E9%A1%B5">More info</a> about SCGY-Tech.
 
-<h3 id="61">61. Who developed freeshell?</h3>
+<h3 id="71">71. Who developed freeshell?</h3>
 <p>Mostly written by <a href="http://boj.blog.ustc.edu.cn">Bojie Li</a> since Jan. 2013, while UI design is copied from <a href="http://blog.ustc.edu.cn">USTC Blog</a> by Miaomiao Li.
 
-<h3 id="62">62. What technology is used in freeshell?</h3>
+<h3 id="72">72. What technology is used in freeshell?</h3>
 <p>Standard Linux utils, OpenVZ, Nginx and PHP. There is no fancy stuff.
 <p>Read the f**king code for more details.
 
-<h3 id="63">63. Is freeshell code open source?</h3>
+<h3 id="73">73. Is freeshell code open source?</h3>
 <p>Yes. If you have a GitLab account or want to register one, <a href="https://gitlab.lug.ustc.edu.cn/boj/freeshell">follow this link</a>.
 <p>You may also get the code directly: 
 <pre>git clone https://gitlab.lug.ustc.edu.cn/boj/freeshell.git</pre>
 
-<h3 id="64">64. I want to contribute to freeshell.</h3>
+<h3 id="74">74. I want to contribute to freeshell.</h3>
 <p>Welcome to Freeshell development team! Register an account on <a href="https://gitlab.lug.ustc.edu.cn/">GitLab</a> and contact us at
 <pre>base64 -d &lt;&lt;&lt;"bHVnQHVzdGMuZWR1LmNuCg=="</pre>
 
-<h3 id="65">65. Any other problem: support@freeshell.ustc.edu.cn</h3>
+<h3 id="75">75. Any other problem: support@freeshell.ustc.edu.cn</h3>
 
 <hr />
 <p>&copy; 2013 - 2014 LUG@USTC
