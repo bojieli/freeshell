@@ -144,7 +144,9 @@ if ($num_shells >= 2) {
 <p class="buttons">
   <span><button id="btn-manage-start" onclick="manage('start')">Start</button></span>
   <span><button id="btn-manage-stop" onclick="manage('stop')">Shutdown</button></span>
+  <span><button id="btn-manage-force-stop" onclick="manage('force-stop')">Force Shutdown</button></span>
   <span><button id="btn-manage-reboot" onclick="manage('reboot')">Reboot</button></span>
+  <span><button id="btn-manage-force-reboot" onclick="manage('force-reboot')">Force Reboot</button></span>
   <span><button id="btn-manage-destroy" onclick="manage('destroy')">Destroy</button></span>
 </p>
 
@@ -153,7 +155,7 @@ if ($num_shells >= 2) {
 <p class="buttons">
   <span><button id="btn-manage-reset-root" onclick="manage('reset-root')">Reset Root Password</button></span>
   <span><button id="btn-manage-rescue" onclick="manage('rescue')">Rescue</button></span>
-  <span class="smaller">(If your freeshell does not respond to <strong>Reboot</strong>, try Rescue. <a href="faq.html#29" target="_blank">Details</a>)</span>
+  <span class="smaller">(If your freeshell does not respond to <strong>Force Reboot</strong>, try Rescue. <a href="faq.html#29" target="_blank">Details</a>)</span>
 </p>
 
 <div id="progbar"></div>

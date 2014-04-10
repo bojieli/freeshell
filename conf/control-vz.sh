@@ -8,7 +8,7 @@ action=$1
 id=$2
 param=$3
 
-for act in start stop restart status destroy; do
+for act in start stop force-stop reboot force-reboot status destroy; do
     if [ "$act" = "$action" ]; then
         if [ "$action" = "destroy" ]; then
             if [ ! -z "$param" ]; then
@@ -27,9 +27,15 @@ for act in start stop restart status destroy; do
                 done
             fi
         fi
+
+        param="$action $id"
+        [ $action = "force-stop" ] && param="stop $id --fast"
+        [ $action = "reboot" ] && param="restart $id"
+        [ $action = "force-reboot" ] && param="restart $id --fast"
         # set 3 minute timeout in case the freeshell is locked
-        timeout 180 vzctl $action $id;
-        if [ $action = "start" ] || [ $action = "restart" ]; then
+        timeout 180 vzctl $param
+
+        if [ $action = "start" ] || [ $action = "reboot" ] || [ $action = "force-reboot" ]; then
             vzctl exec $id "mount -t tmpfs -o noexec,nosuid tmpfs /tmp/"
         fi
         if [ $action = "destroy" ]; then # in case vzctl destroy failed

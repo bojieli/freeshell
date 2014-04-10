@@ -20,10 +20,11 @@ if (empty($a))
 switch ($_POST['action']) {
     case 'start':
     case 'reboot':
+    case 'force-reboot':
     case 'stop':
+    case 'force-stop':
         control_vz($a['nodeno'], $_POST['action'], $id);
-        send_manage_notify_email($email, $id,
-            ($_POST['action'] == 'stop' ? 'stopped' : $_POST['action'].'ed'));
+        send_manage_notify_email($email, $id, strtoupper($_POST['action']));
         break;
     case 'reset-root':
         reset_passwd($email, $a['nodeno'], $id);
