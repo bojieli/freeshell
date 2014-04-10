@@ -87,7 +87,7 @@ function call_monitor($nodeno, $action, $param, $password_to_hide = "") {
 }
 
 function destroy_vz($nodeno, $id, $keep_dirs = "") {
-    call_monitor($nodeno, "stop", "$id --fast");
+    call_monitor($nodeno, "force-stop", "$id");
     return call_monitor($nodeno, "destroy", "$id $keep_dirs");
 }
 
