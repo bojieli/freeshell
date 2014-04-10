@@ -27,7 +27,7 @@ $_SESSION['appid'] = $info['id'];
         	<div id="progbar">
             </div>
 <p>Your freeshell is starting. You can login with SSH in a minute:</p>
-<p style="font:Courier New">ssh root@<?=get_node_dns_name($info['hostname'])?></p>
+<p style="font:Courier New">ssh root@<?=get_shell_v6_dns_name($info['hostname'])?></p>
 <p>The root password is the same as the login password you have just set.</p>
 <p>Also you go to the control panel for more info:</p>
 </div>

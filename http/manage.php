@@ -91,7 +91,7 @@ switch ($_POST['action']) {
         goto_background();
         copy_vz($a['nodeno'], $id, $nodeno, $appid, $_POST['hostname'], $a['distribution']);
         send_manage_notify_email($email, $id, "been Copied to node ".$nodeno,
-            "The new freeshell ID is $appid, new hostname is ".get_node_dns_name($_POST['hostname']));
+            "The new freeshell ID is $appid, new hostname is ".get_shell_v6_dns_name($_POST['hostname']));
         break;
     case 'rescue':
         $_POST['nodeno'] = $a['nodeno'];
@@ -106,7 +106,7 @@ switch ($_POST['action']) {
         move_endpoints($a['nodeno'], $id, $_POST['nodeno'], $appid);
         move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution']);
         send_manage_notify_email($email, $id, "been Moved to node ".$_POST['nodeno'],
-            "The new freeshell ID is $appid and the original ID $id is deprecated. You can still access your freeshell via ".get_node_dns_name($a['hostname']).", but due to DNS cache, you may have to wait several minutes for DNS to refresh. Please note that the IPv6 address and IPv4 SSH/HTTP port have changed.");
+            "The new freeshell ID is $appid and the original ID $id is deprecated. You can still access your freeshell via ".get_shell_v6_dns_name($a['hostname']).", but due to DNS cache, you may have to wait several minutes for DNS to refresh. Please note that the IPv6 address and IPv4 SSH/HTTP port have changed.");
         break;
     case 'add-endpoint':
         if (!is_valid_public_endpoint($_POST['public_endpoint']))

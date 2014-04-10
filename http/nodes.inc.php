@@ -28,7 +28,7 @@ function is_valid_nodeno($nodeno) {
     return $int > 0 && $int <= nodes_num();
 }
 
-function get_node_ip($nodeno) {
+function get_node_ipv4($nodeno) {
     global $nodes2ip;
     return $nodes2ip[$nodeno];
 }
@@ -49,11 +49,11 @@ function get_shell_ipv4($id) {
     return "10.10.".intval($id / 256).".".($id % 256);
 }
 
-function get_node_v6_dns_name($hostname) {
+function get_shell_v6_dns_name($hostname) {
     return "$hostname.6.freeshell.ustc.edu.cn";
 }
 
-function get_node_v4_dns_name($hostname) {
+function get_shell_v4_dns_name($hostname) {
     return "$hostname.4.freeshell.ustc.edu.cn";
 }
 
@@ -94,21 +94,21 @@ function destroy_vz($nodeno, $id, $keep_dirs = "") {
 function delete_dns($hostname) {
     include_once "dns.inc.php";
     $ns = new nsupdate();
-    $ns->delete(get_node_v6_dns_name($hostname), 'AAAA');
-    $ns->delete('*.'.get_node_v6_dns_name($hostname), 'AAAA');
-    $ns->delete(get_node_v4_dns_name($hostname), 'A');
-    $ns->delete('*.'.get_node_v4_dns_name($hostname), 'A');
+    $ns->delete(get_shell_v6_dns_name($hostname), 'AAAA');
+    $ns->delete('*.'.get_shell_v6_dns_name($hostname), 'AAAA');
+    $ns->delete(get_shell_v4_dns_name($hostname), 'A');
+    $ns->delete('*.'.get_shell_v4_dns_name($hostname), 'A');
     $ns->commit();
 }
 
 function update_dns($hostname, $appid) {
     include_once "dns.inc.php";
     $ns = new nsupdate();
-    $ns->replace(get_node_v6_dns_name($hostname), 'AAAA', get_shell_ipv6($appid));
+    $ns->replace(get_shell_v6_dns_name($hostname), 'AAAA', get_shell_ipv6($appid));
     // wildcard domains are also supported
-    $ns->replace('*.'.get_node_v6_dns_name($hostname), 'AAAA', get_shell_ipv6($appid));
-    $ns->replace(get_node_v4_dns_name($hostname), 'A', get_shell_ipv4($appid));
-    $ns->replace('*.'.get_node_v4_dns_name($hostname), 'A', get_shell_ipv4($appid));
+    $ns->replace('*.'.get_shell_v6_dns_name($hostname), 'AAAA', get_shell_ipv6($appid));
+    $ns->replace(get_shell_v4_dns_name($hostname), 'A', get_shell_ipv4($appid));
+    $ns->replace('*.'.get_shell_v4_dns_name($hostname), 'A', get_shell_ipv4($appid));
     $ns->commit();
 }
 
@@ -145,9 +145,9 @@ function move_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distributio
 
 function reactivate_vz($nodeno, $id, $distribution) {
     global $master_node;
-    call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno)." $distribution renew");
+    call_monitor($nodeno, "activate-vz", "$id ".get_node_ipv4($nodeno)." $distribution renew");
 	if ($nodeno != $master_node)
-		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ip($master_node)." ".get_node_ip($nodeno)." renew");
+		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ipv4($master_node)." ".get_node_ipv4($nodeno)." renew");
 }
 
 function add_node_port_forwarding($nodeno, $public_port, $shellid, $private_port) {
@@ -169,7 +169,7 @@ function remove_local_port_forwarding($local_port, $remote_ip, $remote_port) {
 }
 
 function add_ssh_port_forwarding($id, $nodeno) {
-    add_local_port_forwarding(appid2gsshport($id), get_node_ip($nodeno), appid2sshport($id));
+    add_local_port_forwarding(appid2gsshport($id), get_node_ipv4($nodeno), appid2sshport($id));
 }
 
 function is_valid_public_endpoint($port) {
@@ -184,7 +184,7 @@ function add_endpoint($id, $nodeno, $public_port, $private_port) {
     if (!is_valid_public_endpoint($public_port) || !is_valid_private_endpoint($private_port))
         return false;
     add_node_port_forwarding($nodeno, $public_port, $id, $private_port);
-    add_local_port_forwarding($public_port, get_node_ip($nodeno), $public_port);
+    add_local_port_forwarding($public_port, get_node_ipv4($nodeno), $public_port);
     return true;
 }
 
@@ -192,7 +192,7 @@ function remove_endpoint($id, $nodeno, $public_port, $private_port) {
     if (!is_valid_public_endpoint($public_port) || !is_valid_private_endpoint($private_port))
         return false;
     remove_node_port_forwarding($nodeno, $public_port, $id, $private_port);
-    remove_local_port_forwarding($public_port, get_node_ip($nodeno), $public_port);
+    remove_local_port_forwarding($public_port, get_node_ipv4($nodeno), $public_port);
     return true;
 }
 
@@ -206,9 +206,9 @@ function remove_all_endpoints($nodeno, $id) {
 function activate_vz($nodeno, $id, $distribution) {
     global $master_node;
     mysql_query("UPDATE shellinfo SET isactive=1 WHERE id=$id");
-    call_monitor($nodeno, "activate-vz", "$id ".get_node_ip($nodeno)." $distribution");
+    call_monitor($nodeno, "activate-vz", "$id ".get_node_ipv4($nodeno)." $distribution");
 	if ($nodeno != $master_node)
-		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ip($master_node)." ".get_node_ip($nodeno));
+		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ipv4($master_node)." ".get_node_ipv4($nodeno));
     add_ssh_port_forwarding($id, $nodeno);
 }
 

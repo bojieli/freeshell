@@ -13,8 +13,8 @@ $info = mysql_fetch_array($rs);
 if (empty($info))
     include "logout.php";
 
-$info['ip'] = get_node_ip(1);
-$info['realip'] = get_node_ip($info['nodeno']);
+$info['ip'] = get_node_ipv4(1);
+$info['realip'] = get_node_ipv4($info['nodeno']);
 $info['ipv6'] = get_shell_ipv6($appid);
 $info['sshport'] = appid2sshport($appid);
 $info['global_sshport'] = appid2gsshport($appid);
@@ -126,7 +126,7 @@ if ($num_shells >= 2) {
     echo "<li><strong>Your Hostname is in conflict with another freeshell.</strong><br /><strong>DNS name may be unavailable. Please change another hostname, thanks.</strong>";
   }
   ?>
-  <li><span class="h">DNS Name:</span><?=get_node_v6_dns_name($info['hostname'])?> (IPv6 only)
+  <li><span class="h">DNS Name:</span><?=get_shell_v6_dns_name($info['hostname'])?> (IPv6 only)
   <li><span class="h">SSH command:</span><span class="c">ssh root@<?=$info['hostname']?>.6.freeshell.ustc.edu.cn</span> (IPv6 only)
   <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['hostname']?>.6.freeshell.ustc.edu.cn</span> (IPv6 only)
 </ul>
@@ -271,7 +271,7 @@ foreach ($node as $key => $value) {
 <ul class="table">
   <li><span class="h">Distribution</span><strong><?=$info['distribution']?></strong>
   <li><span class="h">Private IP</span><strong><?=get_shell_ipv4($appid)?></strong> (Freeshell Internal)
-  <li><span class="h">Private Hostname</span><strong><?=get_node_v4_dns_name($info['hostname'])?></strong> (Freeshell Internal)
+  <li><span class="h">Private Hostname</span><strong><?=get_shell_v4_dns_name($info['hostname'])?></strong> (Freeshell Internal)
   <li><span class="h">Memory</span><strong><?=$info['nodeno']==3?"12G":"16G"?></strong>, unlimited
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
   <li><span class="h">Disk</span><span class="r"><strong><?=$info['diskspace_softlimit']?></strong>. You can use up to <?=$info['diskspace_hardlimit']?> in a grace period of 24 hours.<br>Please delete unused files as soon as possible :)<br>If you need more disk space, email support@freeshell.ustc.edu.cn</span>
