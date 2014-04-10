@@ -164,6 +164,9 @@ if ($num_shells >= 2) {
 <li>
   <span class="h">Distribution</span>
   <span class="c">
+    <?php if (!is_supported_distribution($info['distribution'])) {
+        echo 'Your current distribution is no longer supported! <a href="faq.html#nonsupported-dist" target="_blank">Details</a><br />';
+    } ?>
     <select id="reinstall-distribution">
     <?php echo distribution_option_html($info['distribution']); ?>
     </select>

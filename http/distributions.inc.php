@@ -20,3 +20,12 @@ function distribution_option_html($default = "debian-7.0-amd64-minimal") {
     }
     return $str;
 }
+
+function is_supported_distribution($dist) {
+    global $supported_distributions;
+    foreach ($supported_distributions as $nickname => $name) {
+        if ($name == $dist)
+            return true;
+    }
+    return false;
+}
