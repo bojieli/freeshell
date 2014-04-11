@@ -5,6 +5,8 @@ if [ -z $1 ] || [ -z $2 ] || [ -z $3 ]; then
     exit 1
 fi
 
+cd `dirname $0`
+
 id=$1
 serverip=$2
 distribution=$3
@@ -29,10 +31,7 @@ vzctl start $id
 vzctl exec $id mknod /dev/ppp c 108 0
 vzctl exec $id chmod 600 /dev/ppp
 
-if [ "$distribution" == "debian-7.0-amd64-minimal" ]; then
-    cat `dirname $0`/conf-in-vz/sources.list | vzctl exec $id "cat - > /etc/apt/sources.list"
-fi
-cat `dirname $0`/conf-in-vz/locale.gen | vzctl exec $id "cat - > /etc/locale.gen"
+cat conf-in-vz/locale.gen | vzctl exec $id "cat - > /etc/locale.gen"
 vzctl exec $id "locale-gen"
 vzctl exec $id "update-locale LANG=en_US.utf8"
 
@@ -42,6 +41,9 @@ vzctl exec $id "echo Asia/Chongqing > /etc/timezone"
 
 sleep 2 # for network bootstrap
 
-if [ "$distribution" == "debian-7.0-amd64-minimal" ]; then
-    vzctl exec $id "apt-get update"
+DIR="vz-pkg-mirror/$distribution"
+if [ -d "$DIR" ] && [ -f "$DIR/setup.sh" ]; then
+    pushd $DIR  >/dev/null 2>&1
+    source setup.sh
+    popd        >/dev/null 2>&1
 fi
