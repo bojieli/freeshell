@@ -1,0 +1,5 @@
+deb http://mirrors.ustc.edu.cn/debian/ squeeze main non-free contrib
+deb-src http://mirrors.ustc.edu.cn/debian/ squeeze main non-free contrib
+
+deb http://mirrors.ustc.edu.cn/debian-security/ squeeze/updates main non-free contrib
+deb-src http://mirrors.ustc.edu.cn/debian-security/ squeeze/updates main non-free contrib

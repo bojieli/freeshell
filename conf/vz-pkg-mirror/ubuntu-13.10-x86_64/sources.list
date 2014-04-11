@@ -1,0 +1,10 @@
+deb http://mirrors.ustc.edu.cn/ubuntu/ saucy main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ saucy-security main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ saucy-updates main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ saucy-proposed main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ saucy-backports main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ saucy main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ saucy-security main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ saucy-updates main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ saucy-proposed main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ saucy-backports main restricted universe multiverse
