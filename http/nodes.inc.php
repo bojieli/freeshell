@@ -68,6 +68,9 @@ function run_in_node($nodeno, $cmd) {
     $local_cmd = "/bin/sh -c 'echo \"$cmd\" | /usr/bin/sudo -u scgyshell-monitor /usr/bin/ssh -4 -o ConnectTimeout=$SSH_TIMEOUT -t -t scgyshell-client@s$nodeno.freeshell.ustc.edu.cn'";
     $output = array();
     exec($local_cmd, $output, $errno);
+    if ($errno != 0) {
+        report_sys_admin("Command in freeshell node returned non-zero status $errno\nFULL COMMAND:\n$local_cmd\nOUTPUT:\n$output\n");
+    }
     return implode("\n", $output);
 }
 
