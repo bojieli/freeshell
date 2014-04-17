@@ -152,7 +152,7 @@ function create_freeshell_in_db($hostname, $salted_pass, $email, $nodeno, $distr
 
     $real_nodeno = $appid % nodes_num();
     if ($real_nodeno == 0)
-        $real_nodenonodeno = nodes_num();
+        $real_nodeno = nodes_num();
     checked_mysql_query("UPDATE shellinfo SET nodeno=$real_nodeno WHERE id=$appid");
 
     return array($appid, $real_nodeno);
