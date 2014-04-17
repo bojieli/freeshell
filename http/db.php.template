@@ -1,0 +1,4 @@
+<?php
+include_once "db.inc.php";
+mysql_connect("localhost", "mysql-user", "mysql-password");
+mysql_select_db("mysql-db-name");
