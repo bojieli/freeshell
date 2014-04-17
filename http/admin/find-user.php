@@ -10,13 +10,13 @@ if (empty($_SESSION['isadmin']))
 <?php
 $rs = array();
 if (is_numeric($_POST['appid']))
-    $rs = mysql_query("SELECT * FROM shellinfo WHERE id=".$_POST['appid']);
+    $rs = checked_mysql_query("SELECT * FROM shellinfo WHERE id=".$_POST['appid']);
 else if (!empty($_POST['email']))
-    $rs = mysql_query("SELECT * FROM shellinfo WHERE email LIKE '%".addslashes($_POST['email'])."%'");
+    $rs = checked_mysql_query("SELECT * FROM shellinfo WHERE email LIKE '%".addslashes($_POST['email'])."%'");
 else if (!empty($_POST['hostname']))
-    $rs = mysql_query("SELECT * FROM shellinfo WHERE hostname LIKE '%".addslashes($_POST['hostname'])."%'");
+    $rs = checked_mysql_query("SELECT * FROM shellinfo WHERE hostname LIKE '%".addslashes($_POST['hostname'])."%'");
 else if (!empty($_POST['http_subdomain']))
-    $rs = mysql_query("SELECT * FROM shellinfo WHERE http_subdomain LIKE '%".addslashes($_POST['http_subdomain'])."%'");
+    $rs = checked_mysql_query("SELECT * FROM shellinfo WHERE http_subdomain LIKE '%".addslashes($_POST['http_subdomain'])."%'");
 else
     goto print_table;
 ?>

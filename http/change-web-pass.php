@@ -7,7 +7,7 @@ include_once "admin.inc.php";
 $appid = $_SESSION['appid'];
 if (empty($appid))
     include "logout.php";
-$rs = mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
+$rs = checked_mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
 $info = mysql_fetch_array($rs);
 if (empty($info))
     include "logout.php";

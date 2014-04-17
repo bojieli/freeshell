@@ -8,7 +8,7 @@ include_once "distributions.inc.php";
 $appid = $_SESSION['appid'];
 if (empty($appid))
     include "logout.php";
-$rs = mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
+$rs = checked_mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
 $info = mysql_fetch_array($rs);
 if (empty($info))
     include "logout.php";
@@ -21,7 +21,7 @@ $info['global_sshport'] = appid2gsshport($appid);
 $info['httpport'] = appid2httpport($appid);
 $info['domain'] = 's'.$info['nodeno'].'.freeshell.ustc.edu.cn';
 
-$num_onthisnode = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `nodeno`='".$info['nodeno']."'"),0);
+$num_onthisnode = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `nodeno`='".$info['nodeno']."'"),0);
 $node = get_node_info($info['nodeno'], $appid);
 if (isset($node['locked']) && $node['locked'])
     $node['mystatus'] = 'Locked';
@@ -103,7 +103,7 @@ if ($_SESSION['isadmin']) { ?>
 ?>
 
 <?php
-$rs = mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `email`='".addslashes($_SESSION['email'])."'");
+$rs = checked_mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `email`='".addslashes($_SESSION['email'])."'");
 $num_shells = mysql_result($rs,0);
 if ($num_shells >= 2) {
 ?>
@@ -121,7 +121,7 @@ if ($num_shells >= 2) {
   <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong>
   <li><span class="h">Hostname:</span><strong><span id="shell-hostname"><?=$info['hostname']?></span></strong> <button id="hostname-change-btn" onclick="changeHostname()">Change</button>
   <?php
-  $count = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `hostname`='".addslashes($info['hostname'])."'"), 0);
+  $count = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `hostname`='".addslashes($info['hostname'])."'"), 0);
   if ($count > 1) {
     echo "<li><strong>Your Hostname is in conflict with another freeshell.</strong><br /><strong>DNS name may be unavailable. Please change another hostname, thanks.</strong>";
   }
@@ -236,7 +236,7 @@ Your own domain: <input id="http-cname" value="<?=$info['http_cname'] ?>" /> (CN
 <table>
 <tr><th>Public Port</th><th>Private Port</th><th></th></tr>
 <?php
-$rs = mysql_query("SELECT * FROM endpoint WHERE id='$appid'");
+$rs = checked_mysql_query("SELECT * FROM endpoint WHERE id='$appid'");
 while ($row = mysql_fetch_array($rs)) {
     echo "<tr>";
     echo "<td>".$row['public_endpoint']."</td>";

@@ -13,7 +13,7 @@ if (!is_numeric($_POST['appid']) || $_POST['appid'] == 0 || empty($_POST['action
     die('Invalid appid');
 $id = $_POST['appid'];
 $email = $_SESSION['email'];
-$a = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE `email`='$email' AND `id`='$id'"));
+$a = mysql_fetch_array(checked_mysql_query("SELECT * FROM shellinfo WHERE `email`='$email' AND `id`='$id'"));
 if (empty($a))
     die("Freeshell does not exist");
 
@@ -224,7 +224,7 @@ function update_proxy($domain, $cname, $page_40x, $page_50x) {
     $page_40x = addslashes(sanitize_url($page_40x));
     $page_50x = addslashes(sanitize_url($page_50x));
 
-    mysql_query("UPDATE shellinfo SET `http_subdomain`='$domain', `http_cname`='$cname', `40x_page`='$page_40x', `50x_page`='$page_50x' WHERE `id`='$id'");
+    checked_mysql_query("UPDATE shellinfo SET `http_subdomain`='$domain', `http_cname`='$cname', `40x_page`='$page_40x', `50x_page`='$page_50x' WHERE `id`='$id'");
     update_proxy_conf();
 }
 
@@ -255,7 +255,7 @@ function update_hostname($hostname) {
     check_hostname_and_fail($hostname);
 
     lock_shell_or_die($id);
-    mysql_query("UPDATE shellinfo SET `hostname`='$hostname' WHERE `id`='$id'");
+    checked_mysql_query("UPDATE shellinfo SET `hostname`='$hostname' WHERE `id`='$id'");
     set_vz($a['nodeno'], $id, 'hostname', $hostname);
     unlock_shell($id);
 
@@ -265,10 +265,10 @@ function update_hostname($hostname) {
 }
 
 function move_endpoints($old_node, $old_id, $new_node, $new_id) {
-    $rs = mysql_query("SELECT * FROM endpoint WHERE `id`='$old_id'");
+    $rs = checked_mysql_query("SELECT * FROM endpoint WHERE `id`='$old_id'");
     while ($row = mysql_fetch_array($rs)) {
         remove_endpoint($old_id, $old_node, $row['public_endpoint'], $row['private_endpoint']);
         add_endpoint($new_id, $new_node, $row['public_endpoint'], $row['private_endpoint']);
     }
-    mysql_query("UPDATE endpoint SET `id`='$new_id' WHERE `id`='$old_id'");
+    checked_mysql_query("UPDATE endpoint SET `id`='$new_id' WHERE `id`='$old_id'");
 }

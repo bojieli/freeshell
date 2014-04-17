@@ -9,7 +9,7 @@ if (!is_numeric($_GET['id']))
     die('Invalid request');
 $ticket_id = $_GET['id'];
 
-$info = mysql_fetch_array(mysql_query("SELECT tickets.shellid, shellinfo.email, shellinfo.nodeno, shellinfo.hostname, shellinfo.diskspace_softlimit, shellinfo.diskspace_hardlimit, tickets.create_time, tickets.used_time, tickets.token, tickets.action FROM tickets, shellinfo WHERE tickets.id='$ticket_id' AND tickets.shellid=shellinfo.id"));
+$info = mysql_fetch_array(checked_mysql_query("SELECT tickets.shellid, shellinfo.email, shellinfo.nodeno, shellinfo.hostname, shellinfo.diskspace_softlimit, shellinfo.diskspace_hardlimit, tickets.create_time, tickets.used_time, tickets.token, tickets.action FROM tickets, shellinfo WHERE tickets.id='$ticket_id' AND tickets.shellid=shellinfo.id"));
 
 if (empty($info) || $info['shellid'] == 0)
     die('Ticket does not exist.');
@@ -23,7 +23,7 @@ if ($info['action'] !== 'destroy-freeshell.php')
     die('This token is not intended for destroying freeshell. Please login to Control Panel and try again.');
 
 lock_shell_or_die($info['shellid']);
-mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
+checked_mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
 ?>
 <div id="wrapper">
 <div id="regtitle">
@@ -41,5 +41,5 @@ destroy_vz($info['nodeno'], $info['shellid']);
 remove_all_endpoints($info['nodeno'], $info['shellid']);
 db_remove_all_endpoints($info['shellid']);
 unlock_shell($info['shellid']);
-mysql_query("DELETE FROM shellinfo WHERE id='".$info['shellid']."'");
+checked_mysql_query("DELETE FROM shellinfo WHERE id='".$info['shellid']."'");
 

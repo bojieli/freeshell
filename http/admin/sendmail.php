@@ -28,7 +28,7 @@ function add_target($row) {
 }
 
 if ($_POST['shells'] == 'all' || $_POST['nodes'] == 'all') {
-    $rs = mysql_query("SELECT id, email from shellinfo WHERE isactive=1");
+    $rs = checked_mysql_query("SELECT id, email from shellinfo WHERE isactive=1");
     while ($row = mysql_fetch_array($rs))
         add_target($row);
 }
@@ -38,7 +38,7 @@ else {
             alert_noredirect('Not numeric!');
             exit();
         }
-        $rs = mysql_query("SELECT id, email FROM shellinfo WHERE isactive=1 AND id IN (".$_POST['shells'].")");
+        $rs = checked_mysql_query("SELECT id, email FROM shellinfo WHERE isactive=1 AND id IN (".$_POST['shells'].")");
         while ($row = mysql_fetch_array($rs))
             add_target($row);
     }
@@ -47,7 +47,7 @@ else {
             alert_noredirect('Not numeric!');
             exit();
         }
-        $rs = mysql_query("SELECT id, email FROM shellinfo WHERE isactive=1 AND nodeno IN (".$_POST['nodes'].")");
+        $rs = checked_mysql_query("SELECT id, email FROM shellinfo WHERE isactive=1 AND nodeno IN (".$_POST['nodes'].")");
         while ($row = mysql_fetch_array($rs))
             add_target($row);
     }

@@ -9,7 +9,7 @@ if (!is_numeric($_GET['id']))
     die('Invalid request');
 $ticket_id = $_GET['id'];
 
-$info = mysql_fetch_array(mysql_query("SELECT tickets.shellid, shellinfo.email, shellinfo.nodeno, shellinfo.hostname, shellinfo.diskspace_softlimit, shellinfo.diskspace_hardlimit, shellinfo.distribution, tickets.create_time, tickets.used_time, tickets.token, tickets.action, tickets.param FROM tickets, shellinfo WHERE tickets.id='$ticket_id' AND tickets.shellid=shellinfo.id"));
+$info = mysql_fetch_array(checked_mysql_query("SELECT tickets.shellid, shellinfo.email, shellinfo.nodeno, shellinfo.hostname, shellinfo.diskspace_softlimit, shellinfo.diskspace_hardlimit, shellinfo.distribution, tickets.create_time, tickets.used_time, tickets.token, tickets.action, tickets.param FROM tickets, shellinfo WHERE tickets.id='$ticket_id' AND tickets.shellid=shellinfo.id"));
 
 if (empty($info) || $info['shellid'] == 0)
     die('Ticket does not exist.');
@@ -31,9 +31,9 @@ if (check_keep_dirs($keep_dirs))
 
 lock_shell_or_die($info['shellid']);
 
-mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
+checked_mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
 if ($info['distribution'] != $distribution) {
-    mysql_query("UPDATE shellinfo SET distribution='$distribution' WHERE id='".$info['shellid']."'");
+    checked_mysql_query("UPDATE shellinfo SET distribution='$distribution' WHERE id='".$info['shellid']."'");
     if (mysql_affected_rows() != 1) {
         unlock_shell($info['shellid']);
         die('Failed to set distribution in database');

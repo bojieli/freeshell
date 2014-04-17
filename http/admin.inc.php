@@ -69,7 +69,7 @@ function send_reinstall_success_email($email, $appid, $hostname, $password) {
 function need_email_verification($name, $msg, $action, $param, $email, $appid) {
     global $headers, $footer;
     $token = random_string(40);
-    mysql_query("INSERT INTO tickets (shellid,create_time,action,token,param) VALUES ('$appid', NOW(), '".addslashes($action)."', '$token', '".addslashes($param)."')");
+    checked_mysql_query("INSERT INTO tickets (shellid,create_time,action,token,param) VALUES ('$appid', NOW(), '".addslashes($action)."', '$token', '".addslashes($param)."')");
     $id = mysql_insert_id();
     if (!is_numeric($id) || $id == 0)
         return "Failed to generate ticket. Please contact support@freeshell.ustc.edu.cn";
@@ -115,7 +115,7 @@ function generate_password($password) {
 }
 
 function change_password($id, $salted_password) {
-    mysql_query("UPDATE shellinfo SET `password`='".addslashes($salted_password)."' WHERE id='$id'");
+    checked_mysql_query("UPDATE shellinfo SET `password`='".addslashes($salted_password)."' WHERE id='$id'");
 }
 
 function check_password($plain, $salted) {
@@ -133,7 +133,7 @@ function get_next_appid($nodeno) {
     $nodeno = (int)$nodeno % nodes_num();
     if ($nodeno < 0)
         return null;
-    $max = mysql_result(mysql_query("SELECT MAX(id) FROM shellinfo"),0);
+    $max = mysql_result(checked_mysql_query("SELECT MAX(id) FROM shellinfo"),0);
     $appid = $max ? (int)$max + 1 : 1;
     while ($appid % nodes_num() != $nodeno)
         ++$appid;
@@ -147,34 +147,34 @@ function create_freeshell_in_db($hostname, $salted_pass, $email, $nodeno, $distr
         $query .= ",id=".get_next_appid($nodeno);
     }
     
-    mysql_query($query);
+    checked_mysql_query($query);
     $appid = mysql_insert_id();
 
     $real_nodeno = $appid % nodes_num();
     if ($real_nodeno == 0)
         $real_nodenonodeno = nodes_num();
-    mysql_query("UPDATE shellinfo SET nodeno=$real_nodeno WHERE id=$appid");
+    checked_mysql_query("UPDATE shellinfo SET nodeno=$real_nodeno WHERE id=$appid");
 
     return array($appid, $real_nodeno);
 }
 
 function move_freeshell_in_db($old_id, $nodeno) {
     $appid = get_next_appid($nodeno);
-    mysql_query("UPDATE shellinfo SET id=$appid, nodeno=$nodeno WHERE id=$old_id");
+    checked_mysql_query("UPDATE shellinfo SET id=$appid, nodeno=$nodeno WHERE id=$old_id");
     return $appid;
 }
 
 function copy_freeshell_config($old_id, $new_id)
 {
     $fields = array("diskspace_softlimit", "diskspace_hardlimit", "distribution");
-    $info = mysql_fetch_array(mysql_query("SELECT ".implode(',',$fields)." FROM shellinfo WHERE id=$old_id"));
+    $info = mysql_fetch_array(checked_mysql_query("SELECT ".implode(',',$fields)." FROM shellinfo WHERE id=$old_id"));
     if (empty($info))
         return false;
     $values = array();
     foreach ($fields as $field) {
         $values[] = "`$field`='".addslashes($info[$field])."'";
     }
-    mysql_query("UPDATE shellinfo SET ".implode(',', $values)." WHERE id=$new_id");
+    checked_mysql_query("UPDATE shellinfo SET ".implode(',', $values)." WHERE id=$new_id");
     return (mysql_affected_rows() == 1);
 }
 
@@ -184,25 +184,25 @@ function copy_freeshell_config($old_id, $new_id)
  * return 3 for database error
  */
 function db_add_endpoint($id, $public_endpoint, $private_endpoint) {
-    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM endpoint WHERE `id`='$id'"), 0);
+    $count = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM endpoint WHERE `id`='$id'"), 0);
     if ($count >= 10)
         return 1;
-    $count = mysql_result(mysql_query("SELECT COUNT(*) FROM endpoint WHERE `public_endpoint`='$public_endpoint'"), 0);
+    $count = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM endpoint WHERE `public_endpoint`='$public_endpoint'"), 0);
     if ($count != 0)
         return 2;
-    mysql_query("INSERT INTO endpoint SET `id`='$id', `public_endpoint`='$public_endpoint', `private_endpoint`='$private_endpoint'");
+    checked_mysql_query("INSERT INTO endpoint SET `id`='$id', `public_endpoint`='$public_endpoint', `private_endpoint`='$private_endpoint'");
     if (mysql_affected_rows() == 1)
         return 0;
     return 3;
 }
 
 function db_remove_endpoint($id, $public_endpoint, $private_endpoint) {
-    mysql_query("DELETE FROM endpoint WHERE `id`='$id' AND `public_endpoint`='$public_endpoint' AND `private_endpoint`='$private_endpoint'");
+    checked_mysql_query("DELETE FROM endpoint WHERE `id`='$id' AND `public_endpoint`='$public_endpoint' AND `private_endpoint`='$private_endpoint'");
     return (mysql_affected_rows() == 1);
 }
 
 function db_remove_all_endpoints($id) {
-    mysql_query("DELETE FROM endpoint WHERE `id`='$id'");
+    checked_mysql_query("DELETE FROM endpoint WHERE `id`='$id'");
 }
 
 function try_lock_shell($id) {

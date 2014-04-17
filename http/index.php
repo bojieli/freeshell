@@ -5,7 +5,7 @@ if (!empty($_SESSION['email']))
 
 include_once "db.php";
 include_once "distributions.inc.php";
-$shellnum = mysql_result(mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
+$shellnum = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo"), 0);
 ?>
 <!docTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

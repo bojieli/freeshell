@@ -21,7 +21,7 @@ function checkhost($folder) {
     if (!preg_match('/^[a-z0-9][a-z0-9-]+[a-z0-9]$/', $folder))
         return 1;
     include_once "db.php";
-    $rs = mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `hostname`='$folder'");
+    $rs = checked_mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `hostname`='$folder'");
     if (mysql_result($rs,0) != 0)
         return 2;
     return 0;
@@ -29,7 +29,7 @@ function checkhost($folder) {
 
 function check_email_count($email) {
     include_once "db.php";
-    $rs = mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `email`='$email'");
+    $rs = checked_mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `email`='$email'");
     return mysql_result($rs,0) < 14;
 }
 

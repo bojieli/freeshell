@@ -224,7 +224,7 @@ function remove_endpoint($id, $nodeno, $public_port, $private_port) {
 }
 
 function remove_all_endpoints($nodeno, $id) {
-    $rs = mysql_query("SELECT * FROM endpoint WHERE `id`='$id'");
+    $rs = checked_mysql_query("SELECT * FROM endpoint WHERE `id`='$id'");
     while ($row = mysql_fetch_array($rs)) {
         remove_endpoint($id, $nodeno, $row['public_port'], $row['private_port']);
     }
@@ -232,7 +232,7 @@ function remove_all_endpoints($nodeno, $id) {
 
 function activate_vz($nodeno, $id, $distribution) {
     global $master_node;
-    mysql_query("UPDATE shellinfo SET isactive=1 WHERE id=$id");
+    checked_mysql_query("UPDATE shellinfo SET isactive=1 WHERE id=$id");
     call_monitor($nodeno, "activate-vz", "$id ".get_node_ipv4($nodeno)." $distribution");
 	if ($nodeno != $master_node)
 		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ipv4($master_node)." ".get_node_ipv4($nodeno));

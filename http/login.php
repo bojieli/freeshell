@@ -16,7 +16,7 @@ if (!isset($_SESSION['appid'])) {
         $email .= '@mail.ustc.edu.cn';
     $pass = $_POST['pass'];
     
-    $rs = mysql_query("SELECT * FROM shellinfo WHERE `email`='$email'");
+    $rs = checked_mysql_query("SELECT * FROM shellinfo WHERE `email`='$email'");
     $info = mysql_fetch_array($rs);
     $verified = array();
     do {
@@ -41,7 +41,7 @@ if (!isset($_SESSION['appid'])) {
     }
 }
 else { // appid has been set
-    $info = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE `id`='".$_SESSION['appid']."'"));
+    $info = mysql_fetch_array(checked_mysql_query("SELECT * FROM shellinfo WHERE `id`='".$_SESSION['appid']."'"));
     if (empty($info))
         die("<script>window.location.href='logout.php';</script>");
     $_SESSION['isadmin'] = $info['isadmin'];

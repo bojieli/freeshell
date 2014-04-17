@@ -9,10 +9,10 @@ if (empty($_SESSION['isadmin']))
 
 if (is_numeric($_POST['appid']) && !empty($_POST['diskspace_softlimit']) && !empty($_POST['diskspace_hardlimit']))
 {
-    $info = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE id=".$_POST['appid']));
+    $info = mysql_fetch_array(checked_mysql_query("SELECT * FROM shellinfo WHERE id=".$_POST['appid']));
     if (empty($info))
         alert("Shell Not Exist");
-    mysql_query("UPDATE shellinfo SET diskspace_softlimit='".addslashes($_POST['diskspace_softlimit'])."', diskspace_hardlimit='".addslashes($_POST['diskspace_hardlimit'])."' WHERE id=".$_POST['appid']);
+    checked_mysql_query("UPDATE shellinfo SET diskspace_softlimit='".addslashes($_POST['diskspace_softlimit'])."', diskspace_hardlimit='".addslashes($_POST['diskspace_hardlimit'])."' WHERE id=".$_POST['appid']);
     set_vz($info['nodeno'], $info['id'], "diskspace", $_POST['diskspace_softlimit'].":".$_POST['diskspace_hardlimit']);
     send_change_quota_email($info['email'], $info['id'], $info['diskspace_softlimit'], $_POST['diskspace_softlimit']);
     alert_noredirect("OK");

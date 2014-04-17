@@ -15,7 +15,7 @@ if (empty($_SESSION['isadmin']))
 $rs = array();
 if (is_numeric($_POST['appid'])) {
     $id = $_POST['appid'];
-    $info = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE id=".$id));
+    $info = mysql_fetch_array(checked_mysql_query("SELECT * FROM shellinfo WHERE id=".$id));
     if (empty($info)) {
         echo '<p>Not Exist</p>';
         goto print_table;

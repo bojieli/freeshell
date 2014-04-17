@@ -7,7 +7,7 @@ if (!is_numeric($_GET['appid']))
     die('Invalid request');
 $appid = $_GET['appid'];
 
-$info = mysql_fetch_array(mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'"));
+$info = mysql_fetch_array(checked_mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'"));
 
 if (empty($info))
     die('App does not exist. The link may have been expired.');

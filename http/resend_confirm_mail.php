@@ -6,7 +6,7 @@ include_once "admin.inc.php";
 
 if (!isset($_SESSION['appid']) || !is_numeric($_SESSION['appid']))
     include "logout.php";
-$rs = mysql_query("SELECT token FROM shellinfo WHERE `id`='". $_SESSION['appid']. "'");
+$rs = checked_mysql_query("SELECT token FROM shellinfo WHERE `id`='". $_SESSION['appid']. "'");
 $token = mysql_result($rs,0);
 if ($token == "")
     include "logout.php";
