@@ -80,13 +80,6 @@ function hide_password($str, $password) {
     return str_replace($password, "********", $str);
 }
 
-function checked_mysql_query($sql) {
-    mysql_query($sql);
-    if (mysql_error()) {
-        report_sys_admin("Mysql query error: ".mysql_error()."\nSQL:\n$sql");
-    }
-}
-
 function ssh_log_before($nodeno, $action, $cmd, $time, $password_to_hide) {
     if ($password_to_hide) {
         $cmd = hide_password($cmd, $password_to_hide);
