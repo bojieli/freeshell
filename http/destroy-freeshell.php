@@ -22,6 +22,7 @@ if ($info['token'] !== $_GET['token'])
 if ($info['action'] !== 'destroy-freeshell.php')
     die('This token is not intended for destroying freeshell. Please login to Control Panel and try again.');
 
+lock_shell_or_die($info['shellid']);
 mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
 ?>
 <div id="wrapper">
@@ -39,5 +40,6 @@ update_proxy_conf();
 destroy_vz($info['nodeno'], $info['shellid']);
 remove_all_endpoints($info['nodeno'], $info['shellid']);
 db_remove_all_endpoints($info['shellid']);
+unlock_shell($info['shellid']);
 mysql_query("DELETE FROM shellinfo WHERE id='".$info['shellid']."'");
 

@@ -17,6 +17,8 @@ if ($info['isactive']) {
 if ($info['token'] !== $_GET['token'])
     die('Incorrect token. Please copy the link to the address bar of your browser and retry.');
 
+lock_shell_or_die($info['id']);
+
 // auto login
 $_SESSION['email'] = $info['email'];
 $_SESSION['appid'] = $info['id'];
@@ -40,4 +42,5 @@ $_SESSION['appid'] = $info['id'];
 <?php
 fastcgi_finish_request();
 activate_vz($info['nodeno'], $appid, $info['distribution']);
+unlock_shell($info['id']);
 ?>
