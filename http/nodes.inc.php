@@ -1,4 +1,6 @@
 <?php
+include_once "admin.inc.php";
+
 $nodes2ip = array(
  1 => "114.214.197.8",
  2 => "114.214.197.143",
@@ -73,16 +75,34 @@ function hide_password($str, $password) {
     return str_replace($password, "********", $str);
 }
 
-function call_monitor($nodeno, $action, $param, $password_to_hide = "") {
-    if (!is_numeric($nodeno))
-        return;
-    $cmd = "$action $param";
-    $output = run_in_node($nodeno, $cmd);
+function ssh_log_before($nodeno, $action, $cmd, $time, $password_to_hide) {
+    if ($password_to_hide) {
+        $cmd = hide_password($cmd, $password_to_hide);
+    }
+    $cmd = "INSERT INTO ssh_log SET `nodeno`='$nodeno', `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `log_time`='$time'";
+    mysql_query($cmd);
+    if (mysql_affected_rows() != 1)
+        report_sys_admin("Failed to save ssh log:\n$cmd");
+}
+
+function ssh_log_after($nodeno, $action, $cmd, $output, $time, $password_to_hide) {
     if ($password_to_hide) {
         $cmd = hide_password($cmd, $password_to_hide);
         $output = hide_password($output, $password_to_hide);
     }
-    mysql_query("INSERT INTO ssh_log SET `nodeno`='$nodeno', `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `output`='".addslashes($output)."', `log_time`='".time()."'");
+    $cmd = "UPDATE ssh_log SET `output`='".addslashes($output)."' WHERE `nodeno`='$nodeno' AND `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `log_time`='$time'";
+    if (mysql_affected_rows() != 1)
+        report_sys_admin("Failed to save ssh log:\n$cmd");
+}
+
+function call_monitor($nodeno, $action, $param, $password_to_hide = "") {
+    if (!is_numeric($nodeno))
+        return;
+    $cmd = "$action $param";
+    $time = time();
+    ssh_log_before($nodeno, $action, $cmd, $time, $password_to_hide);
+    $output = run_in_node($nodeno, $cmd);
+    ssh_log_after($nodeno, $action, $cmd, $output, $time, $password_to_hide);
     return $output;
 }
 
