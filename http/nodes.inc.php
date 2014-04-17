@@ -70,10 +70,11 @@ function run_in_node($nodeno, $cmd) {
     $start_time = microtime(true);
     exec($local_cmd, $output, $errno);
     $elapsed_time = microtime(true) - $start_time;
+    $output = implode("\n", $output);
     if ($errno != 0) {
         report_sys_admin("Command in freeshell node returned non-zero status $errno\nSTART TIME: $start_time\nELAPSED TIME: $elapsed_time\nFULL COMMAND:\n$local_cmd\nOUTPUT:\n$output\n");
     }
-    return implode("\n", $output);
+    return $output;
 }
 
 function hide_password($str, $password) {
