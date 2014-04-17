@@ -39,6 +39,8 @@ CREATE TABLE ssh_log (
     `cmd` TEXT,
     `output` TEXT,
     `log_time` INT(10),
+    `return_status` INT(10),
+    `elapsed_time` FLOAT,
     KEY key_nodeno (`nodeno`)
 );
 

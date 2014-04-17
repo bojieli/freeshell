@@ -60,16 +60,18 @@ function get_shell_v4_dns_name($hostname) {
 }
 
 function run_in_node($nodeno, $cmd) {
-    global $errno;
+    global $errno, $elapsed_time;
     $cmd = str_replace("'", "\\'", $cmd);
     $cmd = str_replace("\"", "\\\"", $cmd);
     // force fork terminal
     global $SSH_TIMEOUT;
     $local_cmd = "/bin/sh -c 'echo \"$cmd\" | /usr/bin/sudo -u scgyshell-monitor /usr/bin/ssh -4 -o ConnectTimeout=$SSH_TIMEOUT -t -t scgyshell-client@s$nodeno.freeshell.ustc.edu.cn'";
     $output = array();
+    $start_time = microtime(true);
     exec($local_cmd, $output, $errno);
+    $elapsed_time = microtime(true) - $start_time;
     if ($errno != 0) {
-        report_sys_admin("Command in freeshell node returned non-zero status $errno\nFULL COMMAND:\n$local_cmd\nOUTPUT:\n$output\n");
+        report_sys_admin("Command in freeshell node returned non-zero status $errno\nSTART TIME: $start_time\nELAPSED TIME: $elapsed_time\nFULL COMMAND:\n$local_cmd\nOUTPUT:\n$output\n");
     }
     return implode("\n", $output);
 }
@@ -100,7 +102,9 @@ function ssh_log_after($nodeno, $action, $cmd, $output, $time, $password_to_hide
         $cmd = hide_password($cmd, $password_to_hide);
         $output = hide_password($output, $password_to_hide);
     }
-    $cmd = "UPDATE ssh_log SET `output`='".addslashes($output)."' WHERE `nodeno`='$nodeno' AND `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `log_time`='$time'";
+    global $errno, $elapsed_time;
+    $cmd = "UPDATE ssh_log SET `output`='".addslashes($output)."', `return_status`='$errno', `elapsed_time`='$elapsed_time' WHERE `nodeno`='$nodeno' AND `action`='".addslashes($action)."' AND `cmd`='".addslashes($cmd)."' AND `log_time`='$time'";
+    checked_mysql_query($cmd);
     if (mysql_affected_rows() != 1)
         report_sys_admin("Failed to save ssh log:\n$cmd");
 }
