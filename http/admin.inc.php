@@ -219,5 +219,5 @@ function lock_shell_or_die($id) {
     if (try_lock_shell($id))
         return true;
     else
-        die('<h1>Another action is pending for your freeshell, please try again later.</h1>\n');
+        die("Another action is pending for your freeshell, please try again later.");
 }
