@@ -113,6 +113,14 @@ if ($num_shells >= 2) {
 }
 ?>
 
+<?php
+if ($info['locked']) {
+    ?>
+    <p><strong>Your freeshell has a pending action started <?=time() - $info['lock_time']?> seconds ago, please wait. Refresh this page at will.</strong>
+    <div id="progbar"></div>
+    <?php
+}
+?>
 <ul class="table">
   <li><span class="h">Shell ID:</span><strong><?=$appid?></strong>
   <li><span class="h">Status:</span><strong><?=$node['mystatus']?></strong>
