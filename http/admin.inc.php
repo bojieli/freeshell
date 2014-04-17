@@ -212,3 +212,13 @@ function db_remove_endpoint($id, $public_endpoint, $private_endpoint) {
 function db_remove_all_endpoints($id) {
     mysql_query("DELETE FROM endpoint WHERE `id`='$id'");
 }
+
+function try_lock_shell($id) {
+    checked_mysql_query("UPDATE shellinfo SET locked=1 WHERE id='$id'");
+    return (mysql_affected_rows() == 1);
+}
+
+function unlock_shell($id) {
+    checked_mysql_query("UPDATE shellinfo SET locked=0 WHERE id='$id'");
+    return (mysql_affected_rows() == 1);
+}
