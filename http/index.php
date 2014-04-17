@@ -2,6 +2,7 @@
 session_start();
 if (!empty($_SESSION['email']))
     die("<script>window.location.href='login.php';</script>");
+session_write_close();
 
 include_once "db.php";
 include_once "distributions.inc.php";

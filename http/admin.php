@@ -12,6 +12,7 @@ $rs = checked_mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
 $info = mysql_fetch_array($rs);
 if (empty($info))
     include "logout.php";
+session_write_close();
 
 $info['ip'] = get_node_ipv4(1);
 $info['realip'] = get_node_ipv4($info['nodeno']);

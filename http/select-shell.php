@@ -11,6 +11,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         die("<script>window.location.href='login.php';</script>");
     }
 }
+session_write_close();
 
 $email = addslashes($_SESSION['email']);
 $rs = checked_mysql_query("SELECT * FROM shellinfo WHERE `email`='$email' ORDER BY id");

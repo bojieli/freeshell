@@ -10,6 +10,7 @@ $rs = checked_mysql_query("SELECT token FROM shellinfo WHERE `id`='". $_SESSION[
 $token = mysql_result($rs,0);
 if ($token == "")
     include "logout.php";
+session_write_close();
 
 send_activate_mail($_SESSION['email'], $_SESSION['appid'], $token);
 ?>

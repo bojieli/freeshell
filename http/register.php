@@ -1,5 +1,6 @@
 <?php
 include_once "header.php";
+session_write_close();
 include_once "db.php";
 include_once "verify.inc.php";
 include_once "nodes.inc.php";

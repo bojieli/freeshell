@@ -7,6 +7,7 @@ include_once "dns.inc.php";
 include_once "db.php";
 
 session_start();
+session_write_close();
 if (empty($_SESSION['email']))
     die('Not login');
 if (!is_numeric($_POST['appid']) || $_POST['appid'] == 0 || empty($_POST['action']))

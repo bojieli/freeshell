@@ -1,5 +1,6 @@
 <?php
 session_start();
+session_write_close();
 include_once "../db.php";
 include_once "../admin.inc.php";
 

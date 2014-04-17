@@ -1,5 +1,6 @@
 <?php
 session_start();
+session_write_close();
 if (empty($_SESSION['isadmin']))
     exit();
 include_once '../db.php';

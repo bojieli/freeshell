@@ -22,6 +22,7 @@ lock_shell_or_die($info['id']);
 // auto login
 $_SESSION['email'] = $info['email'];
 $_SESSION['appid'] = $info['id'];
+session_write_close();
 ?>
 <div id="wrapper">
 <div id="regtitle">
