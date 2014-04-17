@@ -206,12 +206,12 @@ function db_remove_all_endpoints($id) {
 }
 
 function try_lock_shell($id) {
-    checked_mysql_query("UPDATE shellinfo SET locked=1 WHERE id='$id'");
+    checked_mysql_query("UPDATE shellinfo SET locked=1, lock_time='".time()."' WHERE id='$id'");
     return (mysql_affected_rows() == 1);
 }
 
 function unlock_shell($id) {
-    checked_mysql_query("UPDATE shellinfo SET locked=0 WHERE id='$id'");
+    checked_mysql_query("UPDATE shellinfo SET locked=0, lock_time=NULL WHERE id='$id'");
     return (mysql_affected_rows() == 1);
 }
 

@@ -9,6 +9,7 @@ CREATE TABLE shellinfo (
     `isactive` BOOL NOT NULL DEFAULT FALSE,
     `isadmin` BOOL NOT NULL DEFAULT FALSE,
     `locked` BOOL NOT NULL DEFAULT FALSE,
+    `lock_time` INT(10),
     `http_subdomain` VARCHAR(50) NOT NULL,
     `diskspace_softlimit` VARCHAR(20) NOT NULL DEFAULT '5G',
     `diskspace_hardlimit` VARCHAR(20) NOT NULL DEFAULT '7G',
