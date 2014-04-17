@@ -222,3 +222,10 @@ function unlock_shell($id) {
     checked_mysql_query("UPDATE shellinfo SET locked=0 WHERE id='$id'");
     return (mysql_affected_rows() == 1);
 }
+
+function lock_shell_or_die($id) {
+    if (try_lock_shell($id))
+        return true;
+    else
+        die('<h1>Another action is pending for your freeshell, please try again later.</h1>\n');
+}
