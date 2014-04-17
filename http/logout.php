@@ -9,3 +9,6 @@ unset($_SESSION['appid']);
 unset($_SESSION['isadmin']);
 ?>
 <script>window.location.href='index.php';</script>
+<?php
+exit(); // other scripts may include this page to log out
+?>
