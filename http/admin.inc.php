@@ -109,14 +109,6 @@ function send_change_quota_email($email, $appid, $old, $new) {
     mail($email, $title, $body, $headers);
 }
 
-function report_sys_admin($msg) {
-    global $headers, $footer;
-    $title = "Freeshell System Alert";
-    $body = $msg;
-    $admin_email = "servmon@freeshell.ustc.edu.cn";
-    mail($admin_email, $title, $body, $headers);
-}
-
 function generate_password($password) {
     $salt = random_string(20);
     return sha1(sha1($password).$salt) . '/'. $salt;
