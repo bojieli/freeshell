@@ -212,11 +212,11 @@ function update_proxy($domain, $cname, $page_40x, $page_50x) {
     case 0:
         break;
     case 1:
-        die('ERROR: CNAME is not a valid domain name. Please use lower-case letters.');
+        die('ERROR: your own domain is not a valid domain name. Please use lower-case letters.');
     case 2:
-        die('ERROR: CNAME is not allowed to contain ustc.edu.cn');
+        die('ERROR: your own domain is not allowed to contain freeshell.ustc.edu.cn or any other domains owned by USTC LUG');
     case 3:
-        die('Sorry, this CNAME has been taken by another freeshell. Please contact us if you are the owner of the domain.');
+        die('Sorry, your own domain has been taken by another freeshell. Please contact us if you are the owner of the domain.');
     default:
         die('Unknown Error '.$flag);
     }

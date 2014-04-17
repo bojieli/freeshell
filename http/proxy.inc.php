@@ -105,7 +105,11 @@ function cname_check_norepeat($domain) {
         return 0; // empty domain is allowed
     if (!preg_match('/^([a-z0-9-]+\.)+[a-z]+$/', $domain))
         return 1;
-    if (strstr($domain, 'ustc.edu.cn'))
+    if (strstr($domain, 'freeshell.ustc.edu.cn') ||
+        strstr($domain, 'blog.ustc.edu.cn') ||
+        strstr($domain, 'lug.ustc.edu.cn') ||
+        strstr($domain, 'mirrors.ustc.edu.cn') ||
+        strstr($domain, 'pxe.ustc.edu.cn'))
         return 2;
     return 0;
 }
