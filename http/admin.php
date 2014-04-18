@@ -230,15 +230,30 @@ if ($info['locked']) {
 <p class="note">
 http(s)://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />.freeshell.ustc.edu.cn
 <br />
-Your own domain: <input id="http-cname" value="<?=$info['http_cname'] ?>" /> (CNAME to proxy.freeshell.ustc.edu.cn)
-<br />
 40x error page URL: <input id="40x-page" value="<?=$info['40x_page'] ?>" />
 <br />
 50x error page URL: <input id="50x-page" value="<?=$info['50x_page'] ?>" />
 <br />
 <button id="btn-update-proxy" onclick="updateProxy()">Update</button>
 </p>
-<p class="smaller">See <a href="faq.html#40" target="_blank">FAQ</a> for HTTP Proxy Policy and Help.</p>
+<p class="note">Your own domain: (please CNAME to proxy.freeshell.ustc.edu.cn, subdomains supported)</p>
+<table>
+<?php
+$rs = checked_mysql_query("SELECT domain FROM cname WHERE id='$appid'");
+while ($row = mysql_fetch_array($rs)){
+    ?>
+    <tr>
+    <td><?=$row['domain']?></td>
+    <td><button class="btn-remove-cname" onclick="removeCname('<?=$row['domain']?>')">Remove</button></td>
+    </tr>
+    <?php
+}
+?>
+<tr>
+<td><input id="http-cname" /></td>
+<td><button id="btn-add-cname" onclick="addCname()">Add</button></td>
+</tr>
+</table>
 
 <div id="progbar"></div>
 <h2>Public Endpoint (Port Forwarding)</h2>
@@ -250,7 +265,7 @@ while ($row = mysql_fetch_array($rs)) {
     echo "<tr>";
     echo "<td>".$row['public_endpoint']."</td>";
     echo "<td>".$row['private_endpoint']."</td>";
-    echo '<td><button onclick="removeEndpoint('.$row['public_endpoint'].','.$row['private_endpoint'].')">Remove</button></td>';
+    echo '<td><button class="btn-remove-endpoint" onclick="removeEndpoint('.$row['public_endpoint'].','.$row['private_endpoint'].')">Remove</button></td>';
     echo "</tr>\n";
 }
 ?>
@@ -345,6 +360,7 @@ function manage(action) {
     ajaxManage(data);
 }
 function removeEndpoint(public_endpoint, private_endpoint) {
+    $('.btn-remove-endpoint').attr('disabled', true);
     ajaxManage({
         appid: <?=$info['id']?>,
         action: 'remove-endpoint',
@@ -353,11 +369,34 @@ function removeEndpoint(public_endpoint, private_endpoint) {
     });
 }
 function addEndpoint() {
+    $('#btn-add-endpoint').attr('disabled', true);
+    $('#btn-add-endpoint').html('Processing...');
     ajaxManage({
         appid: <?=$info['id']?>,
         action: 'add-endpoint',
         public_endpoint: $('#public-endpoint').val(),
         private_endpoint: $('#private-endpoint').val(),
+    });
+}
+function removeCname(domain) {
+    $('.btn-remove-cname').attr('disabled', true);
+    ajaxManage({
+        appid: <?=$info['id']?>,
+        action: 'remove-cname',
+        domain: domain,
+    });
+}
+function addCname() {
+    if ($('#http-cname').val() == "") {
+        alert('Please specify your own domain!');
+        return;
+    }
+    $('#btn-add-cname').attr('disabled', true);
+    $('#btn-add-cname').html('Processing...');
+    ajaxManage({
+        appid: <?=$info['id']?>,
+        action: 'add-cname',
+        domain: $('#http-cname').val(),
     });
 }
 function updateProxy() {

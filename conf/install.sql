@@ -14,7 +14,6 @@ CREATE TABLE shellinfo (
     `diskspace_softlimit` VARCHAR(20) NOT NULL DEFAULT '5G',
     `diskspace_hardlimit` VARCHAR(20) NOT NULL DEFAULT '7G',
     `distribution` VARCHAR(255) NOT NULL,
-    `http_cname` TEXT,
     `40x_page` TEXT,
     `50x_page` TEXT,
     PRIMARY KEY (`id`),
@@ -50,5 +49,13 @@ CREATE TABLE endpoint (
     `public_endpoint` INT(5) NOT NULL,
     `private_endpoint` INT(5) NOT NULL,
     UNIQUE KEY key_public_endpoint (`public_endpoint`),
+    FOREIGN KEY (`id`) REFERENCES shellinfo (`id`)
+);
+
+CREATE TABLE cname (
+    `id` INT(10) NOT NULL,
+    `domain` VARCHAR(255) NOT NULL,
+    KEY key_id (`id`),
+    UNIQUE KEY key_domain (`domain`),
     FOREIGN KEY (`id`) REFERENCES shellinfo (`id`)
 );
