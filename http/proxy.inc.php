@@ -63,8 +63,9 @@ server {
         error_log  /var/log/nginx/freeshell-proxy/error.log;
         location / {
                 proxy_pass       http://s$nodeno.4.freeshell.ustc.edu.cn:$httpport;
-                proxy_set_header X-Real-IP  \$remote_addr;
                 proxy_set_header Host       \$http_host;
+                proxy_set_header X-Forwarded-For \$remote_addr;
+                proxy_set_header X-Real-IP  \$remote_addr;
                 proxy_set_header X-Scheme   \$scheme;
         }
 }
