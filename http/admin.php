@@ -5,9 +5,9 @@ include_once "nodes.inc.php";
 include_once "admin.inc.php";
 include_once "distributions.inc.php";
 
-$appid = $_SESSION['appid'];
-if (empty($appid))
+if (!isset($_SESSION['appid']) || empty($_SESSION['appid']) || !is_numeric($_SESSION['appid']))
     include "logout.php";
+$appid = $_SESSION['appid'];
 $rs = checked_mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'");
 $info = mysql_fetch_array($rs);
 if (empty($info))
@@ -90,7 +90,7 @@ p.note {
 
 <div id="progbar"></div>
 <?php
-if ($_SESSION['isadmin']) { ?>
+if (isset($_SESSION['isadmin']) && $_SESSION['isadmin']) { ?>
 <p>Freeshell admin area:<br />
 <a href="admin/status.php" target="_blank">View status</a>
 <a href="admin/change-quota.php" target="_blank">Change Disk Quota</a>
