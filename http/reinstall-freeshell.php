@@ -6,6 +6,17 @@ include_once "admin.inc.php";
 include_once "db.php";
 include_once "verify.inc.php";
 
+if (isset($_SESSION['isadmin']) && $_SESSION['isadmin'] && isset($_GET['shellid'])) {
+    $shell_id = intval($_GET['shellid']);
+    $info = mysql_fetch_array(checked_mysql_query("SELECT *, id AS shellid FROM shellinfo WHERE id='$shell_id'"));
+    if (empty($info))
+        die('no such freeshell');
+    $ticket_id = -1;
+    $distribution = $info['distribution'];
+    $keep_dirs = '/root,/home';
+    goto do_reinstall;
+}
+
 if (!is_numeric($_GET['id']))
     die('Invalid request');
 $ticket_id = $_GET['id'];
@@ -25,6 +36,8 @@ if ($info['action'] !== 'reinstall-freeshell.php')
 if (empty($info['param']))
     die('Invalid param!');
 list($distribution, $keep_dirs) = explode("\n", $info['param']);
+
+do_reinstall:
 if (check_distribution($distribution))
     die('Invalid distribution!');
 if (check_keep_dirs($keep_dirs))
@@ -47,7 +60,7 @@ if ($info['distribution'] != $distribution) {
         	<h1>Reinstalling</h1>
         	<div id="progbar">
             </div>
-<p>Your freeshell is reinstalling.</p>
+<p>Your freeshell #<?=$info['shellid']?> is reinstalling.</p>
 <p>We will send you an email containing the new root password.</p>
 </div>
 <div id="regbutton" onclick="javascript:document.location.href='http://email.ustc.edu.cn'">
