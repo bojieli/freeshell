@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-iptables-restore < /home/boj/iptables-save
+iptables-restore < /home/freeshell/iptables-save
 [ -f /usr/local/sbin/pernode-rc.local ] && /usr/local/sbin/pernode-rc.local
 
 # USTC routes

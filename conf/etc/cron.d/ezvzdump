@@ -1,2 +1,2 @@
 # backup at 3:20 every day
-20 3 * * *  root   /home/boj/scripts/ezvzdump >/dev/null
+20 3 * * *  root   /home/freeshell/scripts/ezvzdump >/dev/null

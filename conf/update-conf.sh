@@ -2,7 +2,7 @@
 # should be run in freeshell node!
 # update configs from this dir to system dir
 
-BASE="/home/boj/scripts"
+BASE="/home/freeshell/scripts"
 
 if [ -z "$1" ]; then
     NODENO=$(hostname | awk 'BEGIN{FS="-"}{print $2}')

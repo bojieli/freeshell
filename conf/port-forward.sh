@@ -27,4 +27,4 @@ if [ "$action" == "remove" ]; then
     iptables_delete PREROUTING -i eth0 -p tcp -m tcp --dport $local_port -j DNAT --to-destination $shell_ip:$shell_port
 fi
 
-iptables-save > /home/boj/iptables-save
+iptables-save > /home/freeshell/iptables-save

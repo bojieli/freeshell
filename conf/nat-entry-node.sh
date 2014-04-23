@@ -26,4 +26,4 @@ iptables -t nat -A PREROUTING -i eth0 -p tcp --dport $sshport -j DNAT --to-desti
 iptables -t nat -A POSTROUTING -p tcp --dport $sshport -j SNAT --to-source $localip
 iptables -t nat -A PREROUTING -i eth0 -p tcp --dport $httpport -j DNAT --to-destination $nodeip:$httpport
 iptables -t nat -A POSTROUTING -p tcp --dport $httpport -j SNAT --to-source $localip
-iptables-save > /home/boj/iptables-save
+iptables-save > /home/freeshell/iptables-save

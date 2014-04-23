@@ -21,7 +21,7 @@ if [ "$3" == "renew" ]; then
 fi
 iptables -t nat -A PREROUTING -i eth0 -p tcp -d $serverip --dport $sshport -j DNAT --to-destination $localip:22
 iptables -t nat -A PREROUTING -i eth0 -p tcp -d $serverip --dport $httpport -j DNAT --to-destination $localip:80
-iptables-save > /home/boj/iptables-save
+iptables-save > /home/freeshell/iptables-save
 
 vzctl set $id --ipdel all --save
 vzctl set $id --ipadd $localip --save

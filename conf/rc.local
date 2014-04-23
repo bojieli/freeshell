@@ -11,5 +11,5 @@
 #
 # By default this script does nothing.
 
-iptables-restore < /home/boj/iptables-save
+iptables-restore < /home/freeshell/iptables-save
 exit 0

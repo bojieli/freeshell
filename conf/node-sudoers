@@ -21,7 +21,7 @@ root    ALL=(ALL) ALL
 # (Note that later entries override this, so you might need to move
 # it further down)
 %sudo ALL=(ALL) NOPASSWD: ALL
-scgyshell-client ALL=(root) NOPASSWD: /home/boj/scripts/scgyshell.sh
+scgyshell-client ALL=(root) NOPASSWD: /home/freeshell/scripts/scgyshell.sh
 
 #
 #includedir /etc/sudoers.d
