@@ -24,6 +24,8 @@ if (!$appid)
 $info = mysql_fetch_array(checked_mysql_query("SELECT * FROM shellinfo WHERE `id`='$appid'"));
 if (empty($info))
     die('Failed to create freeshell, please contact us at support@freeshell.ustc.edu.cn');
+
+lock_shell_or_die($appid);
 ?>
 <div id="wrapper">
 <div id="regtitle">
@@ -44,4 +46,5 @@ create_vz($nodeno, $appid, $hostname, $password, $info['diskspace_softlimit'], $
 
 $token = random_string(40);
 checked_mysql_query("UPDATE shellinfo SET `token`='$token' WHERE `id`='$appid'");
+unlock_shell($appid);
 send_activate_mail($email, $appid, $token);
