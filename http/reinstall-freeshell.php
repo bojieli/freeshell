@@ -14,6 +14,7 @@ if (isset($_SESSION['isadmin']) && $_SESSION['isadmin'] && isset($_GET['shellid'
     $ticket_id = -1;
     $distribution = $info['distribution'];
     $keep_dirs = '/root,/home';
+    report_sys_admin("Administrator ".$_SESSION['email']." reinstalled freeshell #".$shell_id." to distribution $distribution");
     goto do_reinstall;
 }
 
