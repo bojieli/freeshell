@@ -59,6 +59,17 @@ function get_shell_v4_dns_name($hostname) {
     return "$hostname.4.freeshell.ustc.edu.cn";
 }
 
+function local_sudo($cmd) {
+    $start_time = microtime(true);
+    exec("sudo $cmd", $output, $errno);
+    $elapsed_time = microtime(true) - $start_time;
+    $output = implode("\n", $output);
+    if ($errno != 0) {
+        report_sys_admin("local sudo failed with status $errno\nSTART TIME: $start_time\nELAPSED TIME: $elapsed_time\nFULL COMMAND:\n$cmd\nOUTPUT:\n$output\n");
+    }
+    return array($errno, $output);
+}
+
 function run_in_node($nodeno, $cmd) {
     global $errno, $elapsed_time;
     $cmd = str_replace("'", "\\'", $cmd);
@@ -189,11 +200,11 @@ function remove_node_port_forwarding($nodeno, $public_port, $shellid, $private_p
 function add_local_port_forwarding($local_port, $remote_ip, $remote_port) {
     if ($local_port < 1024)
         die('Request tainted');
-    exec("sudo /usr/local/bin/port-forward add $local_port $remote_ip $remote_port");
+    local_sudo("/usr/local/bin/port-forward add $local_port $remote_ip $remote_port");
 }
 
 function remove_local_port_forwarding($local_port, $remote_ip, $remote_port) {
-    exec("sudo /usr/local/bin/port-forward remove $local_port $remote_ip $remote_port");
+    local_sudo("/usr/local/bin/port-forward remove $local_port $remote_ip $remote_port");
 }
 
 function add_ssh_port_forwarding($id, $nodeno) {

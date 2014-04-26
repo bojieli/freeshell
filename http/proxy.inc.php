@@ -1,5 +1,6 @@
 <?php
 include_once "verify.inc.php";
+include_once "nodes.inc.php";
 
 function update_proxy_conf() {
     $localfile = "/etc/nginx/autogen-conf/freeshell.conf";
@@ -72,12 +73,12 @@ server {
 ";
 }
 
-function runas_monitor($cmd) {
-    return exec("sudo -u scgyshell-monitor $cmd");
+function local_update_proxy_conf() {
+    return local_sudo("/usr/local/bin/reload-nginx");
 }
 
-function local_update_proxy_conf() {
-    exec("sudo /usr/local/bin/reload-nginx");
+function runas_monitor($cmd) {
+    return local_sudo("-u scgyshell-monitor $cmd");
 }
 
 function ssh_update_proxy_conf($tmpfile) {
