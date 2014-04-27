@@ -34,6 +34,7 @@ CREATE TABLE tickets (
 );
 
 CREATE TABLE ssh_log (
+    `id` INT(10) NOT NULL AUTO_INCREMENT,
     `nodeno` INT(10) NOT NULL,
     `action` VARCHAR(200) NOT NULL,
     `cmd` TEXT,
@@ -41,6 +42,7 @@ CREATE TABLE ssh_log (
     `log_time` INT(10),
     `return_status` INT(10),
     `elapsed_time` FLOAT,
+    PRIMARY KEY (`id`),
     KEY key_nodeno (`nodeno`)
 );
 

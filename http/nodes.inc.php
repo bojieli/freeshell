@@ -96,20 +96,20 @@ function ssh_log_before($nodeno, $action, $cmd, $time, $password_to_hide) {
     if ($password_to_hide) {
         $cmd = hide_password($cmd, $password_to_hide);
     }
-    $cmd = "INSERT INTO ssh_log SET `nodeno`='$nodeno', `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `log_time`='$time'";
-    checked_mysql_query($cmd);
+    $sql = "INSERT INTO ssh_log SET `nodeno`='$nodeno', `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `log_time`='$time'";
+    checked_mysql_query($sql);
     if (mysql_affected_rows() != 1)
-        report_sys_admin("Failed to save ssh log:\n$cmd");
+        report_sys_admin("Failed to save ssh log:\n$sql");
+    return mysql_insert_id();
 }
 
-function ssh_log_after($nodeno, $action, $cmd, $output, $time, $password_to_hide) {
+function ssh_log_after($id, $output, $password_to_hide) {
     if ($password_to_hide) {
-        $cmd = hide_password($cmd, $password_to_hide);
         $output = hide_password($output, $password_to_hide);
     }
     global $errno, $elapsed_time;
-    $cmd = "UPDATE ssh_log SET `output`='".addslashes($output)."', `return_status`='$errno', `elapsed_time`='$elapsed_time' WHERE `nodeno`='$nodeno' AND `action`='".addslashes($action)."' AND `cmd`='".addslashes($cmd)."' AND `log_time`='$time'";
-    checked_mysql_query($cmd);
+    $sql = "UPDATE ssh_log SET `output`='".addslashes($output)."', `return_status`='$errno', `elapsed_time`='$elapsed_time' WHERE `id`='$id'";
+    checked_mysql_query($sql);
     if (mysql_affected_rows() != 1)
         report_sys_admin("Failed to save ssh log:\n$cmd");
 }
@@ -119,9 +119,9 @@ function call_monitor($nodeno, $action, $param, $password_to_hide = "") {
         return;
     $cmd = "$action $param";
     $time = time();
-    ssh_log_before($nodeno, $action, $cmd, $time, $password_to_hide);
+    $log_id = ssh_log_before($nodeno, $action, $cmd, $time, $password_to_hide);
     $output = run_in_node($nodeno, $cmd);
-    ssh_log_after($nodeno, $action, $cmd, $output, $time, $password_to_hide);
+    ssh_log_after($log_id, $output, $password_to_hide);
     return $output;
 }
 
