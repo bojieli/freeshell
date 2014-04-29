@@ -2,7 +2,7 @@
 
 cd `dirname $0`
 CONFDIR="../conf"
-TMP_DIR=/tmp/freeshell-scripts
+TMP_DIR=/home/`whoami`/freeshell-scripts
 TARGET_DIR=/home/freeshell/scripts
 
 echo "Preparing for upload..."
