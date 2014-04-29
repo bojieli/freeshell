@@ -161,7 +161,10 @@ function create_freeshell_in_db($hostname, $salted_pass, $email, $nodeno, $distr
 function move_freeshell_in_db($old_id, $nodeno) {
     $appid = get_next_appid($nodeno);
     checked_mysql_query("UPDATE shellinfo SET id=$appid, nodeno=$nodeno WHERE id=$old_id");
-    return $appid;
+    if (mysql_affected_rows() == 1)
+        return $appid;
+    else
+        return false;
 }
 
 function copy_freeshell_config($old_id, $new_id)

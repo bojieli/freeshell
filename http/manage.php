@@ -120,7 +120,7 @@ switch ($_POST['action']) {
 
         lock_shell_or_die($id);
         $appid = move_freeshell_in_db($id, $_POST['nodeno']);
-        if (!$appid || !try_lock_shell($appid)) {
+        if (!$appid) {
             unlock_shell($id);
             die("Failed to move freeshell in database.");
         }
@@ -128,7 +128,6 @@ switch ($_POST['action']) {
         update_proxy_conf();
         move_endpoints($a['nodeno'], $id, $_POST['nodeno'], $appid);
         move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution']);
-        unlock_shell($id);
         unlock_shell($appid);
         
         send_manage_notify_email($email, $id, "been Moved to node ".$_POST['nodeno'],
