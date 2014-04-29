@@ -58,7 +58,7 @@ if ($info['isactive']) {
         	<h1>It's almost there!</h1>
         	<div id="progbar">
             </div>
-<p>Please confirm your identity by clicking the link in <?=$_SESSSION['email']?>.</p>
+<p>Please confirm your identity by clicking the link in <?=$_SESSION['email']?>.</p>
 <p>If you have not received confirmation mail, click below to resend:</p>
 </div>
 <div id="regbutton" onclick="javascript:window.location.href='resend_confirm_mail.php'">
