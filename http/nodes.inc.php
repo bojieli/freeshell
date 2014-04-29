@@ -59,6 +59,10 @@ function get_shell_v4_dns_name($hostname) {
     return "$hostname.4.freeshell.ustc.edu.cn";
 }
 
+function get_node_v4_dns_name($nodeno) {
+    return "s$nodeno.4.freeshell.ustc.edu.cn";
+}
+
 function local_sudo($cmd) {
     $start_time = microtime(true);
     exec("sudo $cmd", $output, $errno);
@@ -76,7 +80,7 @@ function run_in_node($nodeno, $cmd) {
     $cmd = str_replace("\"", "\\\"", $cmd);
     // force fork terminal
     global $SSH_TIMEOUT;
-    $local_cmd = "/bin/sh -c 'echo \"$cmd\" | /usr/bin/sudo -u scgyshell-monitor /usr/bin/ssh -4 -o ConnectTimeout=$SSH_TIMEOUT -t -t scgyshell-client@s$nodeno.freeshell.ustc.edu.cn'";
+    $local_cmd = "/bin/sh -c 'echo \"$cmd\" | /usr/bin/sudo -u scgyshell-monitor /usr/bin/ssh -4 -o ConnectTimeout=$SSH_TIMEOUT -t -t scgyshell-client@".get_node_v4_dns_name($nodeno)."'";
     $output = array();
     $start_time = microtime(true);
     exec($local_cmd, $output, $errno);
