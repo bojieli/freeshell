@@ -84,7 +84,7 @@ Subsystem sftp /usr/lib/openssh/sftp-server
 # PAM authentication, then enable this but set PasswordAuthentication
 # and ChallengeResponseAuthentication to 'no'.
 UsePAM yes
-AllowGroups super_manager ssh_local ssh_freeshell scgyshell-client
+AllowGroups super_manager ssh_local ssh_freeshell scgyshell-client root
 
 Match User gulctsu
 PasswordAuthentication no
