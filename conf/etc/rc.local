@@ -33,4 +33,8 @@ ip rule add from all lookup 999 # table 999 is higher priority
 # inter-vz traffic go through internal interface
 ip route add 10.10.0.0/16 dev eth1
 
+# fix ipv6 route (in case ifup scripts did not set it correctly)
+ip -6 route add 2001:da8:d800:71::/64 dev eth0
+ip -6 route add 2001:da8:d800:701:8000::/64 dev eth1
+
 exit 0
