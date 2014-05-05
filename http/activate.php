@@ -14,7 +14,7 @@ if (empty($info))
 if ($info['isactive']) {
 	die("<script>window.location.href='admin.php'</script>");
 }
-if ($info['token'] !== $_GET['token'])
+if (!isset($_GET['token']) || !isset($info['token']) || sha1($info['token']) !== sha1($_GET['token']))
     die('Incorrect token. Please copy the link to the address bar of your browser and retry.');
 
 lock_shell_or_die($info['id']);

@@ -18,7 +18,7 @@ if (strtotime($info['used_time']) > 0)
     die('This ticket has been used.');
 if (time() - strtotime($info['create_time']) > 48*3600)
     die('Sorry, this link has been expired. Please re-perform the action.');
-if ($info['token'] !== $_GET['token'])
+if (!isset($_GET['token']) || !isset($info['token']) || sha1($info['token']) !== sha1($_GET['token']))
     die('Invalid link. Please copy the link to the address bar of your browser and retry.');
 if ($info['action'] !== 'destroy-freeshell.php')
     die('This token is not intended for destroying freeshell. Please login to Control Panel and try again.');
