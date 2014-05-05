@@ -12,7 +12,7 @@ $info = mysql_fetch_array(checked_mysql_query("SELECT * FROM shellinfo WHERE `id
 if (empty($info))
     die('App does not exist. The link may have been expired.');
 if ($info['isactive']) {
-	echo "<script>window.location.href='admin.php'</script>";
+	die("<script>window.location.href='admin.php'</script>");
 }
 if ($info['token'] !== $_GET['token'])
     die('Incorrect token. Please copy the link to the address bar of your browser and retry.');
