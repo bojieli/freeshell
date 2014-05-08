@@ -137,16 +137,18 @@ switch ($_POST['action']) {
         if (!is_valid_public_endpoint($_POST['public_endpoint']))
             die('Invalid public endpoint');
         if (!is_valid_private_endpoint($_POST['private_endpoint']))
-            die('Invalid private endpoint'); 
+            die('Invalid private endpoint');
+        if (!is_valid_transport_protocol($_POST['protocol']))
+            die('Invalid protocol');
 
         lock_shell_or_die($id);
-        $status = db_add_endpoint($id, $_POST['public_endpoint'], $_POST['private_endpoint']);
+        $status = db_add_endpoint($id, $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
         switch ($status) {
             case 0:
                 break;
             case 1:
                 unlock_shell($id);
-                die('You have created too many endpoints.');
+                die('You have created too many endpoints. If you have special needs, please contact us.');
             case 2:
                 unlock_shell($id);
                 die('The public endpoint has been taken, please use another one');
@@ -154,24 +156,26 @@ switch ($_POST['action']) {
                 unlock_shell($id);
                 die('Unknown error');
         }
-        add_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint']);
+        add_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
         unlock_shell($id);
-        send_manage_notify_email($email, $id, "Added Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
+        send_manage_notify_email($email, $id, "Added ".strtoupper($_POST['protocol'])." Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
         break;
     case 'remove-endpoint':
         if (!is_valid_public_endpoint($_POST['public_endpoint']))
             die('Invalid public endpoint');
         if (!is_valid_private_endpoint($_POST['private_endpoint']))
-            die('Invalid private endpoint'); 
+            die('Invalid private endpoint');
+        if (!is_valid_transport_protocol($_POST['protocol']))
+            die('Invalid protocol');
 
         lock_shell_or_die($id);
-        if (!db_remove_endpoint($id, $_POST['public_endpoint'], $_POST['private_endpoint'])) {
+        if (!db_remove_endpoint($id, $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol'])) {
             unlock_shell($id);
             die('The endpoints does not exist');
         }
-        remove_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint']);
+        remove_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
         unlock_shell($id);
-        send_manage_notify_email($email, $id, "Removed Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
+        send_manage_notify_email($email, $id, "Removed ".strtoupper($_POST['protocol'])." Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
         break;
     default:
         die('Unsupported action');

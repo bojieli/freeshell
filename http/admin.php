@@ -258,18 +258,20 @@ while ($row = mysql_fetch_array($rs)){
 <div id="progbar"></div>
 <h2>Public Endpoint (Port Forwarding)</h2>
 <table>
-<tr><th>Public Port</th><th>Private Port</th><th></th></tr>
+<tr><th>Protocol</th><th>Public Port</th><th>Private Port</th><th></th></tr>
 <?php
 $rs = checked_mysql_query("SELECT * FROM endpoint WHERE id='$appid'");
 while ($row = mysql_fetch_array($rs)) {
     echo "<tr>";
+    echo "<td>".strtoupper($row['protocol'])."</td>";
     echo "<td>".$row['public_endpoint']."</td>";
     echo "<td>".$row['private_endpoint']."</td>";
-    echo '<td><button class="btn-remove-endpoint" onclick="removeEndpoint('.$row['public_endpoint'].','.$row['private_endpoint'].')">Remove</button></td>';
+    echo '<td><button class="btn-remove-endpoint" onclick="removeEndpoint('.$row['public_endpoint'].','.$row['private_endpoint'].',\''.$row['protocol'].'\')">Remove</button></td>';
     echo "</tr>\n";
 }
 ?>
 <tr>
+<td><select id="endpoint-protocol"><option value="tcp" selected="selected">TCP</option><option value="udp">UDP</option></select></td>
 <td><input type="text" id="public-endpoint" /></td>
 <td><input type="text" id="private-endpoint" /></td>
 <td><button id="btn-add-endpoint" onclick="addEndpoint()">Add</button></td>
@@ -359,13 +361,14 @@ function manage(action) {
     }
     ajaxManage(data);
 }
-function removeEndpoint(public_endpoint, private_endpoint) {
+function removeEndpoint(public_endpoint, private_endpoint, protocol) {
     $('.btn-remove-endpoint').attr('disabled', true);
     ajaxManage({
         appid: <?=$info['id']?>,
         action: 'remove-endpoint',
         public_endpoint: public_endpoint,
         private_endpoint: private_endpoint,
+        protocol: protocol,
     });
 }
 function addEndpoint() {
@@ -376,6 +379,7 @@ function addEndpoint() {
         action: 'add-endpoint',
         public_endpoint: $('#public-endpoint').val(),
         private_endpoint: $('#private-endpoint').val(),
+        protocol: $('#endpoint-protocol').val(),
     });
 }
 function removeCname(domain) {

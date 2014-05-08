@@ -186,21 +186,21 @@ function copy_freeshell_config($old_id, $new_id)
  * return 2 for endpoint already taken
  * return 3 for database error
  */
-function db_add_endpoint($id, $public_endpoint, $private_endpoint) {
+function db_add_endpoint($id, $public_endpoint, $private_endpoint, $protocol) {
     $count = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM endpoint WHERE `id`='$id'"), 0);
     if ($count >= 10)
         return 1;
-    $count = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM endpoint WHERE `public_endpoint`='$public_endpoint'"), 0);
+    $count = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM endpoint WHERE `public_endpoint`='$public_endpoint' AND `protocol`='$protocol'"), 0);
     if ($count != 0)
         return 2;
-    checked_mysql_query("INSERT INTO endpoint SET `id`='$id', `public_endpoint`='$public_endpoint', `private_endpoint`='$private_endpoint'");
+    checked_mysql_query("INSERT INTO endpoint SET `id`='$id', `public_endpoint`='$public_endpoint', `private_endpoint`='$private_endpoint', `protocol`='$protocol'");
     if (mysql_affected_rows() == 1)
         return 0;
     return 3;
 }
 
-function db_remove_endpoint($id, $public_endpoint, $private_endpoint) {
-    checked_mysql_query("DELETE FROM endpoint WHERE `id`='$id' AND `public_endpoint`='$public_endpoint' AND `private_endpoint`='$private_endpoint'");
+function db_remove_endpoint($id, $public_endpoint, $private_endpoint, $protocol) {
+    checked_mysql_query("DELETE FROM endpoint WHERE `id`='$id' AND `public_endpoint`='$public_endpoint' AND `private_endpoint`='$private_endpoint' AND `protocol`='$protocol'");
     return (mysql_affected_rows() == 1);
 }
 

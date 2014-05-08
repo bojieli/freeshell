@@ -50,7 +50,8 @@ CREATE TABLE endpoint (
     `id` INT(10) NOT NULL,
     `public_endpoint` INT(5) NOT NULL,
     `private_endpoint` INT(5) NOT NULL,
-    UNIQUE KEY key_public_endpoint (`public_endpoint`),
+    `protocol` VARCHAR(10) NOT NULL DEFAULT 'tcp',
+    UNIQUE KEY key_public_endpoint (`public_endpoint`,`protocol`),
     FOREIGN KEY (`id`) REFERENCES shellinfo (`id`)
 );
 
