@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
+    exit 1
+fi
+
+shellid=$1
+node=$2
+ip=$3
+gw=10.71.$node.2
+
+ip route replace $ip/32 via $gw table 1002
