@@ -1,10 +1,15 @@
-#!/bin/sh -e
+#!/bin/bash
 
 iptables-restore < /home/freeshell/iptables-save
-[ -f /usr/local/sbin/pernode-rc.local ] && /usr/local/sbin/pernode-rc.local
+
+# flush ip rules
+ip rule show | grep -v 'local\|main\|default' | while read pref rule; do
+    ip rule del pref ${pref%%:} $rule
+done
 
 # USTC routes
 GATEWAY=$(ip route | awk '{if($1=="default")print $3}')
+ip route flush table 999
 ip route add 218.104.71.160/28 via $GATEWAY table 999
 ip route add 218.22.21.0/27 via $GATEWAY table 999
 ip route add 210.72.22.0/24 via $GATEWAY table 999
@@ -23,18 +28,46 @@ ip route add 121.255.0.0/16 via $GATEWAY table 999
 ip route add 114.214.197.0/24 dev eth0 table 999
 ip route add 202.38.70.0/24   dev eth0 table 999
 
-# outbound traffic go through MYIP
-MYIP=$(ip addr show dev eth0 | awk '{if($1=="inet")print $2}' | awk 'BEGIN{FS="/"}{print $1}')
-ip route add default via $GATEWAY table 1000
-ip rule add from $MYIP lookup 1000
-
-ip rule add from all lookup 999 # table 999 is higher priority
+ip rule add from all lookup 999
 
 # inter-vz traffic go through internal interface
-ip route add 10.10.0.0/16 dev eth1
+ip route replace 10.10.0.0/16 dev eth1
 
 # fix ipv6 route (in case ifup scripts did not set it correctly)
-ip -6 route add 2001:da8:d800:71::/64 dev eth0
-ip -6 route add 2001:da8:d800:701:8000::/64 dev eth1
+ip -6 route replace 2001:da8:d800:71::/64 dev eth0
+ip -6 route replace 2001:da8:d800:701:8000::/64 dev eth1
+
+# tunnel between freeshell controller and node
+MYIP=$(ip addr show dev eth0 | awk '{if($1=="inet")print $2}' | awk 'BEGIN{FS="/"}{print $1}')
+NODE=$(hostname | grep -o '[0-9]*')
+TUNNEL_IP="10.71.$NODE.2"
+TUNNEL_GW="10.71.$NODE.1"
+ip tunnel del freeshell
+ip tunnel add freeshell mode ipip remote 202.141.160.99 local $MYIP ttl 255
+ip link set freeshell up
+ip addr add $TUNNEL_IP/30 dev freeshell
+
+# outbound packets for inbound connections should go through incoming interface
+function iptables_mangle_replace() {
+    iptables -t mangle -D $* >/dev/null 2>&1
+    iptables -t mangle -A $*
+}
+iptables_mangle_replace PREROUTING -j CONNMARK --restore-mark
+iptables_mangle_replace PREROUTING -i eth0 -j MARK --set-mark 1
+iptables_mangle_replace PREROUTING -i freeshell -j MARK --set-mark 2
+iptables_mangle_replace PREROUTING -j CONNMARK --save-mark
+
+ip route flush table 1000
+ip route add default via $GATEWAY table 1000
+# warning: the following rule must not be "from all", since freeshell IPs are in "main" table
+#   which has lower priority than the fwmark rule, making incoming packets fail to forward.
+# The rule works for outgoing packets in reply to incoming connections because routing happens
+#   before SNAT, the source IP is still freeshell IP (10.10.0.0/16).
+ip rule add from 10.10.0.0/16 fwmark 1 lookup 1000
+ip route flush table 1001
+ip route add default via $TUNNEL_GW table 1001
+ip rule add from 10.10.0.0/16 fwmark 2 lookup 1001
+
+[ -f /usr/local/sbin/pernode-rc.local ] && /usr/local/sbin/pernode-rc.local
 
 exit 0
