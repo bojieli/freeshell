@@ -212,11 +212,11 @@ function add_ssh_port_forwarding($id, $nodeno) {
 }
 
 function is_valid_public_endpoint($port) {
-    return (is_numeric($port) && is_integer($port) && $port >= 40000 && $port < 60000);
+    return (is_numeric($port) && intval($port) == $port && $port >= 40000 && $port < 60000);
 }
 
 function is_valid_private_endpoint($port) {
-    return (is_numeric($port) && is_integer($port) && $port > 0 && $port < 65536);
+    return (is_numeric($port) && intval($port) == $port && $port > 0 && $port < 65536);
 }
 
 function is_valid_transport_protocol($protocol) {
