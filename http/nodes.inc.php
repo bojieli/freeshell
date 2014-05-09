@@ -211,6 +211,10 @@ function add_ssh_port_forwarding($id, $nodeno) {
     add_local_port_forwarding(appid2gsshport($id), get_shell_ipv4($id), 22);
 }
 
+function add_tunnel_ip_route($id, $nodeno) {
+    local_sudo("/usr/local/bin/tunnel-ip-route $id $nodeno ".get_shell_ipv4($id));
+}
+
 function is_valid_public_endpoint($port) {
     return (is_numeric($port) && intval($port) == $port && $port >= 40000 && $port < 60000);
 }
@@ -254,6 +258,7 @@ function activate_vz($nodeno, $id, $distribution) {
     call_monitor($nodeno, "activate-vz", "$id ".get_node_ipv4($nodeno)." $distribution");
 	if ($nodeno != $master_node)
 		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ipv4($master_node)." ".get_node_ipv4($nodeno));
+    add_tunnel_ip_route($id, $nodeno);
     add_ssh_port_forwarding($id, $nodeno);
 }
 
