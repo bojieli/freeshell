@@ -208,7 +208,7 @@ function remove_local_port_forwarding($local_port, $remote_ip, $remote_port, $pr
 }
 
 function add_ssh_port_forwarding($id, $nodeno) {
-    add_local_port_forwarding(appid2gsshport($id), get_node_ipv4($nodeno), appid2sshport($id));
+    add_local_port_forwarding(appid2gsshport($id), get_shell_ipv4($id), 22);
 }
 
 function is_valid_public_endpoint($port) {
@@ -228,8 +228,7 @@ function add_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
         return false;
     if (!is_valid_transport_protocol($protocol))
         return false;
-    add_node_port_forwarding($nodeno, $public_port, $id, $private_port, $protocol);
-    add_local_port_forwarding($public_port, get_node_ipv4($nodeno), $public_port, $protocol);
+    add_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol);
     return true;
 }
 
@@ -238,8 +237,7 @@ function remove_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
         return false;
     if (!is_valid_transport_protocol($protocol))
         return false;
-    remove_node_port_forwarding($nodeno, $public_port, $id, $private_port, $protocol);
-    remove_local_port_forwarding($public_port, get_node_ipv4($nodeno), $public_port, $protocol);
+    remove_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol);
     return true;
 }
 

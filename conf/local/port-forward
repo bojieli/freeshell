@@ -15,6 +15,7 @@ function iptables_delete(){
     iptables -t nat -D $@
 }
 function iptables_replace(){
+    # if already exists, do not replicate the rule
     iptables -t nat -D $@
     iptables -t nat -A $@
 }
@@ -23,7 +24,7 @@ if [ "$action" == "add" ]; then
     for local_ip in $local_ips; do
         iptables_replace PREROUTING -d $local_ip/32 -p $protocol --dport $local_port -j DNAT --to-destination $remote_ip:$remote_port
     done
-    iptables_replace POSTROUTING -d $remote_ip/32 -p $protocol --dport $remote_port -j MASQUERADE
+    #iptables_replace POSTROUTING -d $remote_ip/32 -p $protocol --dport $remote_port -j MASQUERADE
     exit 0
 fi
 
@@ -31,7 +32,7 @@ if [ "$action" == "remove" ]; then
     for local_ip in $local_ips; do
         iptables_delete PREROUTING -d $local_ip/32 -p $protocol --dport $local_port -j DNAT --to-destination $remote_ip:$remote_port
     done
-    iptables_delete POSTROUTING -d $remote_ip/32 -p $protocol --dport $remote_port -j MASQUERADE
+    #iptables_delete POSTROUTING -d $remote_ip/32 -p $protocol --dport $remote_port -j MASQUERADE
     exit 0
 fi
 
