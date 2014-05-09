@@ -259,6 +259,7 @@ while ($row = mysql_fetch_array($rs)){
 <h2>Public Endpoint (Port Forwarding)</h2>
 <table>
 <tr><th>Protocol</th><th>Public Port</th><th>Private Port</th><th></th></tr>
+<tr><td>TCP</td><td><?=$info['global_sshport']?></td><td>22</td><td>For SSH, cannot remove</td></tr>
 <?php
 $rs = checked_mysql_query("SELECT * FROM endpoint WHERE id='$appid'");
 while ($row = mysql_fetch_array($rs)) {
@@ -277,7 +278,7 @@ while ($row = mysql_fetch_array($rs)) {
 <td><button id="btn-add-endpoint" onclick="addEndpoint()">Add</button></td>
 </tr>
 </table>
-<p class="note">Public IP is ssh.freeshell.ustc.edu.cn.<br />Public port must be in range 40000-49999.<br />Private port should not be 22 or 80.</p>
+<p class="note">Please use ssh.freeshell.ustc.edu.cn to access, the IP address is subject to change.<br />Public port must be in range 40000-59999.</p>
 
 <div id="progbar"></div>
 <h2>Server status</h2>
