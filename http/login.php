@@ -50,6 +50,14 @@ else { // appid has been set
 if ($info['isactive']) {
 	die("<script>window.location.href='admin.php';</script>");
 }
+else{
+    $_SESSION['appid_to_active'] = $_SESSION['appid'];
+    $_SESSION['email_to_active'] = $_SESSION['email'];
+
+    unset($_SESSION['email']);
+    unset($_SESSION['appid']);
+    unset($_SESSION['isadmin']);
+}
 
 // not activated
 ?>
@@ -58,7 +66,7 @@ if ($info['isactive']) {
         	<h1>It's almost there!</h1>
         	<div id="progbar">
             </div>
-<p>Please confirm your identity by clicking the link in <?=$_SESSION['email']?>.</p>
+<p>Please confirm your identity by clicking the link in <?=$_SESSION['email_to_active']?>.</p>
 <p>If you have not received confirmation mail, click below to resend:</p>
 </div>
 <div id="regbutton" onclick="javascript:window.location.href='resend_confirm_mail.php'">
