@@ -17,5 +17,5 @@ for shellid in `seq 101 $max`; do
     node=$(($shellid % $NODENUM))
     [ $node -eq 0 ] && node=$NODENUM
     gw=10.71.$node.2
-    echo "route add $ip/32 via $gw table $tableid"
+    echo "route replace $ip/32 via $gw table $tableid"
 done | ip -batch -
