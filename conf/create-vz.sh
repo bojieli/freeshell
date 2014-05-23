@@ -15,10 +15,10 @@ distribution=$7
 
 vzctl create $id --ostemplate $distribution
 vzctl set $id --userpasswd root:$password
-vzctl set $id --physpages $mem_limit --save
 vzctl set $id --kmemsize unlimited --save
 vzctl set $id --privvmpages unlimited --save
 vzctl set $id --shmpages unlimited --save
+vzctl set $id --physpages $mem_limit --swappages 0 --save
 vzctl set $id --diskspace $diskspace_softlimit:$diskspace_hardlimit --save
 vzctl set $id --diskinodes 10000000 --save
 vzctl set $id --quotatime 86400 --save
