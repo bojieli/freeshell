@@ -30,6 +30,13 @@ function is_valid_nodeno($nodeno) {
     return $int > 0 && $int <= nodes_num();
 }
 
+function node_default_mem_limit($nodeno) {
+    if ($nodeno == 3)
+        return '8G';
+    else
+        return '12G';
+}
+
 function get_node_ipv4($nodeno) {
     global $nodes2ip;
     return $nodes2ip[$nodeno];
@@ -151,9 +158,9 @@ function update_dns($hostname, $appid) {
     $ns->commit();
 }
 
-function create_vz($nodeno, $id, $hostname, $password, $diskspace_softlimit, $diskspace_hardlimit, $distribution) {
+function create_vz($nodeno, $id, $hostname, $password, $mem_limit, $diskspace_softlimit, $diskspace_hardlimit, $distribution) {
     update_dns($hostname, $id);
-    return call_monitor($nodeno, "create-vz", "$id $hostname $password $diskspace_softlimit $diskspace_hardlimit $distribution", $password);
+    return call_monitor($nodeno, "create-vz", "$id $hostname $password $mem_limit $diskspace_softlimit $diskspace_hardlimit $distribution", $password);
 }
 
 function copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution) {

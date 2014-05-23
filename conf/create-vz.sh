@@ -1,19 +1,21 @@
 #!/bin/bash
-# usage: ./create-vz.sh <id> <hostname> <password> <diskspace_softlimit> <diskspace_hardlimit> <distribution>
+# usage: ./create-vz.sh <id> <hostname> <password> <mem_limit> <diskspace_softlimit> <diskspace_hardlimit> <distribution>
 
-if [ -z $1 ] || [ -z $2 ] || [ -z $3 ] || [ -z $4 ] || [ -z $5 ] || [ -z $6 ]; then
+if [ -z $1 ] || [ -z $2 ] || [ -z $3 ] || [ -z $4 ] || [ -z $5 ] || [ -z $6 ] || [ -z $7 ]; then
     exit 1
 fi
 
 id=$1
 hostname=$2
 password=$3
-diskspace_softlimit=$4
-diskspace_hardlimit=$5
-distribution=$6
+mem_limit=$4
+diskspace_softlimit=$5
+diskspace_hardlimit=$6
+distribution=$7
 
 vzctl create $id --ostemplate $distribution
 vzctl set $id --userpasswd root:$password
+vzctl set $id --physpages $mem_limit --save
 vzctl set $id --kmemsize unlimited --save
 vzctl set $id --privvmpages unlimited --save
 vzctl set $id --shmpages unlimited --save

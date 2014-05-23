@@ -72,7 +72,7 @@ if ($info['distribution'] != $distribution) {
 fastcgi_finish_request();
 destroy_vz($info['nodeno'], $info['shellid'], $keep_dirs);
 $password = random_string(12);
-create_vz($info['nodeno'], $info['shellid'], $info['hostname'], $password, $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution']);
+create_vz($info['nodeno'], $info['shellid'], $info['hostname'], $password, node_default_mem_limit($info['nodeno']), $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution']);
 reactivate_vz($info['nodeno'], $info['shellid'], $info['distribution']);
 unlock_shell($info['shellid']);
 send_reinstall_success_email($info['email'], $info['shellid'], $info['hostname'], $password);
