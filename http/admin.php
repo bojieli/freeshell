@@ -304,7 +304,7 @@ foreach ($node as $key => $value) {
   <li><span class="h">Distribution</span><strong><?=$info['distribution']?></strong>
   <li><span class="h">Private IP</span><strong><?=get_shell_ipv4($appid)?></strong> (Freeshell Internal)
   <li><span class="h">Private Hostname</span><strong><?=get_shell_v4_dns_name($info['hostname'])?></strong> (Freeshell Internal)
-  <li><span class="h">Memory</span><strong><?=$info['nodeno']==3?"12G":"16G"?></strong>, unlimited
+  <li><span class="h">Memory</span><strong><?=node_default_mem_limit($info['nodeno'])?></strong>
   <li><span class="h">CPU</span>8 cores * Xeon X5450, unlimited
   <li><span class="h">Disk</span><span class="r"><strong><?=$info['diskspace_softlimit']?></strong>. You can use up to <?=$info['diskspace_hardlimit']?> in a grace period of 24 hours.<br>Please delete unused files as soon as possible :)<br>If you need more disk space, email support@freeshell.ustc.edu.cn</span>
 <?php
