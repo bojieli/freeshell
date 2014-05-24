@@ -4,6 +4,7 @@ $supported_distributions = array(
     "Debian 6.0 squeeze" => "debian-6.0-amd64-minimal",
     "CentOS 6" => "centos-6-x86_64",
     "CentOS 5" => "centos-5-x86_64",
+    "Ubuntu 14.04 LTS" => "ubuntu-14.04-x86_64",
     "Ubuntu 12.04 LTS" => "ubuntu-12.04-x86_64",
     "Ubuntu 13.10" => "ubuntu-13.10-x86_64",
     "Fedora 20" => "fedora-20-x86_64",
