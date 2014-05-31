@@ -121,6 +121,20 @@ if ($info['locked']) {
     <div id="progbar"></div>
     <?php
 }
+$free_diskspace = $node['#Disk Space Limit (KB)'] - $node['Used Disk Space (KB)'];
+if ($free_diskspace < 0) {
+    ?>
+    <p><strong>Your freeshell has exceeded disk space limit by <?=-$free_diskspace?> KB.</strong></p>
+    <p><strong>Please remove some files, otherwise the freeshell might be blocked after grace period.</strong></p>
+    <div id="progbar"></div>
+    <?php
+}
+else if ($free_diskspace < 500 * 1024) {
+    ?>
+    <p>Notice: Your freeshell has only <?=$free_diskspace?> KB free space, please save disk space.</p>
+    <div id="progbar"></div>
+    <?php
+}
 ?>
 <ul class="table">
   <li><span class="h">Shell ID:</span><strong><?=$appid?></strong>
