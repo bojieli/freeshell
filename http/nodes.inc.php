@@ -77,13 +77,17 @@ function local_sudo($cmd) {
     return array($errno, $output);
 }
 
+function single_quote_escape($cmd) {
+    // substitute ' with '\'': close the single quote, add an escaped quote, reopen the single quote
+    return str_replace("'", "'\\''", $cmd);
+}
+
 function run_in_node($nodeno, $cmd) {
     global $errno, $elapsed_time;
-    $cmd = str_replace("'", "\\'", $cmd);
-    $cmd = str_replace("\"", "\\\"", $cmd);
-    // force fork terminal
     global $SSH_TIMEOUT;
-    $local_cmd = "/bin/sh -c 'echo \"$cmd\" | /usr/bin/sudo -u scgyshell-monitor /usr/bin/ssh -4 -o ConnectTimeout=$SSH_TIMEOUT -t -t scgyshell-client@s$nodeno.freeshell.ustc.edu.cn'";
+    // force fork terminal in ssh
+    $sudo_cmd = "echo '".single_quote_escape($cmd)."' | /usr/bin/sudo -u scgyshell-monitor /usr/bin/ssh -4 -o ConnectTimeout=$SSH_TIMEOUT -t -t scgyshell-client@s$nodeno.freeshell.ustc.edu.cn";
+    $local_cmd = "/bin/sh -c -- '".single_quote_escape($sudo_cmd)."'";
     $output = array();
     $start_time = microtime(true);
     exec($local_cmd, $output, $errno);
