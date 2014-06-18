@@ -2,9 +2,11 @@
 
 NODENUM=7
 for node in `seq 1 $NODENUM`; do
-    ip tunnel add freeshell$node mode ipip remote $(dig +short s$node.freeshell.ustc.edu.cn) local 202.141.160.99
+    ip tunnel del freeshell$node
+    ip tunnel add freeshell$node mode gre remote $(dig +short s$node.freeshell.ustc.edu.cn) local 202.141.160.99
     ip link set freeshell$node up
     ip addr add 10.71.$node.1/30 dev freeshell$node
+    ip addr add fdfe:dcba:9876:71::$node:1/126 dev freeshell$node
 done
 
 max=$(curl http://freeshell.ustc.edu.cn/shellmax.php)

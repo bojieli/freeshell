@@ -42,10 +42,13 @@ MYIP=$(ip addr show dev eth0 | awk '{if($1=="inet")print $2}' | awk 'BEGIN{FS="/
 NODE=$(hostname | grep -o '[0-9]*')
 TUNNEL_IP="10.71.$NODE.2"
 TUNNEL_GW="10.71.$NODE.1"
+TUNNEL_IPV6="fdfe:dcba:9876:71::$NODE:2"
+TUNNEL_IPV6_GW="fdfe:dcba:9876:71::$NODE:1"
 ip tunnel del freeshell
-ip tunnel add freeshell mode ipip remote 202.141.160.99 local $MYIP ttl 255
+ip tunnel add freeshell mode gre remote 202.141.160.99 local $MYIP ttl 255
 ip link set freeshell up
 ip addr add $TUNNEL_IP/30 dev freeshell
+ip addr add $TUNNEL_IPV6/126 dev freeshell
 
 # outbound packets for inbound connections should go through incoming interface
 function iptables_mangle_replace() {
@@ -67,6 +70,12 @@ ip rule add from 10.10.0.0/16 fwmark 1 lookup 1000
 ip route flush table 1001
 ip route add default via $TUNNEL_GW table 1001
 ip rule add from 10.10.0.0/16 fwmark 2 lookup 1001
+
+# abroad ipv6 via tunnel
+cat /etc/chnroutes-v6.txt | while read prefix comment; do
+    ip -6 route add $prefix via 2001:da8:d800:71::1
+done
+ip -6 route replace default via $TUNNEL_IPV6_GW
 
 [ -f /usr/local/sbin/pernode-rc.local ] && /usr/local/sbin/pernode-rc.local
 
