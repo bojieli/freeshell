@@ -6,6 +6,9 @@ iptables-restore < /home/freeshell/iptables-save
 ip rule show | grep -v 'local\|main\|default' | while read pref rule; do
     ip rule del pref ${pref%%:} $rule
 done
+ip -6 rule show | grep -v 'local\|main\|default' | while read pref rule; do
+    ip -6 rule del pref ${pref%%:} $rule
+done
 
 # USTC routes
 GATEWAY=$(ip route | awk '{if($1=="default")print $3}')
@@ -56,8 +59,10 @@ function iptables_mangle_replace() {
     iptables -t mangle -A $*
 }
 iptables_mangle_replace PREROUTING -j CONNMARK --restore-mark
+iptables_mangle_replace PREROUTING -m mark ! --mark 0 -j ACCEPT
 iptables_mangle_replace PREROUTING -i eth0 -j MARK --set-mark 1
 iptables_mangle_replace PREROUTING -i freeshell -j MARK --set-mark 2
+iptables_mangle_replace PREROUTING -i venet0 -j MARK --set-mark 100
 iptables_mangle_replace PREROUTING -j CONNMARK --save-mark
 
 ip route flush table 1000
@@ -71,11 +76,37 @@ ip route flush table 1001
 ip route add default via $TUNNEL_GW table 1001
 ip rule add from 10.10.0.0/16 fwmark 2 lookup 1001
 
+# similar outbound fix for inbound IPv6 connections
+function ip6tables_mangle_replace() {
+    ip6tables -t mangle -D $* >/dev/null 2>&1
+    ip6tables -t mangle -A $*
+}
+ip6tables_mangle_replace PREROUTING -j CONNMARK --restore-mark
+ip6tables_mangle_replace PREROUTING -m mark ! --mark 0 -j ACCEPT
+ip6tables_mangle_replace PREROUTING -i eth0 -j MARK --set-mark 1
+ip6tables_mangle_replace PREROUTING -i eth1 -j MARK --set-mark 2
+ip6tables_mangle_replace PREROUTING -i freeshell -j MARK --set-mark 3
+ip6tables_mangle_replace PREROUTING -i venet0 -j MARK --set-mark 100
+ip6tables_mangle_replace PREROUTING -j CONNMARK --save-mark
+
+IPV6_GW="2001:da8:d800:71::1"
+IPV6_GW2="2001:da8:d800:701:8000::1"
+ip -6 route flush table 1000
+ip -6 route add default via $IPV6_GW  table 1000
+ip -6 rule add iif venet0 fwmark 1 lookup 1000
+ip -6 route flush table 1001
+ip -6 route add default via $IPV6_GW2 table 1001
+ip -6 rule add iif venet0 fwmark 2 lookup 1001
+ip -6 route flush table 1002
+ip -6 route add default via $TUNNEL_IPV6_GW table 1002
+ip -6 rule add iif venet0 fwmark 3 lookup 1002
+
 # abroad ipv6 via tunnel
 cat /etc/chnroutes-v6.txt | while read prefix comment; do
-    ip -6 route add $prefix via 2001:da8:d800:71::1
-done
-ip -6 route replace default via $TUNNEL_IPV6_GW
+    echo "route replace $prefix via $IPV6_GW"
+done | ip -6 -batch -
+ip -6 route del default
+ip -6 route add default via $TUNNEL_IPV6_GW
 
 [ -f /usr/local/sbin/pernode-rc.local ] && /usr/local/sbin/pernode-rc.local
 
