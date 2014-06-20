@@ -40,7 +40,5 @@ delete_dns($info['hostname']);
 update_proxy_conf();
 destroy_vz($info['nodeno'], $info['shellid']);
 remove_all_endpoints($info['nodeno'], $info['shellid']);
-db_remove_all_endpoints($info['shellid']);
 unlock_shell($info['shellid']);
-checked_mysql_query("DELETE FROM shellinfo WHERE id='".$info['shellid']."'");
-
+delete_freeshell_in_db($info['shellid']);

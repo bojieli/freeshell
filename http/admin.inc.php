@@ -161,10 +161,21 @@ function create_freeshell_in_db($hostname, $salted_pass, $email, $nodeno, $distr
 function move_freeshell_in_db($old_id, $nodeno) {
     $appid = get_next_appid($nodeno);
     checked_mysql_query("UPDATE shellinfo SET id=$appid, nodeno=$nodeno WHERE id=$old_id");
-    if (mysql_affected_rows() == 1)
+    if (mysql_affected_rows() == 1) {
+        checked_mysql_query("UPDATE tickets SET shellid=$appid WHERE shellid=$old_id");
+        checked_mysql_query("UPDATE endpoint SET id=$appid WHERE id=$old_id");
+        checked_mysql_query("UPDATE cname SET id=$appid WHERE id=$old_id");
         return $appid;
+    }
     else
         return false;
+}
+
+function delete_freeshell_in_db($id) {
+    db_remove_all_endpoints($id);
+    checked_mysql_query("DELETE FROM cname WHERE id=$id");
+    checked_mysql_query("DELETE FROM shellinfo WHERE id=$id");
+    return (mysql_affected_rows() == 1);
 }
 
 function copy_freeshell_config($old_id, $new_id)
