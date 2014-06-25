@@ -117,7 +117,10 @@ if ($num_shells >= 2) {
 <?php
 if ($info['locked']) {
     ?>
-    <p><strong>Your freeshell has a pending action started <?=time() - $info['lock_time']?> seconds ago, please wait. Refresh this page at will.</strong>
+    <p><strong>Your freeshell has a pending action started <?=time() - $info['lock_time']?> seconds ago, please wait.<br />Refresh at will.</strong>
+    <?php if (time() - $info['lock_time'] > 3600) { ?>
+        <p>The action takes significantly longer than usual. The technical team will be awared of this issue. Feel free to contact us if you have any additional details to provide.</p>
+    <?php } ?>
     <div id="progbar"></div>
     <?php
 }
