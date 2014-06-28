@@ -69,7 +69,11 @@ echo "</tr>\n";
 echo "</thead><tbody>";
 
 foreach ($nodes2ip as $nodeno => $ip) {
-    $lines = explode("\n", run_in_node($nodeno, $cmd));
+    list($errno, $output) = run_in_node($nodeno, $cmd);
+    if ($errno != 0) {
+        continue;
+    }
+    $lines = explode("\n", $output);
     foreach ($lines as $line) {
         $cols = preg_split('/\s+/', trim($line));
         if (count($cols) != count($attrs))
