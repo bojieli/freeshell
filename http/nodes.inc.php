@@ -66,15 +66,19 @@ function get_shell_v4_dns_name($hostname) {
     return "$hostname.4.freeshell.ustc.edu.cn";
 }
 
-function local_sudo($cmd) {
+function local_exec($cmd) {
     $start_time = microtime(true);
-    exec("sudo $cmd", $output, $errno);
+    exec($cmd, $output, $errno);
     $elapsed_time = microtime(true) - $start_time;
     $output = implode("\n", $output);
     if ($errno != 0) {
         report_sys_admin("local sudo failed with status $errno\nSTART TIME: $start_time\nELAPSED TIME: $elapsed_time\nFULL COMMAND:\n$cmd\nOUTPUT:\n$output\n");
     }
     return array($errno, $output);
+}
+
+function local_sudo($cmd) {
+    return local_exec("sudo $cmd");
 }
 
 function single_quote_escape($cmd) {

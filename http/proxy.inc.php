@@ -15,14 +15,14 @@ function update_proxy_conf() {
 }
 
 function get_all_cnames() {
-    $rs = checked_mysql_query("SELECT id, domain FROM cname");
+    $rs = checked_mysql_query("SELECT id, domain, is_ssl FROM cname");
     $cnames = array();
     while ($row = mysql_fetch_array($rs)) {
         if (0 == cname_check_norepeat($row['domain'])) {
             if (!isset($cnames[$row['id']]))
-                $cnames[$row['id']] = array($row['domain']);
+                $cnames[$row['id']] = array(array($row['domain'], $row['is_ssl']));
             else
-                $cnames[$row['id']][] = $row['domain'];
+                $cnames[$row['id']][] = array($row['domain'], $row['is_ssl']);
         }
     }
     return $cnames;
@@ -36,34 +36,31 @@ function nginx_conf_gen_for_proxy() {
         $cname = isset($all_cname[$row['id']]) ? $all_cname[$row['id']] : array();
         $domain = $row['http_subdomain'];
         if ($domain != "" && 0 == subdomain_check_norepeat($domain))
-            $cname[] = "$domain.freeshell.ustc.edu.cn";
+            $cname[] = array("$domain.freeshell.ustc.edu.cn", false); // false: do not need ssl key
         if (count($cname) == 0)
             continue; // do not generate entry if empty
         $nodeno = $row['nodeno'];
         $httpport = appid2httpport($row['id']);
-        $conf .= conf_for_one_subdomain($cname, $nodeno, $httpport,
+        $conf .= conf_for_one_freeshell($cname, $nodeno, $httpport,
             sanitize_url($row['40x_page']),
             sanitize_url($row['50x_page']));
     }
     return $conf;
 }
 
-function conf_for_one_subdomain($cname, $nodeno, $httpport, $page40x = null, $page50x = null) {
-    $cname_str = "";
-    foreach ($cname as $c) {
-        $cname_str .= "$c *.$c ";
-    }
+function server_block($server_name, $nodeno, $additional_conf, $httpport, $page40x, $page50x) {
     return "
 server {
         listen 80;
         listen 443;
         listen [::]:80;
         listen [::]:443;
-        server_name $cname_str;\n".
+        server_name $server_name;\n".$additional_conf.
         ($page40x ? "error_page 400 403 404 = $page40x;\n" : "").
         ($page50x ? "error_page 500 502 503 504 = $page50x;\n" : "")."
         access_log /var/log/nginx/freeshell-proxy/access.log logverbose;
         error_log  /var/log/nginx/freeshell-proxy/error.log;
+
         location / {
                 proxy_pass       http://s$nodeno.4.freeshell.ustc.edu.cn:$httpport;
                 proxy_set_header Host       \$http_host;
@@ -75,8 +72,32 @@ server {
 ";
 }
 
+function conf_for_one_freeshell($cname, $nodeno, $httpport, $page40x = null, $page50x = null) {
+    $aggregated_server_name = "";
+    $retval = "";
+    foreach ($cname as $c) {
+        if (count($c) != 2)
+            continue;
+        $domain = $c[0]; // domain
+        $server_name = "$domain *.$domain";
+        if ($c[1]) { // need ssl key
+            $retval .= server_block($server_name, $nodeno, "
+        ssl_certificate_key /etc/nginx/freeshell-keys/$domain.key;
+        ssl_certificate     /etc/nginx/freeshell-keys/$domain.crt;
+",
+                        $httpport, $page40x, $page50x);
+        } else {
+            $aggregated_server_name .= $server_name." ";
+        }
+    }
+    if ($aggregated_server_name) {
+        $retval .= server_block($aggregated_server_name, $nodeno, "", $httpport, $page40x, $page50x);
+    }
+    return $retval;
+}
+
 function local_update_proxy_conf() {
-    list($errno, $output) = local_sudo("/usr/local/bin/reload-nginx");
+    list($errno, $output) = local_sudo("/usr/local/bin/safe-reload-nginx");
     return ($errno == 0);
 }
 

@@ -253,17 +253,25 @@ http(s)://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>"
 <br />
 <button id="btn-update-proxy" onclick="updateProxy()">Update</button>
 </p>
-<p class="note">Your own domain: (please CNAME to proxy.freeshell.ustc.edu.cn, subdomains supported)</p>
+
+<p class="note">Add your own domains below.</p>
 <table>
 <?php
-$rs = checked_mysql_query("SELECT domain FROM cname WHERE id='$appid'");
+$rs = checked_mysql_query("SELECT domain, is_ssl FROM cname WHERE id='$appid'");
+$domain_count = 0;
 while ($row = mysql_fetch_array($rs)){
+    ++$domain_count;
     ?>
     <tr>
     <td><?=$row['domain']?></td>
     <td><button class="btn-remove-cname" onclick="removeCname('<?=$row['domain']?>')">Remove</button></td>
+    <td><button class="btn-update-ssl-key" onclick="location.href='update-ssl-keys.php?domain=<?=$row['domain']?>'"><?=($row['is_ssl'] ? 'Update SSL' : 'Setup SSL')?></button></td>
     </tr>
     <?php
+}
+if ($domain_count == 0) { ?>
+    <tr><td colspan="3">No personal domains yet.</td></tr>
+<?php
 }
 ?>
 <tr>
@@ -271,6 +279,7 @@ while ($row = mysql_fetch_array($rs)){
 <td><button id="btn-add-cname" onclick="addCname()">Add</button></td>
 </tr>
 </table>
+<p class="note">Please CNAME your domain to <code>proxy.freeshell.ustc.edu.cn</code>. Once you set up example.com, subdomains *.example.com are also proxied to your freeshell.</p>
 
 <div id="progbar"></div>
 <h2>Public Endpoint (Port Forwarding)</h2>
@@ -295,7 +304,7 @@ while ($row = mysql_fetch_array($rs)) {
 <td><button id="btn-add-endpoint" onclick="addEndpoint()">Add</button></td>
 </tr>
 </table>
-<p class="note">Please use ssh.freeshell.ustc.edu.cn to access, the IP address is subject to change.<br />Public port must be in range 40000-59999.</p>
+<p class="note">Please use <code>ssh.freeshell.ustc.edu.cn</code> to access, the IP address is subject to change.<br />Public port must be in range 40000-59999.</p>
 
 <div id="progbar"></div>
 <h2>Server status</h2>

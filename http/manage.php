@@ -2,6 +2,7 @@
 include_once "nodes.inc.php";
 include_once "verify.inc.php";
 include_once "proxy.inc.php";
+include_once "ssl.inc.php";
 include_once "admin.inc.php";
 include_once "dns.inc.php";
 include_once "db.php";
@@ -264,6 +265,10 @@ function remove_cname($cname) {
     global $id;
 
     $cname = addslashes($cname);
+    $is_ssl = mysql_result(checked_mysql_query("SELECT is_ssl FROM cname WHERE id=$id AND domain='$cname'"), 0);
+    if ($is_ssl) {
+        remove_ssl_key($cname);
+    }
     checked_mysql_query("DELETE FROM cname WHERE id=$id AND domain='$cname'");
     if (mysql_affected_rows() != 1)
         die('The domain you are removing does not exist');
