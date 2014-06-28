@@ -42,7 +42,11 @@ lock_shell_or_die($appid);
 </div>
 <?php
 fastcgi_finish_request();
-create_vz($nodeno, $appid, $hostname, $password, node_default_mem_limit($nodeno), $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution']);
+if (!create_vz($nodeno, $appid, $hostname, $password, node_default_mem_limit($nodeno), $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution'])) {
+    checked_mysql_query("DELETE FROM shellinfo WHERE `id`='$appid'");
+    send_register_fail_mail($email);
+    exit();
+}
 
 $token = random_string(40);
 checked_mysql_query("UPDATE shellinfo SET `token`='$token' WHERE `id`='$appid'");

@@ -70,9 +70,20 @@ if ($info['distribution'] != $distribution) {
 </div>
 <?php
 fastcgi_finish_request();
-destroy_vz($info['nodeno'], $info['shellid'], $keep_dirs);
+function do_reinstall($info, $password) {
+    if (!destroy_vz($info['nodeno'], $info['shellid'], $keep_dirs))
+        return false;
+    if (!create_vz($info['nodeno'], $info['shellid'], $info['hostname'], $password, node_default_mem_limit($info['nodeno']), $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution']))
+        return false;
+    if (!reactivate_vz($info['nodeno'], $info['shellid'], $info['distribution']))
+        return false;
+    return true;
+}
 $password = random_string(12);
-create_vz($info['nodeno'], $info['shellid'], $info['hostname'], $password, node_default_mem_limit($info['nodeno']), $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution']);
-reactivate_vz($info['nodeno'], $info['shellid'], $info['distribution']);
+$status = do_reinstall($info, $password);
 unlock_shell($info['shellid']);
-send_reinstall_success_email($info['email'], $info['shellid'], $info['hostname'], $password);
+if ($status) {
+    send_reinstall_success_email($info['email'], $info['shellid'], $info['hostname'], $password);
+} else {
+    send_reinstall_failure_email($info['email'], $info['shellid']);
+}

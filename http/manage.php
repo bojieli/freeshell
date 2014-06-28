@@ -25,9 +25,9 @@ switch ($_POST['action']) {
     case 'stop':
     case 'force-stop':
         lock_shell_or_die($id);
-        control_vz($a['nodeno'], $_POST['action'], $id);
+        $status = control_vz($a['nodeno'], $_POST['action'], $id);
         unlock_shell($id);
-        send_manage_notify_email($email, $id, strtoupper($_POST['action']));
+        send_manage_notify_email($status, $email, $id, strtoupper($_POST['action']));
         break;
     case 'reset-root':
         reset_passwd($email, $a['nodeno'], $id);
@@ -77,20 +77,20 @@ switch ($_POST['action']) {
             $email, $id);
         break;
     case 'update-proxy':
-        update_proxy(trim($_POST['domain']), trim($_POST['40x_page']), trim($_POST['50x_page']));
-        send_manage_notify_email($email, $id, "Updated HTTP Proxy");
+        $status = update_proxy(trim($_POST['domain']), trim($_POST['40x_page']), trim($_POST['50x_page']));
+        send_manage_notify_email($status, $email, $id, "Updated HTTP Proxy");
         break;
     case 'add-cname':
-        add_cname(trim($_POST['domain']));
-        send_manage_notify_email($email, $id, "Added HTTP Proxy Domain ".$_POST['domain']);
+        $status = add_cname(trim($_POST['domain']));
+        send_manage_notify_email($status, $email, $id, "Added HTTP Proxy Domain ".$_POST['domain']);
         break;
     case 'remove-cname':
-        remove_cname(trim($_POST['domain']));
-        send_manage_notify_email($email, $id, "Removed HTTP Proxy Domain ".$_POST['domain']);
+        $status = remove_cname(trim($_POST['domain']));
+        send_manage_notify_email($status, $email, $id, "Removed HTTP Proxy Domain ".$_POST['domain']);
         break;
     case 'update-hostname':
-        update_hostname(trim($_POST['hostname']));
-        send_manage_notify_email($email, $id, "Updated Hostname",
+        $status = update_hostname(trim($_POST['hostname']));
+        send_manage_notify_email($status, $email, $id, "Updated Hostname",
             "Due to DNS cache, the new hostname may take several minutes to be usable.");
         break;
     case 'copy':
@@ -105,11 +105,11 @@ switch ($_POST['action']) {
         }
         copy_freeshell_config($id, $appid);
         goto_background();
-        copy_vz($a['nodeno'], $id, $nodeno, $appid, $_POST['hostname'], $a['distribution']);
+        $status = copy_vz($a['nodeno'], $id, $nodeno, $appid, $_POST['hostname'], $a['distribution']);
         unlock_shell($id);
         unlock_shell($appid);
 
-        send_manage_notify_email($email, $id, "been Copied to node ".$nodeno,
+        send_manage_notify_email($status, $email, $id, "been Copied to node ".$nodeno,
             "The new freeshell ID is $appid, new hostname is ".get_shell_v6_dns_name($_POST['hostname']));
         break;
     case 'rescue':
@@ -125,12 +125,17 @@ switch ($_POST['action']) {
             die("Failed to move freeshell in database.");
         }
         goto_background();
-        update_proxy_conf();
-        move_endpoints($a['nodeno'], $id, $_POST['nodeno'], $appid);
-        move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution']);
+        $status = update_proxy_conf();
+        if (!$status)
+            goto movefinish;
+        $status = move_endpoints($a['nodeno'], $id, $_POST['nodeno'], $appid);
+        if (!$status)
+            goto movefinish;
+        $status = move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution']);
+movefinish:
         unlock_shell($appid);
         
-        send_manage_notify_email($email, $id, "been Moved to node ".$_POST['nodeno'],
+        send_manage_notify_email($status, $email, $id, "been Moved to node ".$_POST['nodeno'],
             "The new freeshell ID is $appid and the original ID $id is deprecated. You can still access your freeshell via ".get_shell_v6_dns_name($a['hostname']).", but due to DNS cache, you may have to wait several minutes for DNS to refresh. Please note that the IPv6 address and IPv4 SSH/HTTP port have changed.");
         break;
     case 'add-endpoint':
@@ -156,9 +161,9 @@ switch ($_POST['action']) {
                 unlock_shell($id);
                 die('Unknown error');
         }
-        add_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
+        $status = add_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
         unlock_shell($id);
-        send_manage_notify_email($email, $id, "Added ".strtoupper($_POST['protocol'])." Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
+        send_manage_notify_email($status, $email, $id, "Added ".strtoupper($_POST['protocol'])." Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
         break;
     case 'remove-endpoint':
         if (!is_valid_public_endpoint($_POST['public_endpoint']))
@@ -173,9 +178,9 @@ switch ($_POST['action']) {
             unlock_shell($id);
             die('The endpoints does not exist');
         }
-        remove_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
+        $status = remove_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
         unlock_shell($id);
-        send_manage_notify_email($email, $id, "Removed ".strtoupper($_POST['protocol'])." Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
+        send_manage_notify_email($status, $email, $id, "Removed ".strtoupper($_POST['protocol'])." Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
         break;
     default:
         die('Unsupported action');
@@ -194,10 +199,15 @@ function check_nodeno_and_fail($nodeno) {
 function reset_passwd($email, $nodeno, $id) {
     $new_passwd = random_string(12);
     lock_shell_or_die($id);
-    control_vz($nodeno, "reset-root", "$id $new_passwd");
+    $status = control_vz($nodeno, "reset-root", "$id $new_passwd");
     unlock_shell($id);
-    send_reset_root_email($email, $id, $new_passwd);
-    echo 'New root password has been sent to your email. If not found, please check the Spam box.';
+    if ($status) {
+        send_reset_root_email($email, $id, $new_passwd);
+        echo 'New root password has been sent to your email. If not found, please check the Spam box.';
+    }
+    else {
+        echo 'Failed to reset root password. Please try again later.';
+    }
 }
 
 function update_proxy($domain, $page_40x, $page_50x) {
@@ -223,7 +233,7 @@ function update_proxy($domain, $page_40x, $page_50x) {
     $page_50x = addslashes(sanitize_url($page_50x));
 
     checked_mysql_query("UPDATE shellinfo SET `http_subdomain`='$domain', `40x_page`='$page_40x', `50x_page`='$page_50x' WHERE `id`='$id'");
-    update_proxy_conf();
+    return update_proxy_conf();
 }
 
 function add_cname($cname) {
@@ -247,7 +257,7 @@ function add_cname($cname) {
     checked_mysql_query("INSERT INTO cname (id,domain) VALUES ('$id','$cname')");
     if (mysql_affected_rows() != 1)
         die('Database Error');
-    update_proxy_conf();
+    return update_proxy_conf();
 }
 
 function remove_cname($cname) {
@@ -257,7 +267,7 @@ function remove_cname($cname) {
     checked_mysql_query("DELETE FROM cname WHERE id=$id AND domain='$cname'");
     if (mysql_affected_rows() != 1)
         die('The domain you are removing does not exist');
-    update_proxy_conf();
+    return update_proxy_conf();
 }
 
 function check_hostname_and_fail($hostname) {
@@ -288,19 +298,24 @@ function update_hostname($hostname) {
 
     lock_shell_or_die($id);
     checked_mysql_query("UPDATE shellinfo SET `hostname`='$hostname' WHERE `id`='$id'");
-    set_vz($a['nodeno'], $id, 'hostname', $hostname);
+    $status = set_vz($a['nodeno'], $id, 'hostname', $hostname);
     unlock_shell($id);
+    if (!$status)
+        return false;
 
     if (strlen($a['hostname']) > 0)
         delete_dns($a['hostname']);
-    update_dns($hostname, $id);
+    return update_dns($hostname, $id);
 }
 
 function move_endpoints($old_node, $old_id, $new_node, $new_id) {
     $rs = checked_mysql_query("SELECT * FROM endpoint WHERE `id`='$old_id'");
     while ($row = mysql_fetch_array($rs)) {
-        remove_endpoint($old_id, $old_node, $row['public_endpoint'], $row['private_endpoint']);
-        add_endpoint($new_id, $new_node, $row['public_endpoint'], $row['private_endpoint']);
+        if (!remove_endpoint($old_id, $old_node, $row['public_endpoint'], $row['private_endpoint']))
+            return false;
+        if (!add_endpoint($new_id, $new_node, $row['public_endpoint'], $row['private_endpoint']))
+            return false;
     }
     checked_mysql_query("UPDATE endpoint SET `id`='$new_id' WHERE `id`='$old_id'");
+    return true;
 }

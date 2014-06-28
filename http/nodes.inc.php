@@ -96,7 +96,7 @@ function run_in_node($nodeno, $cmd) {
     if ($errno != 0) {
         report_sys_admin("Command in freeshell node returned non-zero status $errno\nSTART TIME: $start_time\nELAPSED TIME: $elapsed_time\nFULL COMMAND:\n$local_cmd\nOUTPUT:\n$output\n");
     }
-    return $output;
+    return array($errno, $output);
 }
 
 function hide_password($str, $password) {
@@ -114,27 +114,36 @@ function ssh_log_before($nodeno, $action, $cmd, $time, $password_to_hide) {
     return mysql_insert_id();
 }
 
-function ssh_log_after($id, $output, $password_to_hide) {
+function ssh_log_after($id, $errno, $output, $password_to_hide) {
     if ($password_to_hide) {
         $output = hide_password($output, $password_to_hide);
     }
-    global $errno, $elapsed_time;
+    global $elapsed_time;
     $sql = "UPDATE ssh_log SET `output`='".addslashes($output)."', `return_status`='$errno', `elapsed_time`='$elapsed_time' WHERE `id`='$id'";
     checked_mysql_query($sql);
-    if (mysql_affected_rows() != 1)
+    if (mysql_affected_rows() != 1) {
         report_sys_admin("Failed to save ssh log:\n$cmd");
+        return false;
+    }
+    return true;
 }
 
-function call_monitor($nodeno, $action, $param, $password_to_hide = "") {
+function __call_monitor($nodeno, $action, $param, $password_to_hide = "") {
     if (!is_numeric($nodeno))
         return;
     $cmd = "$action $param";
     $time = time();
     $log_id = ssh_log_before($nodeno, $action, $cmd, $time, $password_to_hide);
-    $output = run_in_node($nodeno, $cmd);
-    ssh_log_after($log_id, $output, $password_to_hide);
-    return $output;
+    list($errno, $output) = run_in_node($nodeno, $cmd);
+    ssh_log_after($log_id, $errno, $output, $password_to_hide);
+    return array($errno, $output);
 }
+
+function call_monitor($nodeno, $action, $param, $password_to_hide = "") {
+    list($errno, $output) = __call_monitor($nodeno, $action, $param, $password_to_hide);
+    return ($errno == 0);
+}
+
 
 function destroy_vz($nodeno, $id, $keep_dirs = "") {
     call_monitor($nodeno, "force-stop", "$id");
@@ -148,7 +157,7 @@ function delete_dns($hostname) {
     $ns->delete('*.'.get_shell_v6_dns_name($hostname), 'AAAA');
     $ns->delete(get_shell_v4_dns_name($hostname), 'A');
     $ns->delete('*.'.get_shell_v4_dns_name($hostname), 'A');
-    $ns->commit();
+    return $ns->commit();
 }
 
 function update_dns($hostname, $appid) {
@@ -159,20 +168,23 @@ function update_dns($hostname, $appid) {
     $ns->replace('*.'.get_shell_v6_dns_name($hostname), 'AAAA', get_shell_ipv6($appid));
     $ns->replace(get_shell_v4_dns_name($hostname), 'A', get_shell_ipv4($appid));
     $ns->replace('*.'.get_shell_v4_dns_name($hostname), 'A', get_shell_ipv4($appid));
-    $ns->commit();
+    return $ns->commit();
 }
 
 function create_vz($nodeno, $id, $hostname, $password, $mem_limit, $diskspace_softlimit, $diskspace_hardlimit, $distribution) {
-    update_dns($hostname, $id);
+    if (!update_dns($hostname, $id))
+        return false;
     return call_monitor($nodeno, "create-vz", "$id $hostname $password $mem_limit $diskspace_softlimit $diskspace_hardlimit $distribution", $password);
 }
 
 function copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution) {
-    update_dns($hostname, $new_id);
-    $ret = call_monitor($old_node, "copy-vz", "$old_id $new_node $new_id");
-    set_vz($new_node, $new_id, 'hostname', $hostname);
-    activate_vz($new_node, $new_id, $distribution);
-    return $ret;
+    if (!update_dns($hostname, $new_id))
+        return false;
+    if (!call_monitor($old_node, "copy-vz", "$old_id $new_node $new_id"))
+        return false;
+    if (!set_vz($new_node, $new_id, 'hostname', $hostname))
+        return false;
+    return activate_vz($new_node, $new_id, $distribution);
 }
 
 function move_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution) {
@@ -195,35 +207,41 @@ function move_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distributio
 
 function reactivate_vz($nodeno, $id, $distribution) {
     global $master_node;
-    call_monitor($nodeno, "activate-vz", "$id ".get_node_ipv4($nodeno)." $distribution renew");
+    if (!call_monitor($nodeno, "activate-vz", "$id ".get_node_ipv4($nodeno)." $distribution renew"))
+        return false;
 	if ($nodeno != $master_node)
-		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ipv4($master_node)." ".get_node_ipv4($nodeno)." renew");
+		if (!call_monitor($master_node, "nat-entry-node", "$id ".get_node_ipv4($master_node)." ".get_node_ipv4($nodeno)." renew"))
+            return false;
+    return true;
 }
 
 function add_node_port_forwarding($nodeno, $public_port, $shellid, $private_port, $protocol = 'tcp') {
-    call_monitor($nodeno, "port-forward", "add $public_port $shellid $private_port $protocol");
+    return call_monitor($nodeno, "port-forward", "add $public_port $shellid $private_port $protocol");
 }
 
 function remove_node_port_forwarding($nodeno, $public_port, $shellid, $private_port, $protocol = 'tcp') {
-    call_monitor($nodeno, "port-forward", "remove $public_port $shellid $private_port $protocol");
+    return call_monitor($nodeno, "port-forward", "remove $public_port $shellid $private_port $protocol");
 }
 
 function add_local_port_forwarding($local_port, $remote_ip, $remote_port, $protocol = 'tcp') {
     if ($local_port < 1024)
         die('Request tainted');
-    local_sudo("/usr/local/bin/port-forward add $local_port $remote_ip $remote_port $protocol");
+    list($errno, $output) = local_sudo("/usr/local/bin/port-forward add $local_port $remote_ip $remote_port $protocol");
+    return ($errno == 0);
 }
 
 function remove_local_port_forwarding($local_port, $remote_ip, $remote_port, $protocol = 'tcp') {
-    local_sudo("/usr/local/bin/port-forward remove $local_port $remote_ip $remote_port $protocol");
+    list($errno, $output) = local_sudo("/usr/local/bin/port-forward remove $local_port $remote_ip $remote_port $protocol");
+    return ($errno == 0);
 }
 
 function add_ssh_port_forwarding($id, $nodeno) {
-    add_local_port_forwarding(appid2gsshport($id), get_shell_ipv4($id), 22);
+    return add_local_port_forwarding(appid2gsshport($id), get_shell_ipv4($id), 22);
 }
 
 function add_tunnel_ip_route($id, $nodeno) {
-    local_sudo("/usr/local/bin/tunnel-ip-route $id $nodeno ".get_shell_ipv4($id));
+    list($errno, $output) = local_sudo("/usr/local/bin/tunnel-ip-route $id $nodeno ".get_shell_ipv4($id));
+    return ($errno == 0);
 }
 
 function is_valid_public_endpoint($port) {
@@ -243,8 +261,7 @@ function add_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
         return false;
     if (!is_valid_transport_protocol($protocol))
         return false;
-    add_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol);
-    return true;
+    return add_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol);
 }
 
 function remove_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
@@ -252,25 +269,31 @@ function remove_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
         return false;
     if (!is_valid_transport_protocol($protocol))
         return false;
-    remove_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol);
-    return true;
+    return remove_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol);
 }
 
 function remove_all_endpoints($nodeno, $id) {
+    $status = true;
     $rs = checked_mysql_query("SELECT * FROM endpoint WHERE `id`='$id'");
     while ($row = mysql_fetch_array($rs)) {
-        remove_endpoint($id, $nodeno, $row['public_port'], $row['private_port'], $row['protocol']);
+        if (!remove_endpoint($id, $nodeno, $row['public_port'], $row['private_port'], $row['protocol']))
+            $status = false;
     }
+    return $status;
 }
 
 function activate_vz($nodeno, $id, $distribution) {
     global $master_node;
     checked_mysql_query("UPDATE shellinfo SET isactive=1 WHERE id=$id");
-    call_monitor($nodeno, "activate-vz", "$id ".get_node_ipv4($nodeno)." $distribution");
+    if (!call_monitor($nodeno, "activate-vz", "$id ".get_node_ipv4($nodeno)." $distribution"))
+        return false;
 	if ($nodeno != $master_node)
-		call_monitor($master_node, "nat-entry-node", "$id ".get_node_ipv4($master_node)." ".get_node_ipv4($nodeno));
-    add_tunnel_ip_route($id, $nodeno);
-    add_ssh_port_forwarding($id, $nodeno);
+		if (!call_monitor($master_node, "nat-entry-node", "$id ".get_node_ipv4($master_node)." ".get_node_ipv4($nodeno)))
+            return false;
+    if (!add_tunnel_ip_route($id, $nodeno))
+        return false;
+    if (!add_ssh_port_forwarding($id, $nodeno))
+        return false;
 }
 
 function control_vz($nodeno, $action, $id) {
@@ -282,7 +305,9 @@ function set_vz($nodeno, $id, $option, $value) {
 }
 
 function get_node_info($nodeno, $id) {
-    $str = call_monitor($nodeno, 'node-info', $id);
+    list($errno, $str) = __call_monitor($nodeno, 'node-info', $id);
+    if ($errno)
+        return null;
     $FS = "-----FREESHELL-FIELD-----";
     $LS = "-----FREESHELL-LINE-----";
     $lines = explode($LS, $str);

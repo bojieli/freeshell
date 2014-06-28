@@ -36,9 +36,21 @@ checked_mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
 </div>
 <?php
 fastcgi_finish_request();
-delete_dns($info['hostname']);
-update_proxy_conf();
-destroy_vz($info['nodeno'], $info['shellid']);
-remove_all_endpoints($info['nodeno'], $info['shellid']);
+function do_destroy($info) {
+    if (!delete_dns($info['hostname']))
+        return false;
+    if (!update_proxy_conf())
+        return false;
+    if (!destroy_vz($info['nodeno'], $info['shellid']))
+        return false;
+    if (!remove_all_endpoints($info['nodeno'], $info['shellid']))
+        return false;
+    return true;
+}
+$status = do_destroy($info);
 unlock_shell($info['shellid']);
-delete_freeshell_in_db($info['shellid']);
+if ($status) {
+    delete_freeshell_in_db($info['shellid']);
+} else {
+    send_manage_notify_email(false, $info['email'], $info['shellid'], 'DESTROY');
+}

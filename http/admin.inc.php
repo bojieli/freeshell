@@ -52,6 +52,13 @@ function send_activate_mail($email, $appid, $token) {
     mail($email, $title, $body, $headers);
 }
 
+function send_register_fail_mail($email) {
+    global $headers, $footer;
+    $title = "Register Failed for USTC freeshell";
+    $body = greetings($appid)."Sorry that your freeshell failed to be created. It might because the hard disk is full or the network is temporarily down. Please try again later.".$footer;
+    mail($email, $title, $body, $headers);
+}
+
 function send_reset_root_email($email, $appid, $new_passwd) {
     global $headers, $footer;
     $title = "New Root Password for your Freeshell";
@@ -63,6 +70,13 @@ function send_reinstall_success_email($email, $appid, $hostname, $password) {
     global $headers, $footer;
     $title = "Your Freeshell is Reinstalled";
     $body = greetings($appid)."Freeshell ID $appid is reinstalled.\n\nNew hostname: $hostname\nNew root password: $password\n\nLogin IP and port does not change, so you may need to edit ~/.ssh/known_hosts to avoid conflicting keys. If you forget how to SSH, please login to ".site_baseurl()." for info.\nAs a special remainder, please change root password as soon as possible.".$footer;
+    mail($email, $title, $body, $headers);
+}
+
+function send_reinstall_failure_email($email, $appid) {
+    global $headers, $footer;
+    $title = "Your Freeshell failed to Reinstall";
+    $body = greetings($appid)."Sorry that your freeshell failed to reinstall. It may because the hard disk is full, or the network is temporarily down. Please try again later.".$footer;
     mail($email, $title, $body, $headers);
 }
 
@@ -81,10 +95,12 @@ function need_email_verification($name, $msg, $action, $param, $email, $appid) {
     return "Since this is a danger action, please check your mailbox and follow the link in confirmation email.";
 }
 
-function send_manage_notify_email($email, $appid, $action, $additional_info = "") {
+function send_manage_notify_email($status, $email, $appid, $action, $additional_info = "") {
     global $headers, $footer;
-    $title = "Your freeshell has $action";
-    $body = greetings($appid)."This email is to notify you that shell ID $appid has been $action via Web control panel ".site_baseurl().".\n\n$additional_info\nIf you did not request this action, maybe your web account is stolen, please contact us.".$footer;
+    $title = "Your freeshell ".($status ? "succeeded in " : "FAILED TO")." $action";
+    if (!$status)
+        $additional_info = "This failure may be caused by a temporary network failure. Please try again later. The freeshell developers will be awared of this issue.\n".$additional_info;
+    $body = greetings($appid)."This email is to notify you that shell ID $appid ".($status ? "has been" : "FAILED TO")." $action via Web control panel ".site_baseurl().".\n\n$additional_info\nIf you did not request this action, maybe your web account is stolen, please contact us.".$footer;
     mail($email, $title, $body, $headers);
 }
 

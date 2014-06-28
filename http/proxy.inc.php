@@ -5,10 +5,12 @@ include_once "nodes.inc.php";
 function update_proxy_conf() {
     $localfile = "/etc/nginx/autogen-conf/freeshell.conf";
     $fp = fopen($localfile, "w");
+    if (!$fp)
+        return false;
     fwrite($fp, nginx_conf_gen_for_proxy());
     fclose($fp);
     chmod($localfile, 0644);
-    local_update_proxy_conf();
+    return local_update_proxy_conf();
     //ssh_update_proxy_conf($localfile);
 }
 
@@ -74,19 +76,25 @@ server {
 }
 
 function local_update_proxy_conf() {
-    return local_sudo("/usr/local/bin/reload-nginx");
+    list($errno, $output) = local_sudo("/usr/local/bin/reload-nginx");
+    return ($errno == 0);
 }
 
 function runas_monitor($cmd) {
-    return local_sudo("-u scgyshell-monitor $cmd");
+    list($errno, $output) = local_sudo("-u scgyshell-monitor $cmd");
+    return ($errno == 0);
 }
 
 function ssh_update_proxy_conf($tmpfile) {
     $host = '202.38.70.159';
     $userhost = "scgyshell-client@$host";
-    runas_monitor("/usr/bin/scp $tmpfile $userhost:~/freeshell-proxy");
-    runas_monitor("/usr/bin/ssh $userhost chmod 644 freeshell-proxy");
-    runas_monitor("/usr/bin/ssh $userhost sudo /etc/init.d/nginx reload");
+    if (!runas_monitor("/usr/bin/scp $tmpfile $userhost:~/freeshell-proxy"))
+        return false;
+    if (!runas_monitor("/usr/bin/ssh $userhost chmod 644 freeshell-proxy"))
+        return false;
+    if (!runas_monitor("/usr/bin/ssh $userhost sudo /etc/init.d/nginx reload"))
+        return false;
+    return true;
 }
 
 function subdomain_check_norepeat($domain) {
