@@ -145,7 +145,7 @@ function subdomain_check($id, $domain) {
 }
 
 function cname_check_norepeat($domain) {
-    if (!preg_match('/^([a-z0-9-]+\.)+[a-z]+$/', $domain))
+    if (!preg_match('/^([a-z0-9-]+\.)+[a-z0-9-]+$/', $domain))
         return 1;
     if (strstr($domain, 'freeshell.ustc.edu.cn') ||
         strstr($domain, 'blog.ustc.edu.cn') ||
