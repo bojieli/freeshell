@@ -155,7 +155,14 @@ function cname_check_norepeat($domain) {
         return 2;
     if ($domain == "edu.cn" || $domain == "ustc.edu.cn")
         return 2;
-    return 0;
+    require_once "tld.inc.php";
+    $parts = explode('.', $domain);
+    $count = count($parts);
+    if (is_tld($parts[$count - 1]))
+        return 0;
+    if (is_tld($parts[$count - 2] . "." . $parts[$count - 1]))
+        return 0;
+    return 1;
 }
 
 function cname_check($id, $domain) {
