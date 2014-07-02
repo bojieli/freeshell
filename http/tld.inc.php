@@ -1,6 +1,10 @@
 <?php
 function get_tld_list() {
     return array(
+  'tk',
+  'ml',
+  'ga',
+  'cf',
   '2000.hu',
   '6bone.pl',
   'aa.no',
