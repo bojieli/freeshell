@@ -31,10 +31,7 @@ function is_valid_nodeno($nodeno) {
 }
 
 function node_default_mem_limit($nodeno) {
-    if ($nodeno == 3)
-        return '8G';
-    else
-        return '12G';
+    return '4G';
 }
 
 function get_node_ipv4($nodeno) {
