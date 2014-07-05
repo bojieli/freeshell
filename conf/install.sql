@@ -16,9 +16,13 @@ CREATE TABLE shellinfo (
     `distribution` VARCHAR(255) NOT NULL,
     `40x_page` TEXT,
     `50x_page` TEXT,
+    `is_public` BOOL NOT NULL DEFAULT FALSE,
+    `public_name` VARCHAR(255),
+    `public_description` TEXT,
     PRIMARY KEY (`id`),
     KEY key_nodeno (`nodeno`),
-    KEY key_email (`email`)
+    KEY key_email (`email`),
+    KEY key_is_public (`is_public`)
 ) AUTO_INCREMENT = 101;
 
 CREATE TABLE tickets (

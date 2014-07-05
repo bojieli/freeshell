@@ -72,3 +72,10 @@ function check_keep_dirs($dirlist) {
     }
     return 0;
 }
+
+function is_in_gallery($id) {
+    if (!is_numeric($id) || $id <= 0)
+        return false;
+    $is_public = mysql_result(checked_mysql_query("SELECT is_public FROM shellinfo WHERE id='$id'"), 0);
+    return ($is_public == 1);
+}

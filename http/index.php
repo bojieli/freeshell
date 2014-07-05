@@ -35,6 +35,7 @@ $shellnum = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo"), 
 <script src="js/arouse.js" type="text/javascript"></script>
 <script src="js/easing.js" type="text/javascript"></script>
 <script src="js/misc.js" type="text/javascript"></script>
+<script src="js/register.js" type="text/javascript"></script>
 
 </head>
 
@@ -128,11 +129,14 @@ $shellnum = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo"), 
                 <option>7</option>
                 </select>
             </p>
-            <p><span>Distribution:</span><select name="distribution" id="distribution">
+            <p><span>Distribution:</span><select name="distribution" id="distribution" onclick="distribution_click()">
                 <?php echo distribution_option_html(); ?>
+                <option value="gallery">Create from Gallery (NEW)</option>
                 </select>
+                <span class="regcheck" id="galleryfail"></span></p>
             </p>
             
+            <div id="gallery" style="display:none"></div>
             <div id="regsend">
         		<p>Register!</p>
         	</div>

@@ -74,8 +74,12 @@ $(document).ready(function(){
 	 			}, 1500,'easeInOutExpo'/*,function(){$("#servstate,#welcome,#header").fadeOut()}*/);
 		$("#regsend").bind('click',function(data){
                 console.log(regdata);
-				if(regdata.email&&regdata.pass&&regdata.host)
+                if ($('#distribution').val() == 'gallery' && ! $('input[name=gallery-id]:checked', '#regform').val()) {
+                    $('#galleryfail').html('Please select one item from the gallery below!');
+                }
+				else if(regdata.email&&regdata.pass&&regdata.host) {
 					$("#regform").submit();
+                }
 				else
 				{
                     verify('email', $('#regemail').val());

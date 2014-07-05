@@ -178,12 +178,18 @@ function create_vz($nodeno, $id, $hostname, $password, $mem_limit, $diskspace_so
     return call_monitor($nodeno, "create-vz", "$id $hostname $password $mem_limit $diskspace_softlimit $diskspace_hardlimit $distribution", $password);
 }
 
-function copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution) {
+function copy_vz_without_activate($old_node, $old_id, $new_node, $new_id, $hostname) {
     if (!update_dns($hostname, $new_id))
         return false;
     if (!call_monitor($old_node, "copy-vz", "$old_id $new_node $new_id"))
         return false;
     if (!set_vz($new_node, $new_id, 'hostname', $hostname))
+        return false;
+    return true;
+}
+
+function copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution) {
+    if (!copy_vz_without_activate($old_node, $old_id, $new_node, $new_id, $hostname))
         return false;
     return activate_vz($new_node, $new_id, $distribution);
 }
@@ -286,6 +292,8 @@ function remove_all_endpoints($nodeno, $id) {
 function activate_vz($nodeno, $id, $distribution) {
     global $master_node;
     checked_mysql_query("UPDATE shellinfo SET isactive=1 WHERE id=$id");
+    if (mysql_affected_rows() != 1)
+        return false; // may be not exist or already activated
     if (!call_monitor($nodeno, "activate-vz", "$id ".get_node_ipv4($nodeno)." $distribution"))
         return false;
 	if ($nodeno != $master_node)
@@ -295,10 +303,11 @@ function activate_vz($nodeno, $id, $distribution) {
         return false;
     if (!add_ssh_port_forwarding($id, $nodeno))
         return false;
+    return true;
 }
 
-function control_vz($nodeno, $action, $id) {
-    return call_monitor($nodeno, $action, $id);
+function control_vz($nodeno, $action, $id, $password_to_hide = "") {
+    return call_monitor($nodeno, $action, $id, $password_to_hide);
 }
 
 function set_vz($nodeno, $id, $option, $value) {

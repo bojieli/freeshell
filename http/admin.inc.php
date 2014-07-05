@@ -55,7 +55,7 @@ function send_activate_mail($email, $appid, $token) {
 function send_register_fail_mail($email) {
     global $headers, $footer;
     $title = "Register Failed for USTC freeshell";
-    $body = greetings($appid)."Sorry that your freeshell failed to be created. It might because the hard disk is full or the network is temporarily down. Please try again later.".$footer;
+    $body = "Hello,\n\nSorry that your freeshell failed to be created. It might because the hard disk is full or the network is temporarily down. Please try again later.".$footer;
     mail($email, $title, $body, $headers);
 }
 
@@ -208,7 +208,7 @@ function copy_freeshell_config($old_id, $new_id)
         $values[] = "`$field`='".addslashes($info[$field])."'";
     }
     checked_mysql_query("UPDATE shellinfo SET ".implode(',', $values)." WHERE id=$new_id");
-    return (mysql_affected_rows() == 1);
+    return (mysql_errno() == 0);
 }
 
 /* return 0 for success
@@ -236,6 +236,17 @@ function db_remove_endpoint($id, $public_endpoint, $private_endpoint, $protocol)
 
 function db_remove_all_endpoints($id) {
     checked_mysql_query("DELETE FROM endpoint WHERE `id`='$id'");
+}
+
+function db_update_public($shellid, $is_public, $name, $description) {
+    $name = trim($name);
+    $description = trim($description);
+    if (strlen($name) >= 200 || ($is_public && strlen($name) == 0))
+        return false;
+    if (strlen($description) >= 3000)
+        return false;
+    checked_mysql_query("UPDATE shellinfo SET is_public=".($is_public ? 'true' : 'false').", public_name='".mysql_real_escape_string($name)."', public_description='".mysql_real_escape_string($description)."' WHERE id='".$shellid."'");
+    return (mysql_affected_rows() == 1);
 }
 
 function try_lock_shell($id) {

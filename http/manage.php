@@ -34,7 +34,15 @@ switch ($_POST['action']) {
         reset_passwd($email, $a['nodeno'], $id);
         break;
     case 'reinstall':
-        if (check_distribution($_POST['distribution']))
+        $distribution = $_POST['distribution'];
+        if ($distribution == 'gallery') {
+            if (!is_in_gallery($_POST['gallery-id'])) {
+                alert('No such item in gallery.');
+            }
+            $gallery_id = intval($_POST['gallery-id']);
+            $distribution = mysql_result(checked_mysql_query("SELECT distribution FROM shellinfo WHERE id='$gallery_id'"), 0);
+        }
+        if (check_distribution($distribution))
             die("Invalid Distribution!");
 
         $keep_dir_str = trim($_POST['keep_directories']);
@@ -62,12 +70,13 @@ switch ($_POST['action']) {
                 die("Too many directories to keep");
         }
 
+        $distribution_param = ($_POST['distribution'] == 'gallery') ? "gallery-$gallery_id" : $distribution;
         echo need_email_verification("Reinstalling System",
             "Distribution: ".$_POST['distribution']."\n".
             "WARNING: THIS OPERATION WILL ERASE ALL DATA ON YOUR FREESHELL".
                 ($keep_dir_str ? " EXCEPT THE FOLLOWING DIRECTORIES:\n".implode("\n", $keep_dirs) : "."),
             "reinstall-freeshell.php",
-            $_POST['distribution']."\n".$keep_dir_str,
+            "$distribution_param\n$keep_dir_str",
             $email, $id);
         break;
     case 'destroy':
@@ -182,6 +191,16 @@ movefinish:
         $status = remove_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
         unlock_shell($id);
         send_manage_notify_email($status, $email, $id, "Removed ".strtoupper($_POST['protocol'])." Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
+        break;
+    case 'update-public':
+        $is_public = ($_POST['is_public'] == 1);
+        if ($a['is_public'] == $is_public && $_POST['public_name'] == $a['public_name'] && $_POST['public_description'] == $a['public_description'])
+            die('Nothing changed');
+        $status = db_update_public($id, $is_public, $_POST['public_name'], $_POST['public_description']);
+        if (!$status)
+            die('Operation failed. Please do not use name and description that are too long.');
+        if ($a['is_public'] != $is_public)
+            send_manage_notify_email($status, $email, $id, ($_POST['is_public'] == 1 ? 'Added to' : 'Removed from')." public gallery");
         break;
     default:
         die('Unsupported action');

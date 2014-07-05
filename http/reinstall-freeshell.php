@@ -39,6 +39,14 @@ if (empty($info['param']))
 list($distribution, $keep_dirs) = explode("\n", $info['param']);
 
 do_reinstall:
+$gallery_id = null;
+if (preg_match('/^gallery-([0-9]+)$/', $distribution, $matches)) {
+    $gallery_id = $matches[1];
+    if (!is_in_gallery($gallery_id)) {
+        alert('No such item in gallery.');
+    }
+    $distribution = mysql_result(checked_mysql_query("SELECT distribution FROM shellinfo WHERE id='$gallery_id'"), 0);
+}
 if (check_distribution($distribution))
     die('Invalid distribution!');
 if (check_keep_dirs($keep_dirs))
@@ -70,7 +78,17 @@ if ($info['distribution'] != $distribution) {
 </div>
 <?php
 fastcgi_finish_request();
-function do_reinstall($info, $password) {
+
+function do_copy_from_gallery($info, $password, $gallery_id, $keep_dirs) {
+    $gallery_node = mysql_result(checked_mysql_query("SELECT nodeno FROM shellinfo WHERE id='$gallery_id'"), 0);
+    return destroy_vz($info['nodeno'], $info['shellid'], $keep_dirs)
+        && copy_vz_without_activate($gallery_node, $gallery_id, $info['nodeno'], $info['shellid'], $info['hostname'])
+        && copy_freeshell_config($gallery_id, $info['shellid'])
+        && control_vz($info['nodeno'], 'reset-root', $info['shellid']." ".$password, $password)
+        && reactivate_vz($info['nodeno'], $info['shellid'], $info['distribution']);
+}
+
+function do_reinstall($info, $password, $keep_dirs) {
     if (!destroy_vz($info['nodeno'], $info['shellid'], $keep_dirs))
         return false;
     if (!create_vz($info['nodeno'], $info['shellid'], $info['hostname'], $password, node_default_mem_limit($info['nodeno']), $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution']))
@@ -79,8 +97,12 @@ function do_reinstall($info, $password) {
         return false;
     return true;
 }
+
 $password = random_string(12);
-$status = do_reinstall($info, $password);
+if ($gallery_id)
+    $status = do_copy_from_gallery($info, $password, $gallery_id, $keep_dirs);
+else
+    $status = do_reinstall($info, $password, $keep_dirs);
 unlock_shell($info['shellid']);
 if ($status) {
     send_reinstall_success_email($info['email'], $info['shellid'], $info['hostname'], $password);

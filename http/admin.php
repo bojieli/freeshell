@@ -80,6 +80,26 @@ p.note {
 .smaller {
     font-size: 16px !important;
 }
+#gallery p {
+    margin: 0px;
+    font-size: 16px;
+}
+.gallery-option {
+    padding-top: 5px;
+    border-bottom: 1px solid;
+    cursor: pointer;
+}
+.gallery-option p {
+    margin: 5px !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+}
+.gallery-option-selected {
+    background-color: #C44D58 !important;
+}
+.gallery-option-selected p {
+    color: white !important;
+}
 </style>
 
 <p>Welcome, <?=$_SESSION['email']?> &nbsp;&nbsp;
@@ -193,14 +213,18 @@ else if ($free_diskspace < 500 * 1024) {
     <?php if (!is_supported_distribution($info['distribution'])) {
         echo 'Your current distribution is no longer supported! <a href="faq.html#nonsupported-dist" target="_blank">Details</a><br />';
     } ?>
-    <select id="reinstall-distribution">
+    <select id="distribution" onclick="distribution_click()">
     <?php echo distribution_option_html($info['distribution']); ?>
+    <option value="gallery">Create from Gallery (NEW)</option>
     </select>
   </span>
 </li>
 <li>
   <span class="h">Keep Directories</span>
   <span class="c"><input type="text" id="reinstall-keep-directories" value="/home,/root" /> (separate by ',')</span>
+</li>
+<li>
+  <div id="gallery" style="display:none"></div>
 </li>
 <li>
   <span class="h"><button id="btn-manage-reinstall" onclick="manage('reinstall')">Reinstall System</button></span>
@@ -307,6 +331,15 @@ while ($row = mysql_fetch_array($rs)) {
 <p class="note">Please use <code>ssh.freeshell.ustc.edu.cn</code> to access, the IP address is subject to change.<br />Public port must be in range 40000-59999.</p>
 
 <div id="progbar"></div>
+<h2>Public Gallery</h2>
+<table>
+<tr><td colspan="2"><input id="is_public" name="is_public" type="checkbox" <?=$info['is_public'] ? 'checked="checked"' : ''?>> <label for="is_public">I want to add my freeshell to public gallery</label></td></tr>
+<tr><th align="left">Name</th><td><input id="public_name" name="public_name" type="text" value="<?=htmlspecialchars($info['public_name'])?>" /></td></tr>
+<tr><th align="left" style="vertical-align:top">Description</th><td><textarea id="public_description" name="public_description" cols="40" rows="5"><?=htmlspecialchars($info['public_description'])?></textarea></td></tr>
+<tr><td colspan="2"><button id="btn-update-public" onclick="updatePublic()">Update</button></td></tr>
+</table>
+
+<div id="progbar"></div>
 <h2>Server status</h2>
 <ul class="table">
   <li><span class="h">Node</span><strong>#<?=$info['nodeno']?></strong>
@@ -350,6 +383,7 @@ foreach ($node as $key => $value) {
 </div>
 </div>
 <script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/register.js" type="text/javascript"></script>
 <script>
 function ajaxSuccessFunc(msg){
     if (msg.length > 0)
@@ -370,10 +404,6 @@ function ajaxManage(data) {
     });
 }
 function manage(action) {
-    if (!confirm("Do you really want to " + action + " your freeshell?"))
-        return;
-    $('#btn-manage-'+action).attr('disabled', true);
-    $('#btn-manage-'+action).html('Processing...');
     var data = {appid: <?=$info['id']?>, action: action};
     if (action == "copy") {
         data.nodeno = $('#copy-nodeno').val();
@@ -383,9 +413,20 @@ function manage(action) {
         data.nodeno = $('#move-nodeno').val();
     }
     else if (action == "reinstall") {
-        data.distribution = $('#reinstall-distribution').val();
+        data.distribution = $('#distribution').val();
         data.keep_directories = $('#reinstall-keep-directories').val();
+        if (data.distribution == "gallery") {
+            data['gallery-id'] = $('input[name=gallery-id]:checked').val();
+            if (!data['gallery-id']) {
+                alert('Please select one item from the gallery!');
+                return;
+            }
+        }
     }
+    if (!confirm("Do you really want to " + action + " your freeshell?"))
+        return;
+    $('#btn-manage-'+action).attr('disabled', true);
+    $('#btn-manage-'+action).html('Processing...');
     ajaxManage(data);
 }
 function removeEndpoint(public_endpoint, private_endpoint, protocol) {
@@ -407,6 +448,24 @@ function addEndpoint() {
         public_endpoint: $('#public-endpoint').val(),
         private_endpoint: $('#private-endpoint').val(),
         protocol: $('#endpoint-protocol').val(),
+    });
+}
+function updatePublic() {
+    var is_public = $('#is_public').attr('checked') ? 1 : 0;
+    var public_name = $('#public_name').val();
+    if (is_public && !public_name) {
+        alert('Public Name must not be empty');
+        return;
+    }
+    var public_description = $('#public_description').val();
+    $('#btn-update-public').attr('disabled', true);
+    $('#btn-update-public').html('Processing...');
+    ajaxManage({
+        appid: <?=$info['id']?>,
+        action: 'update-public',
+        is_public: is_public,
+        public_name: public_name,
+        public_description: public_description,
     });
 }
 function removeCname(domain) {
