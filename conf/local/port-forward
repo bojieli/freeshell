@@ -27,15 +27,13 @@ if [ "$action" == "add" ]; then
         iptables_replace PREROUTING -d $local_ip/32 -p $protocol --dport $local_port -j DNAT --to-destination $remote_ip:$remote_port
     done
     #iptables_replace POSTROUTING -d $remote_ip/32 -p $protocol --dport $remote_port -j MASQUERADE
-    exit 0
-fi
-
-if [ "$action" == "remove" ]; then
+elif [ "$action" == "remove" ]; then
     for local_ip in $local_ips; do
         iptables_delete PREROUTING -d $local_ip/32 -p $protocol --dport $local_port -j DNAT --to-destination $remote_ip:$remote_port
     done
     #iptables_delete POSTROUTING -d $remote_ip/32 -p $protocol --dport $remote_port -j MASQUERADE
-    exit 0
+else
+    exit 1 # unsupported action
 fi
 
-exit 1
+iptables-save > /srv/smartproxy/blog-specific/iptables-save
