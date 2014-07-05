@@ -42,3 +42,5 @@ if [ -n "$(vzctl status $oldid | grep running)" ]; then
     do_sync
     timeout -k 30 10 vzctl chkpnt $oldid --resume
 fi
+
+ssh $SSH_PARAMS $HOSTNAME $(dirname $0)/recover-backup.sh $newid
