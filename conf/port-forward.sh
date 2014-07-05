@@ -13,10 +13,12 @@ shell_port=$4
 protocol=$5
 
 function iptables_delete(){
-    iptables -t nat -D $@
+    while true; do
+        iptables -t nat -D $@ || break
+    done
 }
 function iptables_replace(){
-    iptables -t nat -D $@
+    iptables_delete $@
     iptables -t nat -A $@
 }
 
