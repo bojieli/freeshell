@@ -6,6 +6,16 @@ include_once "admin.inc.php";
 include_once "proxy.inc.php";
 include_once "db.php";
 
+if (isset($_SESSION['isadmin']) && $_SESSION['isadmin'] && isset($_GET['shellid'])) {
+    $shell_id = intval($_GET['shellid']);
+    $info = mysql_fetch_array(checked_mysql_query("SELECT *, id AS shellid FROM shellinfo WHERE id='$shell_id'"));
+    if (empty($info))
+        die('no such freeshell');
+    $ticket_id = -1;
+    report_sys_admin("Administrator ".$_SESSION['email']." destroyed freeshell #".$shell_id);
+    goto do_destroy;
+}
+
 if (!is_numeric($_GET['id']))
     die('Invalid request');
 $ticket_id = $_GET['id'];
@@ -23,6 +33,7 @@ if (!isset($_GET['token']) || !isset($info['token']) || sha1($info['token']) !==
 if ($info['action'] !== 'destroy-freeshell.php')
     die('This token is not intended for destroying freeshell. Please login to Control Panel and try again.');
 
+do_destroy:
 lock_shell_or_die($info['shellid']);
 checked_mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
 ?>
