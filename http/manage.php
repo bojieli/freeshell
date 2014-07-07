@@ -87,7 +87,7 @@ switch ($_POST['action']) {
             $email, $id);
         break;
     case 'update-proxy':
-        $status = update_proxy(trim($_POST['domain']), trim($_POST['40x_page']), trim($_POST['50x_page']));
+        $status = update_proxy(trim($_POST['domain']), trim($_POST['40x_page']), trim($_POST['50x_page']), ($_POST['force_ssl'] ? 1 : 0));
         send_manage_notify_email($status, $email, $id, "Updated HTTP Proxy");
         break;
     case 'add-cname':
@@ -230,7 +230,7 @@ function reset_passwd($email, $nodeno, $id) {
     }
 }
 
-function update_proxy($domain, $page_40x, $page_50x) {
+function update_proxy($domain, $page_40x, $page_50x, $force_ssl) {
     global $id;
 
     $flag = subdomain_check($id, $domain);
@@ -251,8 +251,9 @@ function update_proxy($domain, $page_40x, $page_50x) {
 
     $page_40x = addslashes(sanitize_url($page_40x));
     $page_50x = addslashes(sanitize_url($page_50x));
+    $force_ssl = $force_ssl ? 1 : 0;
 
-    checked_mysql_query("UPDATE shellinfo SET `http_subdomain`='$domain', `40x_page`='$page_40x', `50x_page`='$page_50x' WHERE `id`='$id'");
+    checked_mysql_query("UPDATE shellinfo SET `http_subdomain`='$domain', `40x_page`='$page_40x', `50x_page`='$page_50x', `force_ssl`='$force_ssl' WHERE `id`='$id'");
     return update_proxy_conf();
 }
 

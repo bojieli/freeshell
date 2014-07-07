@@ -63,6 +63,7 @@ CREATE TABLE cname (
     `id` INT(10) NOT NULL,
     `domain` VARCHAR(255) NOT NULL,
     `is_ssl` BOOL NOT NULL DEFAULT FALSE,
+    `force_ssl` BOOL NOT NULL DEFAULT FALSE,
     KEY key_id (`id`),
     UNIQUE KEY key_domain (`domain`),
     FOREIGN KEY (`id`) REFERENCES shellinfo (`id`)

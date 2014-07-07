@@ -271,6 +271,8 @@ else if ($free_diskspace < 500 * 1024) {
 <p class="note">
 http(s)://<input id="http-proxy-subdomain" value="<?=$info['http_subdomain'] ?>" />.freeshell.ustc.edu.cn
 <br />
+<input type="checkbox" id="force-ssl" <?php if($info['force_ssl']) echo 'checked'; ?> /> <label for="force-ssl">Redirect HTTP to HTTPS (force SSL)</label>
+<br />
 40x error page URL: <input id="40x-page" value="<?=$info['40x_page'] ?>" />
 <br />
 50x error page URL: <input id="50x-page" value="<?=$info['50x_page'] ?>" />
@@ -509,6 +511,7 @@ function updateProxy() {
             cname: new_cname,
             '40x_page': new_40x_page,
             '50x_page': new_50x_page,
+            'force_ssl': $('#force-ssl').attr('checked'),
         },
         success: ajaxSuccessFunc,
     });
