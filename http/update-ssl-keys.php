@@ -153,14 +153,14 @@ Upload SSL key and certificate below if you want to use HTTPS for your own domai
 <input type="hidden" name="domain" value="<?=$_REQUEST['domain']?>" />
 <table>
 <tr><th>SSL Key (.key)</th><td><input name="ssl-key" type="file" id="ssl-key" /></td></tr>
-<tr><th>SSL Certificate (.crt)</th><td><input name="ssl-cert" type="file" id="ssl-cert" /></td></tr>
-<tr><th>Intermediate Certificate (.crt)</th><td><input name="ssl-intermediate-cert" type="file" id="ssl-intermediate-cert" /></td></tr>
+<tr><th>SSL Certificate (.crt/.pem)</th><td><input name="ssl-cert" type="file" id="ssl-cert" /></td></tr>
+<tr><th>Intermediate Certificate (.crt/.pem)</th><td><input name="ssl-intermediate-cert" type="file" id="ssl-intermediate-cert" /></td></tr>
 </table>
 <p><button type="submit">Upload Files</button></p>
 <hr />
-<p class="note">The SSL certificate must be globally valid and must match your Site Address.</p>
+<p class="note">The SSL certificate must be in PEM format, must be globally valid and must match your Site Address.</p>
 <p class="note">You need to apply a valid SSL certificate from StartSSL or other certificate authorities.</p>
 <p class="note">The SSL key must be in decrypted form. Some certificate issuers provide keys in encrypted form.</p>
-<p class="note">The intermediate certificate should be retrieved from the certificate issuer.</p>
+<p class="note">The intermediate certificate should be retrieved from the certificate issuer (PEM format).</p>
 </form>
 
