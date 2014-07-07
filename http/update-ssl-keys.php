@@ -115,7 +115,7 @@ function handle_uploaded_ssl_keys($domain) {
 		display_error('Invalid SSL key. Key must be in PEM format.');
 		return false;
 	case 102:
-		display_error('Invalid SSL certificate. Key must be in PEM format.');
+		display_error('Invalid SSL certificate. Certificate must be in PEM format.');
 		return false;
 	case 103:
 		display_error('SSL key and certificate does not match.');
