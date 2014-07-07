@@ -8,7 +8,11 @@ function checked_mysql_query($sql) {
 }
 
 function report_sys_admin($msg) {
-    $headers = 'From: "Freeshell Notification" <noreply@freeshell.ustc.edu.cn>';
+    $headers = 'From: "Freeshell Notification" <noreply@freeshell.ustc.edu.cn>' . "\r\n" .
+        'MIME-Version: 1.0' . "\r\n" .
+        'Content-Type: text/plain; charset=utf-8' . "\r\n" .
+        'Content-Disposition: inline' . "\r\n" .
+        'Content-Transfer-Encoding: 8bit';
     $title = "Freeshell System Alert";
     $body = $msg;
     $admin_email = "servmon@freeshell.ustc.edu.cn";
