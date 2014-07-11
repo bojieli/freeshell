@@ -1,6 +1,9 @@
 <?php
 include_once "nodes.inc.php";
 
+mb_language("uni");
+mb_internal_encoding('UTF-8');
+
 function alert_noredirect($msg) {
     echo "<script>alert('$msg');</script>";
 }
@@ -145,6 +148,8 @@ function check_password($plain, $salted) {
 
 function send_admin_email($email, $appid, $title, $body) {
     global $headers, $footer;
+    if (!mb_check_encoding($title, "ASCII"))
+	    $title=mb_encode_mimeheader($title);
     $body = "Hello freeshell $appid,\n\n".$body.$footer;
     mail($email, $title, $body, $headers);
 }
