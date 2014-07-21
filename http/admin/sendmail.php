@@ -1,3 +1,9 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Freeshell Send Email</title>
+</head>
+<body>
 <?php
 session_start();
 session_write_close();
@@ -82,3 +88,5 @@ if (!empty($_POST['title']) && !empty($_POST['content'])) {
 <tr><td></td><td><button type="submit">Send</button></td></tr>
 </table>
 </form>
+</body>
+</html>

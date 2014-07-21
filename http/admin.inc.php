@@ -1,6 +1,9 @@
 <?php
 include_once "nodes.inc.php";
 
+mb_language("uni");
+mb_internal_encoding('UTF-8');
+
 function alert_noredirect($msg) {
     echo "<script>alert('$msg');</script>";
 }
@@ -34,7 +37,11 @@ function error($msg, $info = "") {
     exit(); // exit after error message is output
 } // end function error
 
-$headers = 'From: "Freeshell Notification" <noreply@freeshell.ustc.edu.cn>';
+$headers = 'From: "Freeshell Notification" <noreply@freeshell.ustc.edu.cn>' . "\r\n" .
+    'MIME-Version: 1.0' . "\r\n" .
+    'Content-Type: text/plain; charset=utf-8' . "\r\n" .
+    'Content-Disposition: inline' . "\r\n" .
+    'Content-Transfer-Encoding: 8bit';
 $footer = "\n\nThis is an automated email, please do not reply. Any problem, please email us: support@freeshell.ustc.edu.cn\n\nSincerely,\nUSTC Freeshell Team";
 
 function site_baseurl() {
@@ -141,6 +148,8 @@ function check_password($plain, $salted) {
 
 function send_admin_email($email, $appid, $title, $body) {
     global $headers, $footer;
+    if (!mb_check_encoding($title, "ASCII"))
+	    $title=mb_encode_mimeheader($title);
     $body = "Hello freeshell $appid,\n\n".$body.$footer;
     mail($email, $title, $body, $headers);
 }
