@@ -179,10 +179,9 @@ else if ($free_diskspace < 500 * 1024) {
 
 <p class="note">If you do not have IPv6 access, try IPv4:</p>
 <ul class="table">
-  <li><span class="h">SSH port:</span><strong><?=$info['global_sshport']?></strong> (mapped to port 22 of your freeshell, global access)
+  <li><span class="h">SSH port:</span><strong><?=$info['global_sshport']?></strong> (mapped to port 22 of your freeshell)
+  <li><span class="h">SSH host:</span>ssh.freeshell.ustc.edu.cn (IPv4 only)</span>
   <li><span class="h">SSH command:</span><span class="c">ssh -p <?=$info['global_sshport']?> root@ssh.freeshell.ustc.edu.cn</span>
-  <li><span class="h">HTTP port:</span><strong><?=$info['httpport']?></strong> (mapped to port 80 of your freeshell, USTC campus only)
-  <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['domain']?>:<?=$info['httpport']?>/</span>
 </ul>
 
 <div id="progbar"></div>
