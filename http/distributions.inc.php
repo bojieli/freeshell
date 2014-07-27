@@ -10,6 +10,7 @@ $supported_distributions = array(
     "Fedora 20" => "fedora-20-x86_64",
     "OpenSUSE 13.1" => "suse-13.1-x86_64",
     "OpenSUSE 12.3" => "suse-12.3-x86_64",
+    "Archlinux 2014-07-27" => "arch-20140727-x86_64",
 );
 
 function distribution_option_html($default = "debian-7.0-amd64-minimal") {
