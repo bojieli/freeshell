@@ -54,40 +54,35 @@ ip addr add $TUNNEL_IP/30 dev freeshell
 ip addr add $TUNNEL_IPV6/126 dev freeshell
 
 # outbound packets for inbound connections should go through incoming interface
-function iptables_mangle_replace() {
-    iptables -t mangle -D $* >/dev/null 2>&1
-    iptables -t mangle -A $*
-}
-iptables_mangle_replace PREROUTING -j CONNMARK --restore-mark
-iptables_mangle_replace PREROUTING -m mark ! --mark 0 -j ACCEPT
-iptables_mangle_replace PREROUTING -i eth0 -j MARK --set-mark 1
-iptables_mangle_replace PREROUTING -i freeshell -j MARK --set-mark 2
-iptables_mangle_replace PREROUTING -i venet0 -j MARK --set-mark 100
-iptables_mangle_replace PREROUTING -j CONNMARK --save-mark
+ROUTER_MAC="f0:25:72:a8:fe:41"
+iptables -t mangle -F
+iptables -t mangle -A PREROUTING -j CONNMARK --restore-mark
+iptables -t mangle -A PREROUTING -m mark ! --mark 0 -j ACCEPT
+iptables -t mangle -A PREROUTING -i eth0 -m mac --mac-source $ROUTER_MAC -j MARK --set-mark 1
+iptables -t mangle -A PREROUTING -i eth0 -m mac ! --mac-source $ROUTER_MAC -j MARK --set-mark 2
+iptables -t mangle -A PREROUTING -i freeshell -j MARK --set-mark 3
+iptables -t mangle -A PREROUTING -i venet0 -j MARK --set-mark 100
+iptables -t mangle -A PREROUTING -j CONNMARK --save-mark
 
-ip route flush table 1000
-ip route add default via $GATEWAY table 1000
 # warning: the following rule must not be "from all", since freeshell IPs are in "main" table
 #   which has lower priority than the fwmark rule, making incoming packets fail to forward.
-# The rule works for outgoing packets in reply to incoming connections because routing happens
-#   before SNAT, the source IP is still freeshell IP (10.10.0.0/16).
-ip rule add from 10.10.0.0/16 fwmark 1 lookup 1000
-ip route flush table 1001
-ip route add default via $TUNNEL_GW table 1001
-ip rule add from 10.10.0.0/16 fwmark 2 lookup 1001
+ip route replace default via $GATEWAY table 1000
+ip rule add iif venet0 fwmark 1 lookup 1000
+ip route replace default dev eth0 table 1001
+ip rule add iif venet0 fwmark 2 lookup 1001
+ip route replace default via $TUNNEL_GW table 1002
+ip rule add iif venet0 fwmark 3 lookup 1002
 
 # similar outbound fix for inbound IPv6 connections
-function ip6tables_mangle_replace() {
-    ip6tables -t mangle -D $* >/dev/null 2>&1
-    ip6tables -t mangle -A $*
-}
-ip6tables_mangle_replace PREROUTING -j CONNMARK --restore-mark
-ip6tables_mangle_replace PREROUTING -m mark ! --mark 0 -j ACCEPT
-ip6tables_mangle_replace PREROUTING -i eth0 -j MARK --set-mark 1
-ip6tables_mangle_replace PREROUTING -i eth1 -j MARK --set-mark 2
-ip6tables_mangle_replace PREROUTING -i freeshell -j MARK --set-mark 3
-ip6tables_mangle_replace PREROUTING -i venet0 -j MARK --set-mark 100
-ip6tables_mangle_replace PREROUTING -j CONNMARK --save-mark
+ip6tables -t mangle -F
+ip6tables -t mangle -A PREROUTING -j CONNMARK --restore-mark
+ip6tables -t mangle -A PREROUTING -m mark ! --mark 0 -j ACCEPT
+ip6tables -t mangle -A PREROUTING -i eth0 -m mac --mac-source $ROUTER_MAC -j MARK --set-mark 1
+ip6tables -t mangle -A PREROUTING -i eth0 -m mac ! --mac-source $ROUTER_MAC -j MARK --set-mark 2
+ip6tables -t mangle -A PREROUTING -i eth1 -j MARK --set-mark 3
+ip6tables -t mangle -A PREROUTING -i freeshell -j MARK --set-mark 4
+ip6tables -t mangle -A PREROUTING -i venet0 -j MARK --set-mark 100
+ip6tables -t mangle -A PREROUTING -j CONNMARK --save-mark
 
 IPV6_GW="2001:da8:d800:71::1"
 IPV6_GW2="2001:da8:d800:701:8000::1"
@@ -98,8 +93,11 @@ ip -6 route flush table 1001
 ip -6 route add default via $IPV6_GW2 table 1001
 ip -6 rule add iif venet0 fwmark 2 lookup 1001
 ip -6 route flush table 1002
-ip -6 route add default via $TUNNEL_IPV6_GW table 1002
+ip -6 route add default dev eth0 table 1002
 ip -6 rule add iif venet0 fwmark 3 lookup 1002
+ip -6 route flush table 1003
+ip -6 route add default via $TUNNEL_IPV6_GW table 1003
+ip -6 rule add iif venet0 fwmark 4 lookup 1003
 
 # abroad ipv6 via tunnel
 cat /etc/chnroutes-v6.txt | while read prefix comment; do
