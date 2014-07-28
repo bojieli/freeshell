@@ -55,6 +55,7 @@ fastcgi_finish_request();
 log_operation($appid, 'register', $_POST);
 if ($_POST['distribution'] != 'gallery') {
     if (!create_vz($nodeno, $appid, $hostname, $password, node_default_mem_limit($nodeno), $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution'])) {
+        unlock_shell($appid, $status);
         delete_freeshell_in_db($appid);
         send_register_fail_mail($email);
         exit();
@@ -66,7 +67,7 @@ if ($_POST['distribution'] != 'gallery') {
         || !control_vz($nodeno, 'reset-root', "$appid $password", $password))
     {
         destroy_vz($nodeno, $appid);
-        unlock_shell($appid);
+        unlock_shell($appid, $status);
         delete_freeshell_in_db($appid);
         send_register_fail_mail($email);
         exit();
@@ -75,5 +76,5 @@ if ($_POST['distribution'] != 'gallery') {
 
 $token = random_string(40);
 checked_mysql_query("UPDATE shellinfo SET `token`='$token' WHERE `id`='$appid'");
-unlock_shell($appid);
+unlock_shell($appid, true);
 send_activate_mail($email, $appid, $token);

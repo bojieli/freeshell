@@ -60,7 +60,7 @@ checked_mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
 if ($info['distribution'] != $distribution) {
     checked_mysql_query("UPDATE shellinfo SET distribution='$distribution' WHERE id='".$info['shellid']."'");
     if (mysql_affected_rows() != 1) {
-        unlock_shell($info['shellid']);
+        unlock_shell($info['shellid'], false);
         die('Failed to set distribution in database');
     }
     $info['distribution'] = $distribution;
@@ -105,7 +105,7 @@ if ($gallery_id)
     $status = do_copy_from_gallery($info, $password, $gallery_id, $keep_dirs);
 else
     $status = do_reinstall($info, $password, $keep_dirs);
-unlock_shell($info['shellid']);
+unlock_shell($info['shellid'], $status);
 if ($status) {
     send_reinstall_success_email($info['email'], $info['shellid'], $info['hostname'], $password);
 } else {

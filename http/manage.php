@@ -28,7 +28,7 @@ switch ($_POST['action']) {
     case 'force-stop':
         lock_shell_or_die($id);
         $status = control_vz($a['nodeno'], $_POST['action'], $id);
-        unlock_shell($id);
+        unlock_shell($id, $status);
         send_manage_notify_email($status, $email, $id, strtoupper($_POST['action']));
         break;
     case 'reset-root':
@@ -111,14 +111,17 @@ switch ($_POST['action']) {
         lock_shell_or_die($id);
         list($appid, $nodeno) = create_freeshell_in_db($_POST['hostname'], $a['password'], $email, $_POST['nodeno'], $a['distribution']);
         if (!$appid || !try_lock_shell($appid)) {
-            unlock_shell($id);
+            unlock_shell($id, false);
             die("Failed to create new entry in database.");
         }
-        copy_freeshell_config($id, $appid);
+        if (!copy_freeshell_config($id, $appid)) {
+            unlock_shell($id, false);
+            die("Failed to copy freeshell config in database.");
+        }
         goto_background();
         $status = copy_vz($a['nodeno'], $id, $nodeno, $appid, $_POST['hostname'], $a['distribution']);
-        unlock_shell($id);
-        unlock_shell($appid);
+        unlock_shell($id, $status);
+        unlock_shell($appid, $status);
 
         send_manage_notify_email($status, $email, $id, "been Copied to node ".$nodeno,
             "The new freeshell ID is $appid, new hostname is ".get_shell_v6_dns_name($_POST['hostname']));
@@ -132,18 +135,21 @@ switch ($_POST['action']) {
         lock_shell_or_die($id);
         $appid = move_freeshell_in_db($id, $_POST['nodeno']);
         if (!$appid) {
-            unlock_shell($id);
+            unlock_shell($id, false);
             die("Failed to move freeshell in database.");
         }
         goto_background();
-        if (!update_proxy_conf()) {
+        if (!($status = update_proxy_conf())) {
             report_sys_admin("failed to update proxy conf");
+            goto move_finish;
         }
-        if (!move_endpoints($a['nodeno'], $id, $_POST['nodeno'], $appid)) {
+        if (!($status = move_endpoints($a['nodeno'], $id, $_POST['nodeno'], $appid))) {
             report_sys_admin("failed to move endpoints: old $id on node ".$a['nodeno']." => new $appid on node ".$_POST['nodeno']);
+            goto move_finish;
         }
         $status = move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution']);
-        unlock_shell($appid);
+move_finish:
+        unlock_shell($appid, $status);
         
         send_manage_notify_email($status, $email, $id, "been Moved to node ".$_POST['nodeno'],
             "The new freeshell ID is $appid and the original ID $id is deprecated. You can still access your freeshell via ".get_shell_v6_dns_name($a['hostname']).", but due to DNS cache, you may have to wait several minutes for DNS to refresh. Please note that the IPv6 address and IPv4 SSH/HTTP port have changed.");
@@ -162,17 +168,17 @@ switch ($_POST['action']) {
             case 0:
                 break;
             case 1:
-                unlock_shell($id);
+                unlock_shell($id, false);
                 die('You have created too many endpoints. If you have special needs, please contact us.');
             case 2:
-                unlock_shell($id);
+                unlock_shell($id, false);
                 die('The public endpoint has been taken, please use another one');
             default:
-                unlock_shell($id);
+                unlock_shell($id, false);
                 die('Unknown error');
         }
         $status = add_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
-        unlock_shell($id);
+        unlock_shell($id, $status);
         send_manage_notify_email($status, $email, $id, "Added ".strtoupper($_POST['protocol'])." Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
         break;
     case 'remove-endpoint':
@@ -185,11 +191,11 @@ switch ($_POST['action']) {
 
         lock_shell_or_die($id);
         if (!db_remove_endpoint($id, $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol'])) {
-            unlock_shell($id);
+            unlock_shell($id, false);
             die('The endpoints does not exist');
         }
         $status = remove_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
-        unlock_shell($id);
+        unlock_shell($id, $status);
         send_manage_notify_email($status, $email, $id, "Removed ".strtoupper($_POST['protocol'])." Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
         break;
     case 'update-public':
@@ -220,7 +226,7 @@ function reset_passwd($email, $nodeno, $id) {
     $new_passwd = random_string(12);
     lock_shell_or_die($id);
     $status = control_vz($nodeno, "reset-root", "$id $new_passwd");
-    unlock_shell($id);
+    unlock_shell($id, $status);
     if ($status) {
         send_reset_root_email($email, $id, $new_passwd);
         echo 'New root password has been sent to your email. If not found, please check the Spam box.';
@@ -324,7 +330,7 @@ function update_hostname($hostname) {
     lock_shell_or_die($id);
     checked_mysql_query("UPDATE shellinfo SET `hostname`='$hostname' WHERE `id`='$id'");
     $status = set_vz($a['nodeno'], $id, 'hostname', $hostname);
-    unlock_shell($id);
+    unlock_shell($id, $status);
     if (!$status)
         return false;
 

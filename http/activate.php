@@ -44,7 +44,7 @@ session_write_close();
 <?php
 fastcgi_finish_request();
 $status = activate_vz($info['nodeno'], $appid, $info['distribution']);
-unlock_shell($info['id']);
+unlock_shell($info['id'], $status);
 if (!$status) {
     send_manage_notify_email(false, $info['email'], $appid, "ACTIVATE", "If you have tried several times and always fail, maybe the installation is corrupted, please contact us and/or register another freeshell, thanks.");
 }
