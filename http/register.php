@@ -52,6 +52,7 @@ lock_shell_or_die($appid);
 </div>
 <?php
 fastcgi_finish_request();
+log_operation($appid, 'register', $_POST);
 if ($_POST['distribution'] != 'gallery') {
     if (!create_vz($nodeno, $appid, $hostname, $password, node_default_mem_limit($nodeno), $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution'])) {
         delete_freeshell_in_db($appid);

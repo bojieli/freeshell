@@ -19,6 +19,7 @@ $a = mysql_fetch_array(checked_mysql_query("SELECT * FROM shellinfo WHERE `email
 if (empty($a))
     die("Freeshell does not exist");
 
+log_operation($id, $_POST['action'], $_POST);
 switch ($_POST['action']) {
     case 'start':
     case 'reboot':

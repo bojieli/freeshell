@@ -39,6 +39,8 @@ if (empty($info['param']))
 list($distribution, $keep_dirs) = explode("\n", $info['param']);
 
 do_reinstall:
+log_operation($info['shellid'], 'reinstall-confirm', array('distribution'=>$distribution, 'keep_dirs'=>$keep_dirs));
+
 $gallery_id = null;
 if (preg_match('/^gallery-([0-9]+)$/', $distribution, $matches)) {
     $gallery_id = $matches[1];

@@ -17,6 +17,7 @@ if ($info['isactive']) {
 if (!isset($_GET['token']) || !isset($info['token']) || sha1($info['token']) !== sha1($_GET['token']))
     die('Incorrect token. Please copy the link to the address bar of your browser and retry.');
 
+log_operation($appid, 'activate');
 lock_shell_or_die($info['id']);
 
 // auto login

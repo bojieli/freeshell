@@ -50,6 +50,14 @@ CREATE TABLE ssh_log (
     KEY key_nodeno (`nodeno`)
 );
 
+CREATE TABLE operation_log (
+    `id` INT(10) NOT NULL,
+    `action` VARCHAR(200) NOT NULL,
+    `data` VARCHAR(200) NOT NULL,
+    `log_time` INT(10) NOT NULL,
+    KEY key_id (`id`)
+);
+
 CREATE TABLE endpoint (
     `id` INT(10) NOT NULL,
     `public_endpoint` INT(5) NOT NULL,

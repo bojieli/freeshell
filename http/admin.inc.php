@@ -278,3 +278,16 @@ function lock_shell_or_die($id) {
     else
         die("Another action is pending for your freeshell, please try again later.");
 }
+
+function log_operation($id, $action, $data = null) {
+    if (!is_numeric($id) || $id <= 0 || $action == "") {
+        report_sys_admin("log_operation failed:\nid = $id\naction = $action\ndata = $data");
+        return;
+    }
+    $action = mysql_real_escape_string($action);
+    if (!is_string($data))
+        $data = json_encode($data);
+    $data = mysql_real_escape_string($data);
+    $time = time();
+    checked_mysql_query("INSERT INTO operation_log (id, action, data, log_time) VALUES ($id, '$action', '$data', $time)");
+}
