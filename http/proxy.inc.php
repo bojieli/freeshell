@@ -5,8 +5,10 @@ include_once "nodes.inc.php";
 function update_proxy_conf() {
     $localfile = "/etc/nginx/autogen-conf/freeshell.conf";
     $fp = fopen($localfile, "w");
-    if (!$fp)
+    if (!$fp) {
+        report_sys_admin("failed to open $localfile for write");
         return false;
+    }
     fwrite($fp, nginx_conf_gen_for_proxy());
     fclose($fp);
     chmod($localfile, 0644);

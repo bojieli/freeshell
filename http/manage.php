@@ -136,14 +136,13 @@ switch ($_POST['action']) {
             die("Failed to move freeshell in database.");
         }
         goto_background();
-        $status = update_proxy_conf();
-        if (!$status)
-            goto movefinish;
-        $status = move_endpoints($a['nodeno'], $id, $_POST['nodeno'], $appid);
-        if (!$status)
-            goto movefinish;
+        if (!update_proxy_conf()) {
+            report_sys_admin("failed to update proxy conf");
+        }
+        if (!move_endpoints($a['nodeno'], $id, $_POST['nodeno'], $appid)) {
+            report_sys_admin("failed to move endpoints: old $id on node ".$a['nodeno']." => new $appid on node ".$_POST['nodeno']);
+        }
         $status = move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution']);
-movefinish:
         unlock_shell($appid);
         
         send_manage_notify_email($status, $email, $id, "been Moved to node ".$_POST['nodeno'],
