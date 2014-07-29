@@ -280,7 +280,7 @@ function unlock_shell($id, $should_commit = true) {
         if ($should_commit)
             checked_mysql_query("COMMIT;");
         else
-            checked_mysql_query("ROLLBACK';");
+            checked_mysql_query("ROLLBACK;");
         $_in_mysql_transaction = false;
     }
     checked_mysql_query("UPDATE shellinfo SET locked=0 WHERE id='$id'");
