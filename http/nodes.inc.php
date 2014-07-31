@@ -205,7 +205,8 @@ function move_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distributio
     } else {
     */
         $ret = copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution);
-        destroy_vz($old_node, $old_id);
+        if ($ret)
+            destroy_vz($old_node, $old_id);
     /*
     }
     */
