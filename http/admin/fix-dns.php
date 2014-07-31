@@ -6,6 +6,9 @@ if (empty($_SESSION['isadmin']))
 include_once '../db.php';
 include_once '../nodes.inc.php';
 
+echo "Goto Background...";
+fastcgi_finish_request();
+
 $rs = checked_mysql_query("SELECT id, hostname FROM shellinfo WHERE isactive=1");
 while ($row = mysql_fetch_array($rs)) {
     update_dns($row['hostname'], $row['id']);
