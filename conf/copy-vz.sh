@@ -23,7 +23,7 @@ if ! ssh $SSH_PARAMS $HOSTNAME ls $VZ_CONF_ROOT >/dev/null; then
     echo "$VZ_CONF_ROOT does not exist on remote system $HOSTNAME" && exit 1
 fi
 if ssh $SSH_PARAMS $HOSTNAME cat $VZ_CONF_ROOT/$newid.conf >/dev/null; then
-    echo "$VZ_CONF_ROOT/$newid.conf already exists on remote system $HOSTNAME" && exit 1
+    echo "WARNING: $VZ_CONF_ROOT/$newid.conf already exists on remote system $HOSTNAME"
 fi
 
 scp $SSH_PARAMS $VZ_CONF_ROOT/$oldid.conf $HOSTNAME:$VZ_CONF_ROOT/$newid.conf
