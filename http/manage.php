@@ -149,6 +149,7 @@ switch ($_POST['action']) {
         }
         $status = move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution']);
 move_finish:
+        unlock_shell($id, $status);
         unlock_shell($appid, $status);
         
         send_manage_notify_email($status, $email, $id, "been Moved to node ".$_POST['nodeno'],
