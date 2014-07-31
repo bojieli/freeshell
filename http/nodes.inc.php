@@ -104,11 +104,11 @@ function hide_password($str, $password) {
     return str_replace($password, "********", $str);
 }
 
-function ssh_log_before($nodeno, $action, $cmd, $time, $password_to_hide) {
+function ssh_log_before($nodeno, $action, $cmd, $password_to_hide) {
     if ($password_to_hide) {
         $cmd = hide_password($cmd, $password_to_hide);
     }
-    $sql = "INSERT INTO ssh_log SET `nodeno`='$nodeno', `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `log_time`='$time'";
+    $sql = "INSERT INTO ssh_log SET `nodeno`='$nodeno', `action`='".addslashes($action)."', `cmd`='".addslashes($cmd)."', `log_time`='".time()."'";
     checked_mysql_query($sql);
     if (mysql_affected_rows() != 1)
         report_sys_admin("Failed to save ssh log:\n$sql");
@@ -131,10 +131,9 @@ function ssh_log_after($id, $errno, $output, $password_to_hide) {
 
 function __call_monitor($nodeno, $action, $param, $password_to_hide = "") {
     if (!is_numeric($nodeno))
-        return;
+        return array(-1, "Invalid nodeno");
     $cmd = "$action $param";
-    $time = time();
-    $log_id = ssh_log_before($nodeno, $action, $cmd, $time, $password_to_hide);
+    $log_id = ssh_log_before($nodeno, $action, $cmd, $password_to_hide);
     list($errno, $output) = run_in_node($nodeno, $cmd);
     ssh_log_after($log_id, $errno, $output, $password_to_hide);
     return array($errno, $output);
@@ -179,11 +178,11 @@ function create_vz($nodeno, $id, $hostname, $password, $mem_limit, $diskspace_so
 }
 
 function copy_vz_without_activate($old_node, $old_id, $new_node, $new_id, $hostname) {
-    if (!update_dns($hostname, $new_id))
-        return false;
     if (!call_monitor($old_node, "copy-vz", "$old_id $new_node $new_id"))
         return false;
     if (!set_vz($new_node, $new_id, 'hostname', $hostname))
+        return false;
+    if (!update_dns($hostname, $new_id))
         return false;
     return true;
 }
@@ -204,13 +203,12 @@ function move_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distributio
         activate_vz($new_node, $new_id, $distribution);
     } else {
     */
-        $ret = copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution);
-        if ($ret)
-            destroy_vz($old_node, $old_id);
+        if (!copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution))
+            return false;
+        return destroy_vz($old_node, $old_id);
     /*
     }
     */
-    return $ret;
 }
 
 function reactivate_vz($nodeno, $id, $distribution) {
