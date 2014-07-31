@@ -24,12 +24,12 @@ $info['domain'] = 's'.$info['nodeno'].'.freeshell.ustc.edu.cn';
 
 $num_onthisnode = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo WHERE `nodeno`='".$info['nodeno']."'"),0);
 $node = get_node_info($info['nodeno'], $appid);
-if (isset($node['locked']) && $node['locked'])
+if ($node === null || !isset($node['mystatus']))
+    $node = array('mystatus' => 'Unknown');
+else if (isset($node['locked']) && $node['locked'])
     $node['mystatus'] = 'Locked';
-else if (isset($node['mystatus']))
-    $node['mystatus'] = human_readable_status($node['mystatus']);
 else
-    $node['mystatus'] = 'Internal error: cannot connect to worker node';
+    $node['mystatus'] = human_readable_status($node['mystatus']);
 ?>
 <div id="wrapper">
 <div id="regtitle">
@@ -144,26 +144,44 @@ if ($info['locked']) {
     <div id="progbar"></div>
     <?php
 }
-$free_diskspace = $node['#Disk Space Limit (KB)'] - $node['Used Disk Space (KB)'];
-if ($free_diskspace < 0) {
+
+function headinfo($msg) {
     ?>
-    <p><strong>Your freeshell has exceeded disk space limit by <?=-$free_diskspace?> KB.</strong></p>
-    <p><strong>Please remove some files, otherwise the freeshell might be blocked after grace period.</strong></p>
+    <h2>Oops! There seems to be some problem.</h2>
+    <p><strong><?=$msg?></strong></p>
     <div id="progbar"></div>
     <?php
 }
-else if ($free_diskspace < 500 * 1024) {
-    ?>
-    <p>Notice: Your freeshell has only <?=$free_diskspace?> KB free space, please save disk space.</p>
-    <div id="progbar"></div>
-    <?php
+if ($node['mystatus'] == 'Unknown') {
+    headinfo('Failed to connect to worker node. Please try again later.');
+    exit();
+}
+else if ($node['mystatus'] == "Not exist") {
+    headinfo('The freeshell does not exist. <button onclick="manage(\'reinstall\')">Reinstall Freeshell</button>');
+}
+else if ($node['mystatus'] == "Locked") {
+    headinfo('Your freeshell has been locked, sorry for the inconvenience. If you need to migrate the data, please contact us.');
+}
+else { // display disk space warning
+    $free_diskspace = $node['#Disk Space Limit (KB)'] - $node['Used Disk Space (KB)'];
+    if ($free_diskspace < 0) {
+        ?>
+        <p><strong>Your freeshell has exceeded disk space limit by <?=-$free_diskspace?> KB.</strong></p>
+        <p><strong>Please remove some files, otherwise the freeshell might be blocked after grace period.</strong></p>
+        <div id="progbar"></div>
+        <?php
+    }
+    else if ($free_diskspace < 500 * 1024) {
+        ?>
+        <p>Notice: Your freeshell has only <?=$free_diskspace?> KB free space, please save disk space.</p>
+        <div id="progbar"></div>
+        <?php
+    }
 }
 ?>
 <ul class="table">
   <li><span class="h">Shell ID:</span><strong><?=$appid?></strong>
   <li><span class="h">Status:</span><strong><?=$node['mystatus']?></strong>
-  <?php if ($node['mystatus'] == "Not exist") echo 'Oops! There seems to be some problem. <button onclick="manage(\'reinstall\')">Reinstall Freeshell</button>'; ?>
-  <?php if ($node['mystatus'] == "Locked") echo 'Oops! There seems to be some problem. Please register a new freeshell, sorry for the inconvenience. If you need to migrate the data, please contact us.'; ?>
   <li><span class="h">IPv6 address:</span><strong><?=$info['ipv6']?></strong>
   <li><span class="h">Hostname:</span><strong><span id="shell-hostname"><?=$info['hostname']?></span></strong> <button id="hostname-change-btn" onclick="changeHostname()">Change</button>
   <?php
