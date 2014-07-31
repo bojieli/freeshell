@@ -258,31 +258,21 @@ function db_update_public($shellid, $is_public, $name, $description) {
     return (mysql_affected_rows() == 1);
 }
 
-$_in_mysql_transaction = false;
-
 function try_lock_shell($id) {
-    global $_in_mysql_transaction;
     checked_mysql_query("UPDATE shellinfo SET locked=1 WHERE id='$id'");
     if (mysql_affected_rows() == 1) {
         checked_mysql_query("UPDATE shellinfo SET lock_time='".time()."' WHERE id='$id'");
-        if (!$_in_mysql_transaction) {
-            checked_mysql_query("START TRANSACTION;");
-            $_in_mysql_transaction = true;
-        }
+        checked_mysql_query("START TRANSACTION;");
         return true;
     }
     else return false;
 }
 
 function unlock_shell($id, $should_commit = true) {
-    global $_in_mysql_transaction;
-    if ($_in_mysql_transaction) {
-        if ($should_commit)
-            checked_mysql_query("COMMIT;");
-        else
-            checked_mysql_query("ROLLBACK;");
-        $_in_mysql_transaction = false;
-    }
+    if ($should_commit)
+        checked_mysql_query("COMMIT;");
+    else
+        checked_mysql_query("ROLLBACK;");
     checked_mysql_query("UPDATE shellinfo SET locked=0 WHERE id='$id'");
     return (mysql_affected_rows() == 1);
 }
