@@ -195,7 +195,7 @@ else { // display disk space warning
   <li><span class="h">HTTP address:</span><span class="c">http://<?=$info['hostname']?>.6.freeshell.ustc.edu.cn</span> (IPv6 only)
 </ul>
 
-<p class="note">If you do not have IPv6 access, try IPv4:</p>
+<p class="note">If you do not have IPv6 access, try SSH port mapping:</p>
 <ul class="table">
   <li><span class="h">SSH port:</span><strong><?=$info['global_sshport']?></strong> (mapped to port 22 of your freeshell)
   <li><span class="h">SSH host:</span>ssh.freeshell.ustc.edu.cn (IPv4 only)</span>
@@ -326,6 +326,7 @@ if ($domain_count == 0) { ?>
 
 <div id="progbar"></div>
 <h2>Public Endpoint (Port Forwarding)</h2>
+<p class="note">Please use IPv6 whenever possible (e.g. for inter-freeshell connections), use Port Forwarding only if you need to provide service for the IPv4 Internet.</p>
 <table>
 <tr><th>Protocol</th><th>Public Port</th><th>Private Port</th><th></th></tr>
 <tr><td>TCP</td><td><?=$info['global_sshport']?></td><td>22</td><td>For SSH, cannot remove</td></tr>
