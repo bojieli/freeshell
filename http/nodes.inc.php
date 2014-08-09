@@ -237,7 +237,7 @@ function add_local_port_forwarding($local_port, $remote_ip, $remote_port, $proto
 }
 
 function remove_local_port_forwarding($local_port, $remote_ip, $remote_port, $protocol, $snat_src_ip) {
-    list($errno, $output) = local_sudo("/usr/local/bin/port-forward remove $local_port $remote_ip $remote_port $protocol");
+    list($errno, $output) = local_sudo("/usr/local/bin/port-forward remove $local_port $remote_ip $remote_port $protocol $snat_src_ip");
     return ($errno == 0);
 }
 
