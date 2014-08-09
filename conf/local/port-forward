@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -z "$5" ]; then
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -z "$5" ] || [ -z "$6" ]; then
     exit 1
 fi
 
@@ -10,6 +10,7 @@ local_port=$2
 remote_ip=$3
 remote_port=$4
 protocol=$5
+snat_src_ip=$6
 
 function iptables_delete(){
     while true; do
@@ -26,12 +27,13 @@ if [ "$action" == "add" ]; then
     for local_ip in $local_ips; do
         iptables_replace PREROUTING -d $local_ip/32 -p $protocol --dport $local_port -j DNAT --to-destination $remote_ip:$remote_port
     done
-    #iptables_replace POSTROUTING -d $remote_ip/32 -p $protocol --dport $remote_port -j MASQUERADE
+    # need snat for connections coming from the physical node, otherwise on the physical node the source ip will be local, packet dropped
+    iptables_replace POSTROUTING -s $snat_src_ip/32 -d $remote_ip/32 -p $protocol --dport $remote_port -j MASQUERADE
 elif [ "$action" == "remove" ]; then
     for local_ip in $local_ips; do
         iptables_delete PREROUTING -d $local_ip/32 -p $protocol --dport $local_port -j DNAT --to-destination $remote_ip:$remote_port
     done
-    #iptables_delete POSTROUTING -d $remote_ip/32 -p $protocol --dport $remote_port -j MASQUERADE
+    iptables_delete POSTROUTING -s $snat_src_ip/32 -d $remote_ip/32 -p $protocol --dport $remote_port -j MASQUERADE
 else
     exit 1 # unsupported action
 fi

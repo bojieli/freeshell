@@ -229,20 +229,20 @@ function remove_node_port_forwarding($nodeno, $public_port, $shellid, $private_p
     return call_monitor($nodeno, "port-forward", "remove $public_port $shellid $private_port $protocol");
 }
 
-function add_local_port_forwarding($local_port, $remote_ip, $remote_port, $protocol = 'tcp') {
+function add_local_port_forwarding($local_port, $remote_ip, $remote_port, $protocol, $snat_src_ip) {
     if ($local_port < 1024)
         die('Request tainted');
-    list($errno, $output) = local_sudo("/usr/local/bin/port-forward add $local_port $remote_ip $remote_port $protocol");
+    list($errno, $output) = local_sudo("/usr/local/bin/port-forward add $local_port $remote_ip $remote_port $protocol $snat_src_ip");
     return ($errno == 0);
 }
 
-function remove_local_port_forwarding($local_port, $remote_ip, $remote_port, $protocol = 'tcp') {
+function remove_local_port_forwarding($local_port, $remote_ip, $remote_port, $protocol, $snat_src_ip) {
     list($errno, $output) = local_sudo("/usr/local/bin/port-forward remove $local_port $remote_ip $remote_port $protocol");
     return ($errno == 0);
 }
 
 function add_ssh_port_forwarding($id, $nodeno) {
-    return add_local_port_forwarding(appid2gsshport($id), get_shell_ipv4($id), 22);
+    return add_local_port_forwarding(appid2gsshport($id), get_shell_ipv4($id), 22, 'tcp', get_node_ipv4($nodeno));
 }
 
 function add_tunnel_ip_route($id, $nodeno) {
@@ -267,7 +267,7 @@ function add_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
         return false;
     if (!is_valid_transport_protocol($protocol))
         return false;
-    return add_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol);
+    return add_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol, get_shell_ipv4($nodeno));
 }
 
 function remove_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
@@ -275,7 +275,7 @@ function remove_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
         return false;
     if (!is_valid_transport_protocol($protocol))
         return false;
-    return remove_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol);
+    return remove_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol, get_shell_ipv4($nodeno));
 }
 
 function remove_all_endpoints($nodeno, $id) {
