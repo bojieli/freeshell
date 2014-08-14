@@ -11,7 +11,7 @@ if [ ! -e "$1" ]; then
 fi
 
 echo "Uploading $1 ..."
-parallel-scp -r -h $(dirname $0)/pssh-hosts $1 /home/freeshell
+parallel-scp -r -h $(dirname $0)/pssh-hosts $1 ~
 echo "Moving $1 to $2 ..."
-parallel-ssh -h $(dirname $0)/pssh-hosts "sudo mv /home/freeshell/$1 $2"
+parallel-ssh -h $(dirname $0)/pssh-hosts "sudo mv ~/$1 $2"
 exit 0
