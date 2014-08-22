@@ -22,7 +22,7 @@ vzctl set $id --physpages $mem_limit --swappages 0 --save
 vzctl set $id --diskspace $diskspace_softlimit:$diskspace_hardlimit --save
 vzctl set $id --diskinodes 10000000 --save
 vzctl set $id --quotatime 86400 --save
-vzctl set $id --numproc 500 --save
+vzctl set $id --numproc 100 --save
 vzctl set $id --numtcpsock 500 --save
 vzctl set $id --numothersock 1000 --save
 vzctl set $id --numfile 25000 --save
