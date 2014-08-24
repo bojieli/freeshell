@@ -267,7 +267,7 @@ function add_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
         return false;
     if (!is_valid_transport_protocol($protocol))
         return false;
-    return add_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol, get_shell_ipv4($nodeno));
+    return add_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol, get_node_ipv4($nodeno));
 }
 
 function remove_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
@@ -275,7 +275,7 @@ function remove_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
         return false;
     if (!is_valid_transport_protocol($protocol))
         return false;
-    return remove_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol, get_shell_ipv4($nodeno));
+    return remove_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol, get_node_ipv4($nodeno));
 }
 
 function remove_all_endpoints($nodeno, $id) {
