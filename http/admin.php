@@ -177,6 +177,36 @@ else { // display disk space warning
         <div id="progbar"></div>
         <?php
     }
+
+    $numproc_limit = $node['Processes (include kernel threads)'];
+    $free_process = $node['#Processes (include kernel threads)'] - $numproc_limit;
+    if ($free_process <= 0) {
+        ?>
+        <p><strong>Your freeshell has reached process number limit (<?=$numproc_limit?>). You may not be able to SSH into your freeshell now, please reboot your freeshell.</strong></p>
+        <div id="progbar"></div>
+        <?php
+    }
+    else if ($free_process < $numproc_limit / 10) {
+        ?>
+        <p>Notice: There are <?=$numproc_limit-$free_process?> processes in your freeshell, near the upper bound (<?=$numproc_limit?>). If the number of processes reach the upper limit, you would not be able to SSH before reboot.</p>
+        <div id="progbar"></div>
+        <?php
+    }
+
+    $tcpsock_limit = $node['TCP sockets'];
+    $free_tcpsock = $node['#TCP sockets'] - $tcpsock_limit;
+    if ($free_tcpsock <= 0) {
+        ?>
+        <p><strong>Your freeshell has reached TCP socket number limit (<?=$tcpsock_limit?>). You may not be able to SSH into your freeshell now, please reboot your freeshell.</strong></p>
+        <div id="progbar"></div>
+        <?php
+    }
+    else if ($free_tcpsock < $tcpsock_limit / 10) {
+        ?>
+        <p>Notice: There are <?=$tcpsock_limit-$free_tcpsock?> TCP sockets in your freeshell, near the upper bound (<?=$tcpsock_limit?>). If the number of TCP sockets reach the upper limit, you would not be able to SSH before reboot.</p>
+        <div id="progbar"></div>
+        <?php
+    }
 }
 ?>
 <ul class="table">
