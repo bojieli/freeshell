@@ -143,8 +143,8 @@ switch ($_POST['action']) {
             report_sys_admin("failed to update proxy conf");
             goto move_finish;
         }
-        if (!($status = move_endpoints($a['nodeno'], $id, $_POST['nodeno'], $appid))) {
-            report_sys_admin("failed to move endpoints: old $id on node ".$a['nodeno']." => new $appid on node ".$_POST['nodeno']);
+        if (!($status = update_port_forwarding())) {
+            report_sys_admin("failed to update port forwarding");
             goto move_finish;
         }
         $status = move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution']);
@@ -178,7 +178,7 @@ move_finish:
                 unlock_shell($id, false);
                 die('Unknown error');
         }
-        $status = add_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
+        $status = update_port_forwarding();
         unlock_shell($id, $status);
         send_manage_notify_email($status, $email, $id, "Added ".strtoupper($_POST['protocol'])." Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
         break;
@@ -195,7 +195,7 @@ move_finish:
             unlock_shell($id, false);
             die('The endpoints does not exist');
         }
-        $status = remove_endpoint($id, $a['nodeno'], $_POST['public_endpoint'], $_POST['private_endpoint'], $_POST['protocol']);
+        $status = update_port_forwarding();
         unlock_shell($id, $status);
         send_manage_notify_email($status, $email, $id, "Removed ".strtoupper($_POST['protocol'])." Public Endpoint ".$_POST['public_endpoint']." => Private Port ".$_POST['private_endpoint']);
         break;
@@ -338,16 +338,4 @@ function update_hostname($hostname) {
     if (strlen($a['hostname']) > 0)
         delete_dns($a['hostname']);
     return update_dns($hostname, $id);
-}
-
-function move_endpoints($old_node, $old_id, $new_node, $new_id) {
-    $rs = checked_mysql_query("SELECT * FROM endpoint WHERE `id`='$old_id'");
-    while ($row = mysql_fetch_array($rs)) {
-        if (!remove_endpoint($old_id, $old_node, $row['public_endpoint'], $row['private_endpoint']))
-            return false;
-        if (!add_endpoint($new_id, $new_node, $row['public_endpoint'], $row['private_endpoint']))
-            return false;
-    }
-    checked_mysql_query("UPDATE endpoint SET `id`='$new_id' WHERE `id`='$old_id'");
-    return true;
 }

@@ -52,16 +52,14 @@ function do_destroy($info) {
         return false;
     if (!update_proxy_conf())
         return false;
+    if (!update_port_forwarding())
+        return false;
     if (!destroy_vz($info['nodeno'], $info['shellid']))
         return false;
-    if (!remove_all_endpoints($info['nodeno'], $info['shellid']))
+    if (!delete_freeshell_in_db($info['shellid']))
         return false;
     return true;
 }
 $status = do_destroy($info);
-unlock_shell($info['shellid']);
-if ($status) {
-    delete_freeshell_in_db($info['shellid']);
-} else {
-    send_manage_notify_email(false, $info['email'], $info['shellid'], 'DESTROY');
-}
+unlock_shell($info['shellid'], $status);
+send_manage_notify_email($status, $info['email'], $info['shellid'], 'DESTROY');

@@ -233,22 +233,6 @@ function remove_node_port_forwarding($nodeno, $public_port, $shellid, $private_p
     return call_monitor($nodeno, "port-forward", "remove $public_port $shellid $private_port $protocol");
 }
 
-function add_local_port_forwarding($local_port, $remote_ip, $remote_port, $protocol, $snat_src_ip) {
-    if ($local_port < 1024)
-        die('Request tainted');
-    list($errno, $output) = local_sudo("/usr/local/bin/port-forward add $local_port $remote_ip $remote_port $protocol $snat_src_ip");
-    return ($errno == 0);
-}
-
-function remove_local_port_forwarding($local_port, $remote_ip, $remote_port, $protocol, $snat_src_ip) {
-    list($errno, $output) = local_sudo("/usr/local/bin/port-forward remove $local_port $remote_ip $remote_port $protocol $snat_src_ip");
-    return ($errno == 0);
-}
-
-function add_ssh_port_forwarding($id, $nodeno) {
-    return add_local_port_forwarding(appid2gsshport($id), get_shell_ipv4($id), 22, 'tcp', get_node_ipv4($nodeno));
-}
-
 function add_tunnel_ip_route($id, $nodeno) {
     list($errno, $output) = local_sudo("/usr/local/bin/tunnel-ip-route $id $nodeno ".get_shell_ipv4($id));
     return ($errno == 0);
@@ -266,30 +250,18 @@ function is_valid_transport_protocol($protocol) {
     return ($protocol == 'tcp' || $protocol == 'udp');
 }
 
-function add_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
-    if (!is_valid_public_endpoint($public_port) || !is_valid_private_endpoint($private_port))
-        return false;
-    if (!is_valid_transport_protocol($protocol))
-        return false;
-    return add_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol, get_node_ipv4($nodeno));
-}
-
-function remove_endpoint($id, $nodeno, $public_port, $private_port, $protocol) {
-    if (!is_valid_public_endpoint($public_port) || !is_valid_private_endpoint($private_port))
-        return false;
-    if (!is_valid_transport_protocol($protocol))
-        return false;
-    return remove_local_port_forwarding($public_port, get_shell_ipv4($id), $private_port, $protocol, get_node_ipv4($nodeno));
-}
-
-function remove_all_endpoints($nodeno, $id) {
-    $status = true;
-    $rs = checked_mysql_query("SELECT * FROM endpoint WHERE `id`='$id'");
+function update_port_forwarding() {
+    include_once 'port-forwarding.inc.php';
+    $fwd = new PortForwarding();
+    $rs = checked_mysql_query("SELECT id, nodeno FROM shellinfo WHERE isactive=1");
     while ($row = mysql_fetch_array($rs)) {
-        if (!remove_endpoint($id, $nodeno, $row['public_port'], $row['private_port'], $row['protocol']))
-            $status = false;
+        $fwd->add_ssh($row['id'], $row['nodeno']);
     }
-    return $status;
+    $rs = checked_mysql_query("SELECT shellinfo.id, nodeno, public_endpoint, private_endpoint, protocol FROM endpoint, shellinfo WHERE endpoint.id = shellinfo.id AND shellinfo.isactive=1");
+    while ($row = mysql_fetch_array($rs)) {
+        $fwd->add($row['public_endpoint'], get_shell_ipv4($row['id']), $row['private_endpoint'], $row['protocol'], get_node_ipv4($row['nodeno']));
+    }
+    return $fwd->commit();
 }
 
 function activate_vz($nodeno, $id, $distribution) {
@@ -304,7 +276,7 @@ function activate_vz($nodeno, $id, $distribution) {
             return false;
     if (!add_tunnel_ip_route($id, $nodeno))
         return false;
-    if (!add_ssh_port_forwarding($id, $nodeno))
+    if (!update_port_forwarding())
         return false;
     return true;
 }
