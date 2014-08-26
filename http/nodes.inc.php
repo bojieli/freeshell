@@ -160,14 +160,18 @@ function delete_dns($hostname) {
     return $ns->commit();
 }
 
-function update_dns($hostname, $appid) {
-    include_once "dns.inc.php";
-    $ns = new nsupdate();
+function __update_dns($ns, $hostname, $appid) {
     $ns->replace(get_shell_v6_dns_name($hostname), 'AAAA', get_shell_ipv6($appid));
     // wildcard domains are also supported
     $ns->replace('*.'.get_shell_v6_dns_name($hostname), 'AAAA', get_shell_ipv6($appid));
     $ns->replace(get_shell_v4_dns_name($hostname), 'A', get_shell_ipv4($appid));
     $ns->replace('*.'.get_shell_v4_dns_name($hostname), 'A', get_shell_ipv4($appid));
+}
+
+function update_dns($hostname, $appid) {
+    include_once "dns.inc.php";
+    $ns = new nsupdate();
+    __update_dns($ns, $hostname, $appid);
     return $ns->commit();
 }
 
