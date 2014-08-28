@@ -113,7 +113,7 @@ $shellnum = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo"), 
             </div>
         </div>
         <form id="regform" action="register.php" method="post">
-         	<p class="descr">Before registering, you should read and agreed to the <a href="faq.html">General Policy</a>.</p>
+         	<!--<p class="descr">Before registering, you should read and agreed to the <a href="faq.html">General Policy</a>.</p>-->
             <p><span>E-Mail: </span><input type="text" name="regemail" id="regemail" onchange="verify('email',$(this).val())"/><span class="regcheck" id="emailfail"></span></p>
             <p><span>Password:</span><input type="password" name="regpassword" id="regpassword" onchange="if(passcheck){checkpass($(this).val(),'password')}"/><span class="regcheck"></span></p>
             <p><span>Confirm:</span><input type="password" name="regconfpass" id="regconfpass" onchange="checkpass($(this).val())"/><span class="regcheck" id="passfail"></span></p>
