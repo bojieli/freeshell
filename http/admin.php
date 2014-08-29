@@ -394,6 +394,7 @@ while ($row = mysql_fetch_array($rs)) {
 <ul class="table">
   <li><span class="h">Node</span><strong>#<?=$info['nodeno']?></strong>
   <li><span class="h">Domain Name</span><strong><?=$info['domain']?></strong>
+  <li><span class="h">Storage</span><strong><?=is_local_storage($info['storage_base']) ? 'Local' : 'External'?></strong></li>
   <li><span class="h">Total shells</span><?=$num_onthisnode?>
 <?php
 unset($node['mystatus']);
