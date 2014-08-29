@@ -1,2 +1,3 @@
-# backup at 3:20 every day
-20 3 * * *  root   /home/freeshell/scripts/ezvzdump >/dev/null
+# we do not have backup disks now...
+## backup at 3:20 every day
+#20 3 * * *  root   /home/freeshell/scripts/ezvzdump >/dev/null
