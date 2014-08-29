@@ -32,6 +32,11 @@ vzctl set $id --nameserver 202.141.160.99 --nameserver 202.141.176.99 --save
 vzctl set $id --searchdomain 6.freeshell.ustc.edu.cn --searchdomain ustc.edu.cn --save
 vzctl set $id --features ppp:on --save
 vzctl set $id --devices c:108:0:rw --save
+vzctl set $id --features sit:on --save
+vzctl set $id --features ipip:on --save
+vzctl set $id --features ipgre:on --save
+vzctl set $id --features nfs:on --save
+vzctl set $id --features nfsd:on --save
 vzctl set $id --netfilter full --save
 
 $(dirname $0)/recover-backup.sh $id
