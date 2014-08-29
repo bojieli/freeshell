@@ -148,7 +148,7 @@ switch ($_POST['action']) {
             report_sys_admin("failed to update port forwarding");
             goto move_finish;
         }
-        if (!($status = copy_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution'], DEFAULT_STORAGE_BASE))) {
+        if (!($status = copy_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution'], $a['storage_base']))) {
             report_sys_admin("failed to copy vz");
             goto move_finish;
         }
