@@ -62,4 +62,5 @@ function do_destroy($info) {
 }
 $status = do_destroy($info);
 unlock_shell($info['shellid'], $status);
-send_manage_notify_email($status, $info['email'], $info['shellid'], 'DESTROY');
+if (!$status)
+    send_manage_notify_email($status, $info['email'], $info['shellid'], 'DESTROY');
