@@ -1,4 +1,5 @@
 <?php
+include_once "config.inc.php";
 include_once "nodes.inc.php";
 include_once "verify.inc.php";
 include_once "proxy.inc.php";
@@ -109,7 +110,7 @@ switch ($_POST['action']) {
         check_hostname_and_fail($_POST['hostname']);
 
         lock_shell_or_die($id);
-        list($appid, $nodeno) = create_freeshell_in_db($_POST['hostname'], $a['password'], $email, $_POST['nodeno'], $a['distribution']);
+        list($appid, $nodeno) = create_freeshell_in_db($_POST['hostname'], $a['password'], $email, $_POST['nodeno'], $a['distribution'], DEFAULT_STORAGE_BASE);
         if (!$appid || !try_lock_shell($appid)) {
             unlock_shell($id, false);
             die("Failed to create new entry in database.");
@@ -119,7 +120,7 @@ switch ($_POST['action']) {
             die("Failed to copy freeshell config in database.");
         }
         goto_background();
-        $status = copy_vz($a['nodeno'], $id, $nodeno, $appid, $_POST['hostname'], $a['distribution']);
+        $status = copy_vz($a['nodeno'], $id, $nodeno, $appid, $_POST['hostname'], $a['distribution'], DEFAULT_STORAGE_BASE);
         unlock_shell($id, $status);
         unlock_shell($appid, $status);
 
@@ -147,7 +148,11 @@ switch ($_POST['action']) {
             report_sys_admin("failed to update port forwarding");
             goto move_finish;
         }
-        $status = move_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution']);
+        if (!($status = copy_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution'], DEFAULT_STORAGE_BASE))) {
+            report_sys_admin("failed to copy vz");
+            goto move_finish;
+        }
+        destroy_vz($a['nodeno'], $id);
 move_finish:
         unlock_shell($id, $status);
         unlock_shell($appid, $status);

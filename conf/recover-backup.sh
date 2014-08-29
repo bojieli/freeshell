@@ -1,18 +1,24 @@
 #!/bin/bash
-id=$1
-[ -z "$id" ] && exit 1
+VEID=$1
+[ -z "$VEID" ] && exit 1
 
-dirlist="/home/vz/backup/$id/backup-dirlist"
+CONFFILE="/etc/vz/conf/$VEID.conf"
+[ ! -f "$CONFFILE" ] && echo "VZ conf does not exist" && exit 1
+source $CONFFILE
+[ ! -d "$VE_PRIVATE" ] && echo "vz root dir $VE_PRIVATE does not exist" && exit 1
+BACKUP_DIR="$VE_PRIVATE/../../backup/$VEID"
+dirlist="$BACKUP_DIR/backup-dirlist"
+
 if [ -f "$dirlist" ]; then
     echo -n "Directories to recover: "
     cat $dirlist
     IFS="," read -ra dir <$dirlist
     for d in "${dir[@]}"; do
         echo "Recovering backuped $d ..."
-        rm -rf /home/vz/private/$id/$d 2>/dev/null
-        mkdir -p /home/vz/private/$id/$(dirname $d)
-        mv /home/vz/backup/$id/$d /home/vz/private/$id/$(dirname $d)
+        rm -rf $VE_PRIVATE/$d 2>/dev/null # clear target directory
+        mkdir -p $VE_PRIVATE/$(dirname $d) # make parent directory
+        mv $BACKUP_DIR/$d $VE_PRIVATE/$(dirname $d)/
     done
 fi
 # free backup directory
-rm -rf /home/vz/backup/$id
+rm -rf $BACKUP_DIR

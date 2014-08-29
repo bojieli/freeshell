@@ -165,8 +165,8 @@ function get_next_appid($nodeno) {
     return $appid;
 }
 
-function create_freeshell_in_db($hostname, $salted_pass, $email, $nodeno, $distribution) {
-    $query = "INSERT INTO shellinfo SET `hostname`='$hostname', `password`='$salted_pass', `email`='$email', `distribution`='$distribution'";
+function create_freeshell_in_db($hostname, $salted_pass, $email, $nodeno, $distribution, $storage_base) {
+    $query = "INSERT INTO shellinfo SET `hostname`='".mysql_real_escape_string($hostname)."', `password`='".mysql_real_escape_string($salted_pass)."', `email`='".mysql_real_escape_string($email)."', `distribution`='".mysql_real_escape_string($distribution)."', `storage_base`='".mysql_real_escape_string($storage_base)."'";
     
     if ($nodeno && is_numeric($nodeno)) {
         $query .= ",id=".get_next_appid($nodeno);

@@ -1,6 +1,7 @@
 <?php
 include_once "header.php";
 session_write_close();
+include_once "config.inc.php";
 include_once "db.php";
 include_once "verify.inc.php";
 include_once "nodes.inc.php";
@@ -10,7 +11,7 @@ $password = $_POST['regpassword'];
 if ($password !== $_POST['regconfpass'])
     alert('Passwords mismatch.');
 $email = $_POST['regemail'];
-$hostname = addslashes($_POST['hostname']);
+$hostname = $_POST['hostname'];
 $distribution = $_POST['distribution'];
 
 if (checkhost($hostname) || strlen($password)<6 || checkemail($email)) {
@@ -27,7 +28,7 @@ if (check_distribution($distribution)) {
     alert('Sorry, this distribution is no longer supported.');
 }
 
-list($appid, $nodeno) = create_freeshell_in_db($hostname, generate_password($password), mysql_real_escape_string($email), $_POST['nodeno'], mysql_real_escape_string($distribution));
+list($appid, $nodeno) = create_freeshell_in_db($hostname, generate_password($password), $email, $_POST['nodeno'], $distribution, DEFAULT_STORAGE_BASE);
 if (!$appid)
     alert('Database error, please retry. If the problem persists, please contact support@freeshell.ustc.edu.cn');
 
@@ -54,7 +55,7 @@ lock_shell_or_die($appid);
 fastcgi_finish_request();
 log_operation($appid, 'register', $_POST);
 if ($_POST['distribution'] != 'gallery') {
-    if (!create_vz($nodeno, $appid, $hostname, $password, node_default_mem_limit($nodeno), $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution'])) {
+    if (!create_vz($nodeno, $appid, $hostname, $password, node_default_mem_limit($nodeno), $info['diskspace_softlimit'], $info['diskspace_hardlimit'], $info['distribution'], $info['storage_base'])) {
         unlock_shell($appid, $status);
         delete_freeshell_in_db($appid);
         send_register_fail_mail($email);
@@ -62,7 +63,7 @@ if ($_POST['distribution'] != 'gallery') {
     }
 } else {
     $gallery_node = mysql_result(checked_mysql_query("SELECT nodeno FROM shellinfo WHERE id='$gallery_id'"), 0);
-    if (!copy_vz_without_activate($gallery_node, $gallery_id, $nodeno, $appid, $hostname)
+    if (!copy_vz_without_activate($gallery_node, $gallery_id, $nodeno, $appid, $hostname, DEFAULT_STORAGE_BASE)
         || !copy_freeshell_config($gallery_id, $appid)
         || !control_vz($nodeno, 'reset-root', "$appid $password", $password))
     {

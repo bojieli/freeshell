@@ -14,6 +14,7 @@ CREATE TABLE shellinfo (
     `diskspace_softlimit` VARCHAR(20) NOT NULL DEFAULT '5G',
     `diskspace_hardlimit` VARCHAR(20) NOT NULL DEFAULT '7G',
     `distribution` VARCHAR(255) NOT NULL,
+    `storage_base` VARCHAR(255) NOT NULL,
     `40x_page` TEXT,
     `50x_page` TEXT,
     `is_public` BOOL NOT NULL DEFAULT FALSE,

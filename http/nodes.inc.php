@@ -175,14 +175,14 @@ function update_dns($hostname, $appid) {
     return $ns->commit();
 }
 
-function create_vz($nodeno, $id, $hostname, $password, $mem_limit, $diskspace_softlimit, $diskspace_hardlimit, $distribution) {
+function create_vz($nodeno, $id, $hostname, $password, $mem_limit, $diskspace_softlimit, $diskspace_hardlimit, $distribution, $storage) {
     if (!update_dns($hostname, $id))
         return false;
-    return call_monitor($nodeno, "create-vz", "$id $hostname $password $mem_limit $diskspace_softlimit $diskspace_hardlimit $distribution", $password);
+    return call_monitor($nodeno, "create-vz", "$id $hostname $password $mem_limit $diskspace_softlimit $diskspace_hardlimit $distribution $storage", $password);
 }
 
-function copy_vz_without_activate($old_node, $old_id, $new_node, $new_id, $hostname) {
-    if (!call_monitor($old_node, "copy-vz", "$old_id $new_node $new_id"))
+function copy_vz_without_activate($old_node, $old_id, $new_node, $new_id, $hostname, $new_storage) {
+    if (!call_monitor($old_node, "copy-vz", "$old_id $new_node $new_id $new_storage"))
         return false;
     if (!set_vz($new_node, $new_id, 'hostname', $hostname))
         return false;
@@ -191,28 +191,10 @@ function copy_vz_without_activate($old_node, $old_id, $new_node, $new_id, $hostn
     return true;
 }
 
-function copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution) {
-    if (!copy_vz_without_activate($old_node, $old_id, $new_node, $new_id, $hostname))
+function copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution, $new_storage) {
+    if (!copy_vz_without_activate($old_node, $old_id, $new_node, $new_id, $hostname, $new_storage))
         return false;
     return activate_vz($new_node, $new_id, $distribution);
-}
-
-function move_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution) {
-    /* do not use fast move because vzquota may fail when old VZ cannot be stopped
-     * copying files is slow, but safer
-     *
-    if ($new_node == $old_node) {
-        update_dns($hostname, $new_id);
-        $ret = call_monitor($old_node, "move-vz", "$old_id $new_id");
-        activate_vz($new_node, $new_id, $distribution);
-    } else {
-    */
-        if (!copy_vz($old_node, $old_id, $new_node, $new_id, $hostname, $distribution))
-            return false;
-        return destroy_vz($old_node, $old_id);
-    /*
-    }
-    */
 }
 
 function reactivate_vz($nodeno, $id, $distribution) {
@@ -340,4 +322,12 @@ function human_readable_status($str) {
     if (strstr($str, 'exist'))
         return 'Down';
     return 'Not exist';
+}
+
+function is_same_storage($a, $b) {
+    if ($a != $b)
+        return false;
+    if (strpos($a, "/home") == 0) // local storage
+        return false;
+    return true;
 }

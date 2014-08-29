@@ -21,5 +21,5 @@ timeout 10 vzctl stop $oldid --fast
 
 mv $VZ_CONF_ROOT/$oldid.conf $VZ_CONF_ROOT/$newid.conf
 mv $VZ_PRIVATE_ROOT/$oldid $VZ_PRIVATE_ROOT/$newid
-mv $VZ_BACKUP_ROOT/$oldid $VZ_BACKUP_ROOT/$oldid
+mv $VZ_BACKUP_ROOT/$oldid $VZ_BACKUP_ROOT/$newid
 mkdir -p $VZ_MOUNT_ROOT/$newid
