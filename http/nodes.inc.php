@@ -325,7 +325,7 @@ function human_readable_status($str) {
 }
 
 function is_local_storage($a) {
-    return (strpos($a, "/home") == 0);
+    return (strpos($a, "/home") === 0);
 }
 
 function is_same_storage($a, $b) {
