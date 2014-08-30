@@ -24,7 +24,7 @@ CREATE TABLE shellinfo (
     KEY key_nodeno (`nodeno`),
     KEY key_email (`email`),
     KEY key_is_public (`is_public`)
-) AUTO_INCREMENT = 101;
+) AUTO_INCREMENT = 101 ENGINE = InnoDB;
 
 CREATE TABLE tickets (
     `id` INT(10) NOT NULL AUTO_INCREMENT,
@@ -36,7 +36,7 @@ CREATE TABLE tickets (
     `used_time` DATETIME,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`shellid`) REFERENCES shellinfo (`id`)
-);
+) ENGINE = InnoDB;
 
 CREATE TABLE ssh_log (
     `id` INT(10) NOT NULL AUTO_INCREMENT,
@@ -49,7 +49,7 @@ CREATE TABLE ssh_log (
     `elapsed_time` FLOAT,
     PRIMARY KEY (`id`),
     KEY key_nodeno (`nodeno`)
-);
+) ENGINE = MyISAM;
 
 CREATE TABLE operation_log (
     `id` INT(10) NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE operation_log (
     `data` VARCHAR(200) NOT NULL,
     `log_time` INT(10) NOT NULL,
     KEY key_id (`id`)
-);
+) ENGINE = MyISAM;
 
 CREATE TABLE endpoint (
     `id` INT(10) NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE endpoint (
     `protocol` VARCHAR(10) NOT NULL DEFAULT 'tcp',
     UNIQUE KEY key_public_endpoint (`public_endpoint`,`protocol`),
     FOREIGN KEY (`id`) REFERENCES shellinfo (`id`)
-);
+) ENGINE = InnoDB;
 
 CREATE TABLE cname (
     `id` INT(10) NOT NULL,
@@ -76,4 +76,4 @@ CREATE TABLE cname (
     KEY key_id (`id`),
     UNIQUE KEY key_domain (`domain`),
     FOREIGN KEY (`id`) REFERENCES shellinfo (`id`)
-);
+) ENGINE = InnoDB;
