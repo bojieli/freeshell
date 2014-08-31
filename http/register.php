@@ -63,7 +63,7 @@ if ($_POST['distribution'] != 'gallery') {
     }
 } else {
     $gallery_node = mysql_result(checked_mysql_query("SELECT nodeno FROM shellinfo WHERE id='$gallery_id'"), 0);
-    if (!copy_vz_without_activate($gallery_node, $gallery_id, $nodeno, $appid, $hostname, DEFAULT_STORAGE_BASE)
+    if (!copy_vz_without_activate($gallery_node, $gallery_id, $nodeno, $appid, $hostname, $info['storage_base'])
         || !copy_freeshell_config($gallery_id, $appid)
         || !control_vz($nodeno, 'reset-root', "$appid $password", $password))
     {

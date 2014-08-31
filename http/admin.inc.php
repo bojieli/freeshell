@@ -184,10 +184,10 @@ function create_freeshell_in_db($hostname, $salted_pass, $email, $nodeno, $distr
 }
 
 // return newly assigned ID if success, return false if error
-function move_freeshell_in_db($old_id, $nodeno) {
+function move_freeshell_in_db($old_id, $nodeno, $new_storage_base) {
     $appid = get_next_appid($nodeno);
     // the new freeshell should be activated later
-    checked_mysql_query("UPDATE shellinfo SET id=$appid, nodeno=$nodeno, isactive=0 WHERE id=$old_id");
+    checked_mysql_query("UPDATE shellinfo SET id=$appid, nodeno=$nodeno, isactive=0, storage_base='".mysql_real_escape_string($new_storage_base)."' WHERE id=$old_id");
     if (mysql_affected_rows() == 1) {
         checked_mysql_query("UPDATE tickets SET shellid=$appid WHERE shellid=$old_id");
         checked_mysql_query("UPDATE cname SET id=$appid WHERE id=$old_id");

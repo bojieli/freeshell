@@ -134,7 +134,8 @@ switch ($_POST['action']) {
         check_nodeno_and_fail($_POST['nodeno']);
 
         lock_shell_or_die($id);
-        $appid = move_freeshell_in_db($id, $_POST['nodeno']);
+        $new_storage = DEFAULT_STORAGE_BASE;
+        $appid = move_freeshell_in_db($id, $_POST['nodeno'], $new_storage);
         if (!$appid) {
             unlock_shell($id, false);
             die("Failed to move freeshell in database.");
@@ -148,7 +149,7 @@ switch ($_POST['action']) {
             report_sys_admin("failed to update port forwarding");
             goto move_finish;
         }
-        if (!($status = copy_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution'], DEFAULT_STORAGE_BASE))) {
+        if (!($status = copy_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution'], $new_storage))) {
             report_sys_admin("failed to copy vz");
             goto move_finish;
         }
