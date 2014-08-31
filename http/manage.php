@@ -27,7 +27,7 @@ if (empty($a))
 if (!$_SESSION['isadmin']) {
     if (!$a['isactive'])
         die('Not Activated');
-    if (!$a['blocked'])
+    if ($a['blocked'])
         die('Freeshell blocked');
 }
 
