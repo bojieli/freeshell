@@ -76,25 +76,25 @@ $shellnum = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo"), 
                       <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
                   </div>
                 </li>
+                <li class="slide2">
+                <div class="slidewords">
+                         <h1>This is SCGY cluster.</h1>
+                         <h2></h2>
+                      <p>SCGY cluster, previously used for high-performance computing, is now open to public.</p>
+                      <p>Unlike most VPS, each box on freeshell can make use of full capacity of the physical machine, i.e. except for disk space, there is nearly no limit.</p>
+                      <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
+                  </div>
+                </li>
+                <li class="slide3">
+                <div class="slidewords">
+                         <h1>This is OpenVZ.</h1>
+                         <h2>OpenVZ Virtualization, solid as stone.</h2>
+                      <p>Based on Linux Containers, OpenVZ provides strong isolation among virtual machines with only 1% to 2% performance loss.</p>
+                      <p>With OpenVZ, there can be hundreds of live Linux boxes on a single machine.</p>
+                      <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
+                  </div>
+                </li>
 		    </ul>
-            <li class="slide2">
-            <div class="slidewords">
-                     <h1>This is SCGY cluster.</h1>
-                     <h2></h2>
-                  <p>SCGY cluster, previously used for high-performance computing, is now open to public.</p>
-                  <p>Unlike most VPS, each box on freeshell can make use of full capacity of the physical machine, i.e. except for disk space, there is nearly no limit.</p>
-                  <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
-              </div>
-            </li>
-            <li class="slide3">
-            <div class="slidewords">
-                     <h1>This is OpenVZ.</h1>
-                     <h2>OpenVZ Virtualization, solid as stone.</h2>
-                  <p>Based on Linux Containers, OpenVZ provides strong isolation among virtual machines with only 1% to 2% performance loss.</p>
-                  <p>With OpenVZ, there can be hundreds of live Linux boxes on a single machine.</p>
-                  <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
-              </div>
-            </li>
 	    </div>
         
     </div>
