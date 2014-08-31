@@ -77,6 +77,10 @@ $(document).ready(function(){
                 if ($('#distribution').val() == 'gallery' && ! $('input[name=gallery-id]:checked', '#regform').val()) {
                     $('#galleryfail').html('Please select one item from the gallery below!');
                 }
+                else if(!$('#agree-policy')[0].checked) {
+                    alert('You could not register unless you agree to the Freeshell Policy.'); 
+                    e.stopPropagation();
+                }
 				else if(regdata.email&&regdata.pass&&regdata.host) {
 					$("#regform").submit();
                 }

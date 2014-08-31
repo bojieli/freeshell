@@ -77,24 +77,6 @@ $shellnum = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo"), 
                       <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
                   </div>
                 </li>
-		        <li class="slide2">
-                <div class="slidewords">
-	                  <h1>This is SCGY cluster.</h1>
-	                  <h2>16G Mem, 8 Cores, 15000rpm disk * 7 nodes</h2>
-                      <p>SCGY cluster, previously used for high-performance computing, is now open to public.</p>
-                      <p>Unlike most VPS, each box on freeshell can make use of full capacity of the physical machine, i.e. except for disk space, there is nearly no limit.</p>
-                      <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
-                  </div>
-                </li>
-		        <li class="slide3">
-                <div class="slidewords">
-	                  <h1>This is OpenVZ.</h1>
-	                  <h2>OpenVZ Virtualization, solid as stone.</h2>
-                      <p>Based on Linux Containers, OpenVZ provides strong isolation among virtual machines with only 1% to 2% performance loss.</p>
-                      <p>With OpenVZ, there can be hundreds of live Linux boxes on a single machine.</p>
-                      <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
-                  </div>
-                </li>
 		    </ul>
 	    </div>
         
@@ -114,7 +96,6 @@ $shellnum = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo"), 
             </div>
         </div>
         <form id="regform" action="register.php" method="post">
-         	<!--<p class="descr">Before registering, you should read and agreed to the <a href="faq.html">General Policy</a>.</p>-->
             <p><span>E-Mail: </span><input type="text" name="regemail" id="regemail" onchange="verify('email',$(this).val())"/><span class="regcheck" id="emailfail"></span></p>
             <p><span>Password:</span><input type="password" name="regpassword" id="regpassword" onchange="if(passcheck){checkpass($(this).val(),'password')}"/><span class="regcheck"></span></p>
             <p><span>Confirm:</span><input type="password" name="regconfpass" id="regconfpass" onchange="checkpass($(this).val())"/><span class="regcheck" id="passfail"></span></p>
@@ -135,6 +116,9 @@ $shellnum = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo"), 
                 <option value="gallery">Create from Gallery (NEW)</option>
                 </select>
                 <span class="regcheck" id="galleryfail"></span></p>
+            </p>
+            <p><span><input id="agree-policy" name="agree-policy" type="checkbox" /></span>
+                <label for="agree-policy">I have read and agree to the <a href="faq.html" target="_blank">Freeshell Policy</a>.</label>
             </p>
             
             <div id="gallery" style="display:none"></div>
