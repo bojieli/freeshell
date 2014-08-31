@@ -10,6 +10,7 @@ CREATE TABLE shellinfo (
     `isadmin` BOOL NOT NULL DEFAULT FALSE,
     `locked` BOOL NOT NULL DEFAULT FALSE,
     `lock_time` INT(10),
+    `blocked` BOOL NOT NULL DEFAULT FALSE,
     `http_subdomain` VARCHAR(50) NOT NULL,
     `diskspace_softlimit` VARCHAR(20) NOT NULL DEFAULT '5G',
     `diskspace_hardlimit` VARCHAR(20) NOT NULL DEFAULT '7G',

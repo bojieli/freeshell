@@ -35,20 +35,25 @@ else
 }
 </style>
 <table>
-<tr class="shell-select-head"><th>ID</th><th>Email</th><th>HostName</th><th>Node</th><th>Disk Soft Quota</th><th>Disk Hard Quota</th><th>HTTP Subdomain</th></tr>
+<tr class="shell-select-head"><th>ID</th><th>Email</th><th>HostName</th><th>Node</th><th>Disk Soft Quota</th><th>Disk Hard Quota</th><th>HTTP Subdomain</th><th>Admin Operations</th></tr>
 <?php
 $counter = 0;
 while ($row = mysql_fetch_array($rs)) {
     $counter++;
+    $id = $row['id'];
     echo "<tr class=\"shell-select\"><td>".
-        $row['id']."</td><td>".
+        "$id</td><td>".
         $row['email']."</td><td>".
         $row['hostname']."</td><td>".
         $row['nodeno']."</td><td>".
         $row['diskspace_softlimit']."</td><td>".
         $row['diskspace_hardlimit']."</td><td>".
-        $row['http_subdomain']."</td>".
-        "</tr>\n";
+        $row['http_subdomain']."</td><td>".
+        "<button onclick=\"manage('force-stop', $id)\">Shutdown</button> ".
+        (!$row['blocked'] ?
+        "<button onclick=\"manage('block', $id)\">Block</button>" :
+        "<button onclick=\"manage('unblock', $id)\">Unblock</button>").
+        "</td></tr>\n";
 }
 ?>
 </table>
@@ -70,3 +75,34 @@ print_table:
 </table>
 </form>
 <p>Note: Match by shell ID or email or hostname. Shell ID is exact match. Email, hostname and HTTP subdomain are substring match.</p>
+<p>"Shutdown" means to shutdown a freeshell immediately. For efficiency we do not detect the current status of the freeshell, so even if the freeshell is already down, the "Shutdown" button still appears.</p>
+<p>"Block" means to block a user's access to freeshell control panel. It will not shutdown the freeshell.</p>
+<p>Management operations will send email to the affected user, as well as you.</p>
+
+<script src="../js/jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+function ajaxSuccessFunc(msg){
+    if (msg.length > 0)
+        alert(msg);
+    else
+        alert('OK. Please refresh the page for the new status.');
+}
+function ajaxErrorFunc() {
+    alert('Failed to connect to server!');
+}
+function ajaxManage(data) {
+    $.ajax({
+        url: '../manage.php',
+        type: 'post',
+        async: true,
+        data: data,
+        success: ajaxSuccessFunc,
+        error: ajaxErrorFunc,
+    });
+}
+function manage(action, id) {
+    if (!confirm("Do you really want to " + action + " freeshell #" + id + "?"))
+        return;
+    ajaxManage({appid: id, action: action});
+}
+</script>

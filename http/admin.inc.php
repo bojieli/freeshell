@@ -107,8 +107,17 @@ function send_manage_notify_email($status, $email, $appid, $action, $additional_
     $title = "Your freeshell ".($status ? "succeeded in " : "FAILED TO")." $action";
     if (!$status)
         $additional_info = "This failure may be caused by a temporary network failure. Please try again later. The freeshell developers will be awared of this issue.\n".$additional_info;
-    $body = greetings($appid)."This email is to notify you that shell ID $appid ".($status ? "has been" : "FAILED TO")." $action via Web control panel ".site_baseurl().".\n\n$additional_info\nIf you did not request this action, maybe your web account is stolen, please contact us.".$footer;
+    $body = greetings($appid)."This email is to notify you that shell ID $appid ".($status ? "has been" : "FAILED TO")." $action via Web control panel ".site_baseurl().".\n\n$additional_info\nIf you did not request this action, maybe this action is done by a system administrator (you should receive another email on the details), or your web account has been compromised, please contact us.".$footer;
     mail($email, $title, $body, $headers);
+}
+
+function send_admin_manage_email($email, $copy_email, $appid, $action, $additional_info = "") {
+    global $headers, $footer;
+    $title = "Your freeshell has been $action"."ed";
+    $body = greetings($appid)."This email is to notify you that shell ID $appid has been $action"."ed by the administrator.\n\n$additional_info\n".$footer;
+    mail($email, $title, $body, $headers);
+    if ($email != $copy_email)
+        mail($copy_email, $title, $body, $headers);
 }
 
 function send_change_password_email($email, $appid) {

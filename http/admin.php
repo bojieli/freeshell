@@ -26,6 +26,8 @@ $num_onthisnode = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellin
 $node = get_node_info($info['nodeno'], $appid);
 if ($node === null || !isset($node['mystatus']))
     $node = array('mystatus' => 'Unknown');
+else if ($info['blocked'])
+    $node['mystatus'] = 'Blocked';
 else if (isset($node['locked']) && $node['locked'])
     $node['mystatus'] = 'Locked';
 else
@@ -163,7 +165,12 @@ else if ($node['mystatus'] == "Not exist") {
     headinfo('The freeshell does not exist. <button onclick="manage(\'reinstall\')">Reinstall Freeshell</button>');
 }
 else if ($node['mystatus'] == "Locked") {
-    headinfo('Your freeshell has been locked, sorry for the inconvenience. If you need to migrate the data, please contact us.');
+    headinfo('Your freeshell is locked in the freeshell system, sorry for the inconvenience. Please contact us.');
+    exit();
+}
+else if ($node['mystatus'] == "Blocked") {
+    headinfo('Your freeshell has been blocked by the administrator. Please contact us.');
+    exit();
 }
 else { // display disk space warning
     $free_diskspace = $node['#Disk Space Limit (KB)'] - $node['Used Disk Space (KB)'];

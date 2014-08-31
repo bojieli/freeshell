@@ -14,11 +14,22 @@ if (empty($_SESSION['email']))
     die('Not login');
 if (!is_numeric($_POST['appid']) || $_POST['appid'] == 0 || empty($_POST['action']))
     die('Invalid appid');
-$id = $_POST['appid'];
+$id = intval($_POST['appid']);
 $email = $_SESSION['email'];
-$a = mysql_fetch_array(checked_mysql_query("SELECT * FROM shellinfo WHERE `email`='$email' AND `id`='$id'"));
+
+if ($_SESSION['isadmin']) {
+    $a = mysql_fetch_array(checked_mysql_query("SELECT * FROM shellinfo WHERE `id`='$id'"));
+} else {
+    $a = mysql_fetch_array(checked_mysql_query("SELECT * FROM shellinfo WHERE `email`='$email' AND `id`='$id'"));
+}
 if (empty($a))
     die("Freeshell does not exist");
+if (!$_SESSION['isadmin']) {
+    if (!$a['isactive'])
+        die('Not Activated');
+    if (!$a['blocked'])
+        die('Freeshell blocked');
+}
 
 log_operation($id, $_POST['action'], $_POST);
 switch ($_POST['action']) {
@@ -30,7 +41,10 @@ switch ($_POST['action']) {
         lock_shell_or_die($id);
         $status = control_vz($a['nodeno'], $_POST['action'], $id);
         unlock_shell($id, $status);
-        send_manage_notify_email($status, $email, $id, strtoupper($_POST['action']));
+        if ($email == $a['email'])
+            send_manage_notify_email($status, $email, $id, strtoupper($_POST['action']));
+        else if ($status)
+            send_admin_manage_email($email, $a['email'], $id, $_POST['action']);
         break;
     case 'reset-root':
         reset_passwd($email, $a['nodeno'], $id);
@@ -214,6 +228,26 @@ move_finish:
             die('Operation failed. Please do not use name and description that are too long.');
         if ($a['is_public'] != $is_public)
             send_manage_notify_email($status, $email, $id, ($_POST['is_public'] == 1 ? 'Added to' : 'Removed from')." public gallery");
+        break;
+    case 'block':
+        if (!$_SESSION['isadmin'])
+            die('Unsupported action');
+        checked_mysql_query("UPDATE shellinfo SET blocked=1 WHERE id='$id'");
+        if (mysql_affected_rows() != 1) {
+            die('Query failed, maybe the shell is already blocked');
+        } else {
+            send_admin_manage_email($email, $a['email'], $id, $_POST['action'], "Please let us know if you want to retrieve your data or have any complaint.");
+        }
+        break;
+    case 'unblock':
+        if (!$_SESSION['isadmin'])
+            die('Unsupported action');
+        checked_mysql_query("UPDATE shellinfo SET blocked=0 WHERE id='$id'");
+        if (mysql_affected_rows() != 1) {
+            die('Query failed, maybe the shell is not blocked');
+        } else {
+            send_admin_manage_email($email, $a['email'], $id, $_POST['action'], "Please start your freeshell via Web control panel. If you have any problem, please contact us.");
+        }
         break;
     default:
         die('Unsupported action');

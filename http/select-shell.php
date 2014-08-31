@@ -51,7 +51,7 @@ while ($info = mysql_fetch_array($rs)) {
     echo "<td>".$info['id']."</td>";
     echo "<td>".$info['nodeno']."</td>";
     echo "<td>".$info['hostname']."</td>";
-    echo "<td>".($info['isactive'] ? 'Active' : 'Not Activated')."</td>";
+    echo "<td>".($info['isactive'] ? ($info['blocked'] ? 'Blocked' : 'Active') : 'Not Activated')."</td>";
     echo "</tr>\n";
 }
 ?>
