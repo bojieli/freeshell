@@ -1,7 +1,5 @@
 #!/bin/bash
 
-iptables-restore < /home/freeshell/iptables-save
-
 # flush ip rules
 ip rule show | grep -v 'local\|main\|default' | while read pref rule; do
     ip rule del pref ${pref%%:} $rule
@@ -63,6 +61,15 @@ iptables -t mangle -A PREROUTING -i eth0 -m mac ! --mac-source $ROUTER_MAC -j MA
 iptables -t mangle -A PREROUTING -i freeshell -j MARK --set-mark 3
 iptables -t mangle -A PREROUTING -i venet0 -j MARK --set-mark 100
 iptables -t mangle -A PREROUTING -j CONNMARK --save-mark
+
+iptables -D PREROUTING -d 192.168.0.200/29 -i venet0 -j DROP 2>/dev/null
+iptables -A PREROUTING -d 192.168.0.200/29 -i venet0 -j DROP
+
+iptables -t nat -F
+iptables -t nat -A POSTROUTING -s 10.10.0.0/16 -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 10.10.0.0/16 -o tun0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 192.168.0.0/22 -o tun0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 192.168.0.0/22 -o eth0 -j MASQUERADE
 
 # warning: the following rule must not be "from all", since freeshell IPs are in "main" table
 #   which has lower priority than the fwmark rule, making incoming packets fail to forward.
