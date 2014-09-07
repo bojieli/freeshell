@@ -7,6 +7,22 @@ include_once "../nodes.inc.php";
 if (empty($_SESSION['isadmin']))
     exit();
 
+function row_to_status($row) {
+    if (!$row['isactive'])
+        return 'Not Activated';
+    if ($row['blocked'])
+        return 'Blocked';
+    if ($row['locked'])
+        return 'Running Action';
+    return 'Active';
+}
+
+$dbstat = array();
+$rs = mysql_query("SELECT id, isactive, blocked, locked FROM shellinfo");
+while ($row = mysql_fetch_array($rs)) {
+    $dbstat[$row['id']] = row_to_status($row);
+}
+
 $attrs = array(
     'ctid',
     'hostname',
@@ -61,6 +77,7 @@ $cmd .= implode(',', $attrs);
 <?php
 echo '<table id="sort"><thead>';
 echo "<th>Node#</th>";
+echo "<th>DB status</th>";
 foreach ($attrs as $attr) {
     echo "<th>$attr</th>";
 }
@@ -84,6 +101,8 @@ foreach ($nodes2ip as $nodeno => $ip) {
         $cols[] = $freespace;
 
         echo "<tr><td>$nodeno</td>";
+        $id = get_col($cols, 'ctid');
+        echo "<td>".(array_key_exists($id, $dbstat) ? $dbstat[$id] : 'Not exist')."</td>";
         foreach ($cols as $col) {
             echo "<td>$col</td>";
         }
