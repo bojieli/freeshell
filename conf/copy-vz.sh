@@ -14,6 +14,7 @@ VZ_CONF_ROOT=/etc/vz/conf
 CONFFILE="$VZ_CONF_ROOT/$VEID.conf"
 [ ! -f "$CONFFILE" ] && echo "VZ conf does not exist" && exit 1
 source $CONFFILE
+[ -z "$VE_PRIVATE" ] && VE_PRIVATE=/home/vz/private/$VEID
 [ ! -d "$VE_PRIVATE" ] && echo "vz root dir $VE_PRIVATE does not exist" && exit 1
 HOSTNAME=scgyshell-$newnode
 NEW_VE_PRIVATE=$newstorage/private/$newid

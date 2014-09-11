@@ -5,6 +5,7 @@ VEID=$1
 CONFFILE="/etc/vz/conf/$VEID.conf"
 [ ! -f "$CONFFILE" ] && echo "VZ conf does not exist" && exit 1
 source $CONFFILE
+[ -z "$VE_PRIVATE" ] && VE_PRIVATE=/home/vz/private/$VEID
 [ ! -d "$VE_PRIVATE" ] && echo "vz root dir $VE_PRIVATE does not exist" && exit 1
 BACKUP_DIR="$VE_PRIVATE/../../backup/$VEID"
 dirlist="$BACKUP_DIR/backup-dirlist"

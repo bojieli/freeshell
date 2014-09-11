@@ -11,6 +11,7 @@ param=$3
 CONFFILE="/etc/vz/conf/$VEID.conf"
 [ ! -f "$CONFFILE" ] && echo "VZ conf does not exist" && exit 1
 source $CONFFILE
+[ -z "$VE_PRIVATE" ] && VE_PRIVATE=/home/vz/private/$VEID
 [ ! -d "$VE_PRIVATE" ] && echo "vz root dir $VE_PRIVATE does not exist" && exit 1
 
 for act in start stop force-stop reboot force-reboot status destroy; do
