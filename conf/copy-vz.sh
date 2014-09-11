@@ -11,6 +11,7 @@ newid=$3
 newstorage=$4
 
 VZ_CONF_ROOT=/etc/vz/conf
+VZ_MOUNT_ROOT=/home/vz/root
 CONFFILE="$VZ_CONF_ROOT/$VEID.conf"
 [ ! -f "$CONFFILE" ] && echo "VZ conf does not exist" && exit 1
 source $CONFFILE
