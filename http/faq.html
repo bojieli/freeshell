@@ -1,295 +1,406 @@
-<html lang=en>
-<head>
-<meta charset="utf-8" />
-<title>Freeshell FAQ</title>
-</head>
-<body>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
+    <title>Freeshell Policy and FAQ</title>
+  </head>
 
-<h1>Freeshell Policy</h1>
+  <body>
+    <h1>Freeshell Policy</h1>
+    <p lang="zh-cmn-Hans">注册 Freeshell 之前，请阅读并同意下述条款。</p>
+    <h2 lang="zh-cmn-Hans">LUG 网络服务总则</h2>
+    <p lang="zh-cmn-Hans">〇、总则</p>
+<ol lang="zh-cmn-Hans">
+	<li>中国科学技术大学 Linux 用户协会（下称 LUG 或“我们”）向中国科大师生和 Linux 社区提供了一系列网络服务。用户在使用 LUG 网络服务之前，应当仔细阅读并同意本文各项条款。<br /></li>
+	<li>除非相关网络服务的服务条款特别说明，否则本文各项规则适用于 LUG 提供的所有网络服务。这些服务包括但不限于：<br />
+		a. USTC blog space<br />
+		b. OpenVZ 虚拟主机服务（Freeshell）<br />
+		c. 代码托管服务（GitLab）<br />
+		d. 虚拟专用网络服务（OpenVPN）<br />
+		e. 软件源镜像（Mirrors）<br />
+		f. 中国科学技术大学网络启动服务（PXE）<br />
+		g. Time Machine 服务（TimeMachine）<br /></li>
+	<li>用户开始使用 LUG 网络服务时，即视为无条件同意本规则和其他相关条款。</li></ol>
+    <p lang="zh-cmn-Hans">一、服务承诺</p>
+    <ol lang="zh-cmn-Hans">
+	<li>LUG 及其成员的行为受中华人民共和国法律法规、中国科学技术大学校规校纪的约束。<br /></li>
+	<li>LUG 网络服务均为非营利性，我们不会以任何名义向用户强制收取任何费用。<br /></li>
+	<li>我们会尽力保证服务稳定，但不对服务质量作任何保证。<br /></li>
+	<li>我们承诺不会主动将用户提交的隐私数据泄露给第三方，用户隐私受到法律保护。<br /></li>
+	<li>对用户通过 LUG 网络服务发表的合法原创内容，其著作权属于用户。<br /></li>
+	<li>当 LUG 网络服务出现重大变更时，我们会通过用户提供的联系方式通知用户。<br /></li></ol>
+<p lang="zh-cmn-Hans">二、用户义务</p>
+<ol lang="zh-cmn-Hans">
+	<li>用户不得利用 LUG 服务从事任何违反中华人民共和国法律法规、中国科学技术大学校规校纪和社会公共道德的活动。<br /></li>
+	<li>未经 LUG 管理人员允许，用户不得利用 LUG 服务进行任何营利性活动。<br /></li>
+	<li>如果用户的行为违反了相关用户条款和规则，我们有权采取终止服务、清除违规内容、向有关部门举报等措施进行反制。用户须承担违规行为所产生的一切后果。<br /></li></ol>
+<p lang="zh-cmn-Hans">三、规则变更</p>
+<ol lang="zh-cmn-Hans">
+	<li>LUG 有权对本服务总则和其他用户规则、协议做出更新和修改。我们会在这些规则、协议内容发生的变化时通知给用户。<br /></li></ol>
 
-<p lang=zh-cmn-Hans>注册 Freeshell 之前，请阅读并同意下述条款。</p>
+<h2 lang="zh-cmn-Hans">Freeshell 用户规则</h2>
+<p lang="zh-cmn-Hans">〇、总则</p>
+<ol lang="zh-cmn-Hans">
+	<li>Freeshell 是中国科学技术大学 Linux 用户协会（下称 LUG 或“我们”）面向中国科大在校师生提供的 Linux 虚拟专用主机（VPS）服务。<br /></li>
+	<li>在注册使用 Freeshell 前，请仔细阅读并同意本文以及《LUG 网络服务总则》的各项条款。<br /></li></ol>
+<p lang="zh-cmn-Hans">一、服务范围</p>
+<ol lang="zh-cmn-Hans">
+	<li>Freeshell 面向中国科大在校师生提供服务。用户需凭有效的科大邮箱注册 Freeshell 帐号，并完成验证。科大邮箱是用户识别的唯一ID，每个用户对应一个科大邮箱。<br /></li>
+	<li>对于已离校人员的 Freeshell 帐号，在服务器资源紧张的情况下，我们有权在通知后予以删除。<br /></li></ol>
+<p lang="zh-cmn-Hans">二、禁止事项</p>
+<ol lang="zh-cmn-Hans">
+	<li>用户不得利用 Freeshell 进行以下行为：<br/>
+		a. 网络攻击、扫描、压力测试；<br/>
+		b. 运行电子货币的“挖矿”程序；<br/>
+		c. 为分布式计算/网格计算/志愿计算项目提供计算资源（个人开发的除外）；<br/>
+		d. 架设网络游戏服务器（个人开发的除外）；<br/>
+		e. 运行以占用资源或干扰其他 Freeshell 为目的的搭建程序；<br/>
+		f. 搭建允许校外人员发布内容的网站；<br/>
+		g. 搭建供校外人员访问校内网络资源的代理服务。<br /></li>
+	<li>对于违反《LUG 网络服务总则》或从事上述行为的用户，我们有权采取包括但不限于限制网络访问、停止相关程序运行、删除相关文件、永久删除 Freeshell 在内的处理措施。</li></ol>
+<p lang="zh-cmn-Hans">三、规则变更</p>
+<ol lang="zh-cmn-Hans">
+	<li>LUG 有权对本规则做出更新和修改。我们会将这些规则、协议内容发生的变化时通知给用户。<br /></li></ol>
 
-<ol lang=zh-cmn-Hans>
+<h2 lang="zh-cmn-Hans">Freeshell 使用说明</h2>
+
+<ol lang="zh-cmn-Hans">
   <li>Freeshell 是实验性的计算和应用搭建平台，我们鼓励创新，希望 freeshell 能孵化出好玩和实用的应用。
-  <li>我们尽力保证服务稳定，但我们不对服务质量作任何保证，freeshell 对维护人员失误、软硬件故障、受到攻击、自然灾害、学校政策等导致的网络故障、程序崩溃、数据损坏、数据泄露等不良后果不承担任何责任。请您注意做好数据备份，关注 freeshell 官方发布的公告。
-  <li>请对您在 freeshell 上的行为负责。Freeshell 禁止下列行为：
+  </li><li>我们尽力保证服务稳定，但我们不对服务质量作任何保证，freeshell 
+	  对维护人员失误、软硬件故障、受到攻击、自然灾害、学校政策等导致的网络故障、程序崩溃、数据损坏、数据泄露等不良后果不承担任何责任。请您注意做好数据备份，关注 freeshell 官方发布的公告。您可以在这里浏览 Freeshell 服务器维护情况的公告：<a href="https://servers.ustclug.org/index.php/category/freeshell/">https://servers.ustclug.org/index.php/category/freeshell/</a>
+  </li><li>请对您在 freeshell 上的行为负责。未经 Freeshell 维护人员的允许，Freeshell 禁止下列行为：
   <ul>
     <li>网络攻击、扫描、压力测试；
-    <li>架设代理服务器；
-    <li>建立校外用户可以发表内容的论坛等；
-    <li>发布未经授权的版权内容；
-    <li>运行电子货币的“挖矿”程序；
-    <li>运行以占用资源 或 干扰其他 freeshell 为目的的程序（如 while(1)）。
-    <li>其他国家法律法规和校纪校规禁止的行为。
-  </ul>
+    </li><li>架设代理服务器，包括但不限于基于 PPTP, L2TP, OpenVPN 协议的代理服务器；
+    </li><li>建立校外用户可以发表内容的论坛等；
+    </li><li>发布未经授权的版权内容；
+    </li><li>运行电子货币的“挖矿”程序；
+    </li><li>架设非用户自己开发的网络游戏服务器，包括但不限于 Minecraft 服务器、Minetest 服务器等。
+    </li><li>运行以占用资源 或 干扰其他 freeshell 为目的的程序（如 while(1)）。
+    </li><li>其他国家法律法规和校纪校规禁止的行为。
+  </li></ul>
   被禁止的行为一经发现，我们有权采取包括但不限于限制网络访问、停止相关程序运行、删除相关文件、永久删除 freeshell 在内的处理措施，并有责任向学校有关部门报告。
   </li>
   <li>Freeshell 不对用户收取任何费用，用户也不得利用 freeshell 平台从事商业行为。
-  <li>Freeshell 开发团队除了为改进服务和排查故障，不会对网络数据和磁盘数据进行监控和记录。关于隐私方面的具体说明参见下面的 “Privacy”。
-  <li>Freeshell 的磁盘空间有限，在您离开学校时请备份所有数据并删除不用的 freeshell。在磁盘空间充足的情况下，我们不会删除离校用户的 freeshell，但如果磁盘空间比较紧张，我们只能删除不活跃的 freeshell。
-</ol>
+  </li><li>Freeshell 开发团队除了为改进服务和排查故障，不会对网络数据和磁盘数据进行监控和记录。关于隐私方面的具体说明参见下面的 “Privacy”。
+  </li><li>Freeshell 的磁盘空间有限，在您离开学校时请备份所有数据并删除不用的 freeshell。在磁盘空间充足的情况下，我们不会删除离校用户的 freeshell，但如果磁盘空间比较紧张，我们将在通知用户后删除用户不活跃的 freeshell。
+  </li><li>Freeshell FAQ 仅用于帮助用户理解 Freeshell 的使用方式。如 FAQ 中的内容与以上所有服务条款有所冲突，以服务条款为准。
+  </li><li>所有服务条款的最终解释权归 USTC LUG 所有。
+</li></ol>
+
+<hr/>
 
 <h1>Freeshell FAQ</h1>
 
 <h2>General Info</h2>
 
-<h3 id="00">00. Who can register freeshell?</h3>
+<h3 id="no00">00. Who can register freeshell?</h3>
 <p>USTC staff and students with @ustc.edu.cn or @mail.ustc.edu.cn email address.
 
-<h3 id="01">01. I Want more freeshells.</h3>
-<p><a href="logout.php">Logout</a> and register a new one :)
-<p>Each email address can register at most 10 freeshells.
+</p><h3 id="no01">01. I Want more freeshells.</h3>
+<p><a href="https://freeshell.ustc.edu.cn/logout.php">Logout</a> and register a new one :)
+</p><p>Each email address can register at most 10 freeshells.
 
-<h3 id="02">02. Can I continue to use freeshell after graduation?</h3>
+</p><h3 id="no02">02. Can I continue to use freeshell after graduation?</h3>
 <p>Yes, if we are not running out of disk space.
-<p>Please back up your data periodically to your own device in case of hardware or software failure.
+</p><p>Please back up your data periodically to your own device in case of hardware or software failure.
 
-<h3 id="03">03. How much CPU / memory / disk space do I have?</h3>
+</p><h3 id="no03">03. How much CPU / memory / disk space do I have?</h3>
 <p>Disk space is initially limited to 5G. But if you need larger space, please contact us.
-<p>CPU and memory is not limited and fairly shared among freeshells. That means that if no other freeshell on the physical node is busy, you can take over virtually all CPU and memory resource of the hardware.
-<p>Hardware spec (may subject to change): CPU 8 cores, Memory 16G.
+</p><p>CPU and memory is not limited and fairly shared among freeshells.
+ That means that if no other freeshell on the physical node is busy, you
+ can take over virtually all CPU and memory resource of the hardware.
+</p><p>Hardware spec (may subject to change): CPU 8 cores, Memory 16G.
 
-<h3 id="04">04. Can I crawl a website using freeshell?</h3>
+</p><h3 id="no04">04. Can I crawl a website using freeshell?</h3>
 <p>It is okay, but do not push the website too hard.
-<p>If we receive complainments or disputes from any organization or individual, it is our sole discretion to limit or block Internet access of your freeshell without prior notification.
+</p><p>If we receive complainments or disputes from any organization or 
+individual, it is our sole discretion to limit or block Internet access 
+of your freeshell without prior notification.
 
-<h3 id="05">05. Are miners / World Community Grid / SETI@home allowed?</h3>
-<p>No. Miners for digital currencies and World Community Grid projects are in blacklist. Once detected, the suspicious process will be terminated immediately.
-<p>Our computation resource is not idle enough to contribute to projects like SETI@home. Thanks for your understanding.
+</p><h3 id="no05">05. Are miners / World Community Grid / SETI@home allowed?</h3>
+<p>No. Miners for digital currencies and World Community Grid projects 
+are in blacklist. Once detected, the suspicious process will be 
+terminated immediately.
+</p><p>Our computation resource is not idle enough to contribute to projects like SETI@home. Thanks for your understanding.
 
 
-<h2>Privacy</h2>
+</p><h2>Privacy</h2>
 
-<h3 id="10">10. Is network traffic monitored?</h3>
+<h3 id="no10">10. Is network traffic monitored?</h3>
 <p>We monitor and record the amount (but not the content) of inbound and outbound traffic on per-freeshell basis.
-<p>We monitor, record and <a href="http://status.lug.ustc.edu.cn">publish</a> the amount (but not the content) of inbound and outbound traffic on per-hardware-node basis.
-<p>For HTTP / HTTPS proxy, we monitor and record client IP, HTTP request line (including URL), request size, response code, response size, response time and some other satistical data. We do not monitor HTTP request or response body.
+</p><p>We monitor, record and <a href="http://status.lug.ustc.edu.cn/">publish</a> the amount (but not the content) of inbound and outbound traffic on per-hardware-node basis.
+</p><p>For HTTP / HTTPS proxy, we monitor and record client IP, HTTP 
+request line (including URL), request size, response code, response 
+size, response time and some other satistical data. We do not monitor 
+HTTP request or response body.
 
-<h3 id="11">11. How is outbound traffic routed?</h3>
-<p>We use policy routing to route outbound traffic to China Telecom, China Mobile and CERNET. For some IP ranges that appear to be blocked, we use VPS. That's why some sites complain about exceptional login IPs.
-<p>The routing policy table is constantly changing. See <a href="https://gitlab.lug.ustc.edu.cn/boj/smartproxy">Source Code and Config Files</a> of SmartProxy.
+</p><h3 id="no11">11. How is outbound traffic routed?</h3>
+<p>We use policy routing to route outbound traffic to China Telecom, 
+China Mobile and CERNET. For some IP ranges that appear to be blocked, 
+we use VPS. That's why some sites complain about exceptional login IPs.
+</p><p>The routing policy table is constantly changing. See <a href="https://gitlab.lug.ustc.edu.cn/boj/smartproxy">Source Code and Config Files</a> of SmartProxy.
 
-<h3 id="12">12. Is file content on disk monitored?</h3>
-<p>We monitor (but not record) the executive of all running processes through /proc interface to discover potentially harmful processes. Other files are not touched.
+</p><h3 id="no12">12. Is file content on disk monitored?</h3>
+<p>We monitor (but not record) the executive of all running processes 
+through /proc interface to discover potentially harmful processes. Other
+ files are not touched.
 
-<h3 id="13">13. Is my data backuped?</h3>
+</p><h3 id="no13">13. Is my data backuped?</h3>
 <p>A daily snapshot of file system is saved. It occurs at 03:20 every morning.
-<p>Because syncing the file system requires many disk reads, system load could be high in the morning. If you encounter any problem due to high disk utilization, please feel free to contact us.
+</p><p>Because syncing the file system requires many disk reads, system 
+load could be high in the morning. If you encounter any problem due to 
+high disk utilization, please feel free to contact us.
 
-<h3 id="14">14. Where do my software come from?</h3>
+</p><h3 id="no14">14. Where do my software come from?</h3>
 <p>New freeshells are based on OpenVZ official Debian 7.0 template (<a href="http://mirrors.ustc.edu.cn/openvz/template/precreated/contrib/debian-7.0-amd64-minimal.tar.gz">Download</a>). Freeshells created before October 2013 are based on OpenVZ Official Debian 6.0 template (<a href="http://mirrors.ustc.edu.cn/openvz/template/precreated/contrib/debian-6.0-amd64-minimal.tar.gz">Download</a>).
-<p>The default Debian package source is <a href="http://mirrors.ustc.edu.cn/">USTC Open Source Software Mirror</a>, the official Debian mirror in mainland China. Debian packages ship with digital signatures and checksums, so any mirror (including ours) is cryptographically impossible to alternate package content.
+</p><p>The default Debian package source is <a href="http://mirrors.ustc.edu.cn/">USTC Open Source Software Mirror</a>,
+ the official Debian mirror in mainland China. Debian packages ship with
+ digital signatures and checksums, so any mirror (including ours) is 
+cryptographically impossible to alternate package content.
 
 
-<h2>Account</h2>
+</p><h2>Account</h2>
 
-<h3 id="20">20. I registered multiple freeshells with different passwords. Which one will I login to?</h3>
+<h3 id="no20">20. I registered multiple freeshells with different passwords. Which one will I login to?</h3>
 <p>If the password matches only one freeshell, that's it.
-<p>If the password matches multiple freeshells, a "Select Freeshell" page will show up and you are free to choose one.
-<p>If you have multiple freeshells, a link to switch shells will show up on Web Control Panel.
+</p><p>If the password matches multiple freeshells, a "Select Freeshell" page will show up and you are free to choose one.
+</p><p>If you have multiple freeshells, a link to switch shells will show up on Web Control Panel.
 
-<h3 id="21">21. What is my initial SSH password?</h3>
+</p><h3 id="no21">21. What is my initial SSH password?</h3>
 <p>The same as the Web Control Password at registeration.
 
-<h3 id="22">22. I changed password, but cannot SSH using the new password.</h3>
+</p><h3 id="no22">22. I changed password, but cannot SSH using the new password.</h3>
 <p>Note that Web password and SSH password are separate.
-<p>To change SSH password, use "passwd" command. If you forget it, click "Reset Root Password" on Web Control Panel.
-<p>To change Web password, click "Change Web Password" on Web Control Panel. If you forget it, contact support@freeshell.ustc.edu.cn
+</p><p>To change SSH password, use "passwd" command. If you forget it, click "Reset Root Password" on Web Control Panel.
+</p><p>To change Web password, click "Change Web Password" on Web 
+Control Panel. If you forget it, contact support@freeshell.ustc.edu.cn
 
-<h3 id="23">23. I forgot my root password.</h3>
+</p><h3 id="no23">23. I forgot my root password.</h3>
 <p>Login to Web Control Panel and click "Reset Root Password".
-<p>We never store passwords in plain text, so no one can regain your original password if you forget it.
+</p><p>We never store passwords in plain text, so no one can regain your original password if you forget it.
 
-<h3 id="24">24. I received a mail asking me for password.</h3>
+</p><h3 id="no24">24. I received a mail asking me for password.</h3>
 <p>Freeshell admin team will never ask users for password. Please report the incident to support@freeshell.ustc.edu.cn
 
-<h3 id="25">25. My Web account seems to be stolen.</h3>
+</p><h3 id="no25">25. My Web account seems to be stolen.</h3>
 <p>Contact support@freeshell.ustc.edu.cn
-<p>As a special reminder, keep an eye on weak passwords. Do not use dictionary words, birthday or any password that may have leaked elsewhere.
+</p><p>As a special reminder, keep an eye on weak passwords. Do not use 
+dictionary words, birthday or any password that may have leaked 
+elsewhere.
 
-<h3 id="26">26. Can I create SSH accounts for others?</h3>
+</p><h3 id="no26">26. Can I create SSH accounts for others?</h3>
 <p>Please think twice before doing that. You are responsible for all activities, content and traffic on freeshell.
 
-<h3 id="27">27. Can I create users other than root?</h3>
+</p><h3 id="no27">27. Can I create users other than root?</h3>
 <p>Sure! The Linux box is dedicated for you.
-<p>To add a user with root privilege:
-<ol>
+</p><p>To add a user with root privilege:
+</p><ol>
 <li>adduser [username]
-<li>apt-get install sudo
-<li>usermod -aG sudo,adm [username]
-</ol>
+</li><li>apt-get install sudo
+</li><li>usermod -aG sudo,adm [username]
+</li></ol>
 
-<h3 id="28">28. Can I use SSH key to login?</h3>
+<h3 id="no28">28. Can I use SSH key to login?</h3>
 <p>Sure! "ssh-copy-id" is your friend.
 
 
-<h2>Networking</h2>
+</p><h2>Networking</h2>
 
-<h3 id="30">30. Why SSH says "No route to host"?</h3>
+<h3 id="no30">30. Why SSH says "No route to host"?</h3>
 <p>Hostname of your freeshell resolves to IPv6 address only.
-<p>If you do not have IPv6 access, try IPv4 port mapping on Web Control Panel. The IPv4 address is shared and only the listed ports are mapped to your port.
+</p><p>If you do not have IPv6 access, try IPv4 port mapping on Web 
+Control Panel. The IPv4 address is shared and only the listed ports are 
+mapped to your port.
 
-<h3 id="31">31. I added a network device / IP address but not working.</h3>
+</p><h3 id="no31">31. I added a network device / IP address but not working.</h3>
 <p>This is by design. Network configurations can only be altered in Web Control Panel.</p>
 
-<h3 id="33">32. How can I change my hostname?</h3>
+<h3 id="no32">32. How can I change my hostname?</h3>
 <p>Login to Web Control Panel, click "Change" beside your hostname. You may need to relogin for changes to take effect.
-<p>If you change hostname via "hostname" command, it will revert to the old one on reboot, and the DNS Name will not be changed.
+</p><p>If you change hostname via "hostname" command, it will revert to the old one on reboot, and the DNS Name will not be changed.
 
-<h3 id="34">33. I have changed my hostname, but still cannot use the new DNS Name.</h3>
-<p>The hostname in your freeshell should be changed immediately, but due to DNS caching and negative caching, it may take 10 minutes or longer for DNS updates to propagate. If your new DNS name still cannot be used after one hour, please contact us.
+</p><h3 id="no33">33. I have changed my hostname, but still cannot use the new DNS Name.</h3>
+<p>The hostname in your freeshell should be changed immediately, but due
+ to DNS caching and negative caching, it may take 10 minutes or longer 
+for DNS updates to propagate. If your new DNS name still cannot be used 
+after one hour, please contact us.
 
-<h3 id="35">34. How can freeshells talk to each other?</h3>
+</p><h3 id="no34">34. How can freeshells talk to each other?</h3>
 <p>Just ping6 your peer's hostname. We have set DNS search domain to "6.freeshell.ustc.edu.cn" and "ustc.edu.cn".
-<p>If you have to use IPv4 for inter-freeshell communication, please use $hostname.4.freeshell.ustc.edu.cn which resolves to an internal IP 10.10.x.x.
+</p><p>If you have to use IPv4 for inter-freeshell communication, please
+ use $hostname.4.freeshell.ustc.edu.cn which resolves to an internal IP 
+10.10.x.x.
 
-<h3 id="36">35. Why my IP address appears outside China?</h3>
-<p>See <a href="#11">FAQ #11</a>
+</p><h3 id="no35">35. Why my IP address appears outside China?</h3>
+<p>See <a href="#no11">FAQ #11</a>
 
-<h3 id="36">36. How to share files with another machine?</h3>
+</p><h3 id="no36">36. How to share files with another machine?</h3>
 <p>Take a look at <a href="http://www.samba.org/" target="_blank">Samba</a>. It is fully user-space, able to work in freeshell and can be connected from both Linux and Windows.
-<p>Since freeshells share a common kernel, kernel-mode NFS will not work.
+</p><p>Since freeshells share a common kernel, kernel-mode NFS will not work.
 
+</p><h2>Running Network Services</h2>
 
-<h2>Running Network Services</h2>
-
-<h3 id="40">40. Can I create a VPN on freeshell?</h3>
+<h3 id="no40">40. Can I create a VPN on freeshell?</h3>
 <p>You can use PPTP/L2TP VPN, given that PPP device is available since 02/24/2014. <a href="https://servers.blog.ustc.edu.cn/index.php/2014/02/freeshell-supports-ppp/">More info</a>
-<p>VPN solutions relying on TUN/TAP device, such as OpenVPN, are not supported.
+</p><p>VPN solutions relying on TUN/TAP device, such as OpenVPN, are not supported.
 
-<h3 id="41">41. Can I have a dedicated IPv4 address?</h3>
+</p><h3 id="no41">41. Can I have a dedicated IPv4 address?</h3>
 <p>No. We do not have such a large IPv4 address space.
-<p>Please use HTTP Proxy if you require IPv4 web access.
+</p><p>Please use HTTP Proxy if you require IPv4 web access.
 
-<h3 id="42">42. I have set up HTTP proxy, but it seems not working.</h3>
+</p><h3 id="no42">42. I have set up HTTP proxy, but it seems not working.</h3>
 <p>To use HTTP proxy, a Web Server listening IPv4 port 80 should be installed.
 
-<h3 id="43">43. I want HTTPS secure access to my freeshell.</h3>
+</p><h3 id="no43">43. I want HTTPS secure access to my freeshell.</h3>
 <p>Sure! Setup HTTP Proxy in Control Panel and visit <strong>https://&lt;yourname&gt;.freeshell.ustc.edu.cn</strong>
-<p>If you `want to redirect http to https: In the web server of your freeshell, please check "X-Scheme" HTTP header for "http" or "https".
+</p><p>If you `want to redirect http to https: In the web server of your
+ freeshell, please check "X-Scheme" HTTP header for "http" or "https".
 
-<h3 id="44">44. How to see the client's real IP behind HTTP proxy?</h3>
+</p><h3 id="no44">44. How to see the client's real IP behind HTTP proxy?</h3>
 <p>See "X-Real-IP" HTTP header. You should use this header field to identify clients.
 
-<h3 id="45">45. How to set up a FTP server?</h3>
+</p><h3 id="no45">45. How to set up a FTP server?</h3>
 <p>vsftpd / proftpd or other FTP server will work. Please use IPv6 (<strong>&lt;hostname&gt;.6.freeshell.ustc.edu.cn</strong>) to connect to your FTP server. IPv4 does not work, because FTP ports are not mapped for IPv4 shared address.
-<p>FTP protocol is in plaintext and your password may be easily eavesdropped. It is recommended to use SFTP (secure FTP) instead. SFTP is supported by ssh daemon, so there is no need to install "SFTP server". Most FTP clients also support SFTP, just connect to sftp://&lt;hostname&gt;.6.freeshell.ustc.edu.cn and use your SSH username and password to login.
+</p><p>FTP protocol is in plaintext and your password may be easily 
+eavesdropped. It is recommended to use SFTP (secure FTP) instead. SFTP 
+is supported by ssh daemon, so there is no need to install "SFTP 
+server". Most FTP clients also support SFTP, just connect to 
+sftp://&lt;hostname&gt;.6.freeshell.ustc.edu.cn and use your SSH 
+username and password to login.
 
-<h3 id="47">47. How to use my own domain name for HTTP proxy?</h3>
+</p><h3 id="no47">47. How to use my own domain name for HTTP proxy?</h3>
 <ol>
 <li>Add a DNS "CNAME" record to <strong>proxy.freeshell.ustc.edu.cn</strong> at your domain registrar. (DO NOT USE "A" RECORD) It may take some time for DNS changes to take effect.</li>
 <li>Fill your own domain in "HTTP Proxy" in Control Panel.</li>
 </ol>
 <p>Access is HTTP only. HTTPS access to your own domain name will get a SSL certificate error.
 
-<h3 id="48">48. How to use my own domain name to SSH into freeshell?</h3>
+</p><h3 id="no48">48. How to use my own domain name to SSH into freeshell?</h3>
 <p>Add a DNS "CNAME" record to <strong>&lt;hostname&gt;.6.freeshell.ustc.edu.cn</strong>. Since the IPv6 address is dedicated, you do not need to do anything in control panel.
 
 
-<h2>Freeshell Management</h2>
+</p><h2>Freeshell Management</h2>
 
-<h3 id="50">50. What is the difference between "reboot" and "force reboot", "stop" and "force stop"?</h3>
-<p>"Stop" is like executing "init 0" in your freeshell and all processes shut down gracefully. "Force stop" is like pulling the power out of your freeshell and implemented with SIGKILL.
-<p>"Reboot" is like executing "init 6" in your freeshell. "Force reboot" is essentially a "Force stop" followed by a "Start" operation.
-<p>Please note that "Force stop" and "Force reboot" may not work if "Stop" or "Reboot" is in process and some process in your freeshell refuses to exit. You have to wait the pending stop or reboot to timeout in order to perform force-actions.
+<h3 id="no50">50. What is the difference between "reboot" and "force reboot", "stop" and "force stop"?</h3>
+<p>"Stop" is like executing "init 0" in your freeshell and all processes
+ shut down gracefully. "Force stop" is like pulling the power out of 
+your freeshell and implemented with SIGKILL.
+</p><p>"Reboot" is like executing "init 6" in your freeshell. "Force 
+reboot" is essentially a "Force stop" followed by a "Start" operation.
+</p><p>Please note that "Force stop" and "Force reboot" may not work if 
+"Stop" or "Reboot" is in process and some process in your freeshell 
+refuses to exit. You have to wait the pending stop or reboot to timeout 
+in order to perform force-actions.
 
-<h3 id="51">51. How does "Rescue" feature work?</h3>
-<p>"Rescue" is essentially a "Move" operation to the same hardware node. It allocates a new freeshell, copies data and configuration and starts the new freeshell. It takes a long time and the IP address of your freeshell will be changed. If your freeshell is stuck in the kernel and "Reboot" does not help, "Rescue" should be the last resort.
+</p><h3 id="no51">51. How does "Rescue" feature work?</h3>
+<p>"Rescue" is essentially a "Move" operation to the same hardware node.
+ It allocates a new freeshell, copies data and configuration and starts 
+the new freeshell. It takes a long time and the IP address of your 
+freeshell will be changed. If your freeshell is stuck in the kernel and 
+"Reboot" does not help, "Rescue" should be the last resort.
 
-<h3 id="52">52. How does "Copy" feature work?</h3>
+</p><h3 id="no52">52. How does "Copy" feature work?</h3>
 <ol>
 <li>Setup DNS for new freeshell.
-<li>Copy the data in the source freeshell to destination node.
-<li>Suspend the source freeshell (if running).
-<li>Differentially sync the data from the source freeshell to destination node.
-<li>Resume the source freeshell (if running).
-<li>Set the hostname, IP addresses and NAT rules for new freeshell (i.e. redo freeshell activation task).
-<li>Start the new freeshell.
-</ol>
+</li><li>Copy the data in the source freeshell to destination node.
+</li><li>Suspend the source freeshell (if running).
+</li><li>Differentially sync the data from the source freeshell to destination node.
+</li><li>Resume the source freeshell (if running).
+</li><li>Set the hostname, IP addresses and NAT rules for new freeshell (i.e. redo freeshell activation task).
+</li><li>Start the new freeshell.
+</li></ol>
 
-<h3 id="53">53. How does "Move" feature work?</h3>
+<h3 id="no53">53. How does "Move" feature work?</h3>
 <ol>
 <li>Update proxy config.
-<li>Do the same thing as "Copy" feature.
-<li>Destroy the source freeshell.
-</ol>
+</li><li>Do the same thing as "Copy" feature.
+</li><li>Destroy the source freeshell.
+</li></ol>
 
 <h3 id="nonsupported-dist">54. Why my distribution is no longer supported?</h3>
 <p>Because the distribution has some compatibility issues with OpenVZ.
-<p>In particular, Archlinux is removed from distribution candidates because the latest systemd cannot work with 2.6.32 kernel. See <a href="https://gitlab.lug.ustc.edu.cn/boj/freeshell/issues/5">GitLab Issue</a> for discussion.
+</p><p>In particular, Archlinux is removed from distribution candidates because the latest systemd cannot work with 2.6.32 kernel. See <a href="https://gitlab.lug.ustc.edu.cn/boj/freeshell/issues/5">GitLab Issue</a> for discussion.
 
 
-<h2>Misc.</h2>
+</p><h2>Misc.</h2>
 
-<h3 id="60">60. I'm using Windows, how to connect?</h3>
-<p>If you are using Windows, please download PuTTY <a href="http://lug.ustc.edu.cn/~boj/web_dev/ref/putty.zip">Here</a>. The usage of PuTTY can be found on Google.
+<h3 id="no60">60. I'm using Windows, how to connect?</h3>
+<p>If you are using Windows, please download PuTTY <a href="http://lug.ustc.edu.cn/%7Eboj/web_dev/ref/putty.zip">Here</a>. The usage of PuTTY can be found on Google.
 
-<h3 id="61">61. I want to change a newer kernel / insert a kernel module.</h3>
+</p><h3 id="no61">61. I want to change a newer kernel / insert a kernel module.</h3>
 <p>Sorry. We use OpenVZ virtualization technology, and all freeshells (OpenVZ Containers) share a same kernel.
 
-<h3 id="62">62. What Linux Distribution am I using?</h3>
+</p><h3 id="no62">62. What Linux Distribution am I using?</h3>
 <p>If you created freeshell before Nov. 2013, it is a minimal Debian 6.0 "squeeze" system.
-<p>Otherwise, you are using Debian 7.0 "wheezy" minimal system.
+</p><p>Otherwise, you are using Debian 7.0 "wheezy" minimal system.
 
-<h3 id="63">63. Why command X "not found"?</h3>
-<p>This Linux box ships with a minimal set of pre-installed software packages. Many utils on normal Linux distributions have to be installed by yourself.
-<p>See <a href="http://home.ustc.edu.cn/~yousong/freeshell-basicsetup.html">Basic Setup for Freeshell</a> by yousong.
-<p>Please not to install too many packages, since our disk space is limited :)
+</p><h3 id="no63">63. Why command X "not found"?</h3>
+<p>This Linux box ships with a minimal set of pre-installed software 
+packages. Many utils on normal Linux distributions have to be installed 
+by yourself.
+</p><p>See <a href="http://home.ustc.edu.cn/%7Eyousong/freeshell-basicsetup.html">Basic Setup for Freeshell</a> by yousong.
+</p><p>Please not to install too many packages, since our disk space is limited :)
 
-<h3 id="64">64. "apt-get install" says "404 not found".</h3>
+</p><h3 id="no64">64. "apt-get install" says "404 not found".</h3>
 <p>run "apt-get update" to update software index.
 
-<h3 id="65">65. How to install X, GNOME or KDE?</h3>
+</p><h3 id="no65">65. How to install X, GNOME or KDE?</h3>
 <p>While it is technically possible, we are strongly against it.
-<p>You are expected to learn some shell commands. Break shell, touch Linux!
+</p><p>You are expected to learn some shell commands. Break shell, touch Linux!
 
-<h3 id="66">66. Why my program terminated when I exit the shell?</h3>
+</p><h3 id="no66">66. Why my program terminated when I exit the shell?</h3>
 <p>You should install "screen" and run long-live programs in screen.
 
-<h3 id="67">67. Why udev does not work?</h3>
-<p>Due to security concerns, freeshells are not allowed to touch hardware, kernel modules, etc. directly. We have created necessary devices in <strong>/dev</strong> on system startup.
-<p>If there is any error while installing or starting udev, it is safe to ignore it.
+</p><h3 id="no67">67. Why udev does not work?</h3>
+<p>Due to security concerns, freeshells are not allowed to touch 
+hardware, kernel modules, etc. directly. We have created necessary 
+devices in <strong>/dev</strong> on system startup.
+</p><p>If there is any error while installing or starting udev, it is safe to ignore it.
 
-<h3 id="68">68. I messed up. How can I reinstall the system?</h3>
+</p><h3 id="no68">68. I messed up. How can I reinstall the system?</h3>
 <p>On Control Panel, there is "Reinstall System" button. There are two options:
-<ul>
+</p><ul>
 <li>If you want to keep /home directory, click "keep /home" button;
-<li>If you want to delete /home as well, click "NOT keep /home" button.
-</ul>
+</li><li>If you want to delete /home as well, click "NOT keep /home" button.
+</li></ul>
 <p>Be sure to backup all your data outside /home, because reinstalling system will erase all data permanently.
-<p>If you cannot login via SSH, and you do not have a backup, please feel free to contact <a href="mailto:support@freeshell.ustc.edu.cn">support@freeshell.ustc.edu.cn</a></p>
+</p><p>If you cannot login via SSH, and you do not have a backup, please feel free to contact <a href="mailto:support@freeshell.ustc.edu.cn">support@freeshell.ustc.edu.cn</a></p>
 
-<h3 id="69">69. Why the numbering of this FAQ looks so strange?</h3>
+<h3 id="no69">69. Why the numbering of this FAQ looks so strange?</h3>
 <p>The first digit is section number, starting from zero and in hexademical.
-<p>The second digit is question number in this section, starting from zero and in hexademical.
+</p><p>The second digit is question number in this section, starting from zero and in hexademical.
 
 
-<h2>About Us</h2>
+</p><h2>About Us</h2>
 
-<h3 id="70">70. Where is freeshell physically located?</h3>
+<h3 id="no70">70. Where is freeshell physically located?</h3>
 <p>A rack of 7 blade servers, secured in School of Gifted Young (SCGY), East Campus, USTC.
-<p><a href="http://gewu.ustc.edu.cn/tech/index.php?title=%E9%A6%96%E9%A1%B5">More info</a> about SCGY-Tech.
+</p><p><a href="http://gewu.ustc.edu.cn/tech/index.php?title=%E9%A6%96%E9%A1%B5">More info</a> about SCGY-Tech.
 
-<h3 id="71">71. Who developed freeshell?</h3>
-<p>Mostly written by <a href="http://boj.blog.ustc.edu.cn">Bojie Li</a> since Jan. 2013, while UI design is copied from <a href="http://blog.ustc.edu.cn">USTC Blog</a> by Miaomiao Li.
+</p><h3 id="no71">71. Who developed freeshell?</h3>
+<p>Mostly written by <a href="http://boj.blog.ustc.edu.cn/">Bojie Li</a> since Jan. 2013, while UI design is copied from <a href="http://blog.ustc.edu.cn/">USTC Blog</a> by Miaomiao Li.
 
-<h3 id="72">72. What technology is used in freeshell?</h3>
+</p><h3 id="no72">72. What technology is used in freeshell?</h3>
 <p>Standard Linux utils, OpenVZ, Nginx and PHP. There is no fancy stuff.
-<p>Read the f**king code for more details.
+</p><p>Read the f**king code for more details.
 
-<h3 id="73">73. Is freeshell code open source?</h3>
+</p><h3 id="no73">73. Is freeshell code open source?</h3>
 <p>Yes. If you have a GitLab account or want to register one, <a href="https://gitlab.lug.ustc.edu.cn/boj/freeshell">follow this link</a>.
-<p>You may also get the code directly: 
-<pre>git clone https://gitlab.lug.ustc.edu.cn/boj/freeshell.git</pre>
+</p><p>You may also get the code directly: 
+</p><pre>git clone https://gitlab.lug.ustc.edu.cn/boj/freeshell.git</pre>
 
-<h3 id="74">74. I want to contribute to freeshell.</h3>
+<h3 id="no74">74. I want to contribute to freeshell.</h3>
 <p>Welcome to Freeshell development team! Register an account on <a href="https://gitlab.lug.ustc.edu.cn/">GitLab</a> and contact us at
-<pre>base64 -d &lt;&lt;&lt;"bHVnQHVzdGMuZWR1LmNuCg=="</pre>
+</p><pre>base64 -d &lt;&lt;&lt;"bHVnQHVzdGMuZWR1LmNuCg=="</pre>
 
-<h3 id="75">75. Any other problem: support@freeshell.ustc.edu.cn</h3>
+<h3 id="no75">75. Any other problem: support@freeshell.ustc.edu.cn</h3>
 
-<hr />
-<p>&copy; 2013 - 2014 LUG@USTC
+<hr/>
 
+<p>© 2013 - 2014 LUG@USTC
+    <a href="http://validator.w3.org/check?uri=referer"><img src="https://freeshell.ustc.edu.cn/faq-backup/valid-xhtml10" alt="Valid XHTML 1.0 Transitional" height="31" width="88" style="float:right" /></a>
+</p>
 </body>
 </html>

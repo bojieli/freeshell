@@ -33,9 +33,11 @@ else if (isset($node['locked']) && $node['locked'])
 else
     $node['mystatus'] = human_readable_status($node['mystatus']);
 ?>
+<!--
 <div style="width: 1000px; margin: 20px auto;">
   <a href="https://lug.ustc.edu.cn/wiki/lug/sfd"><img style="width:100%" src="https://lug.ustc.edu.cn/ftp/events/2014.09.20_SFD/sfd2014banner.png"></a>
 </div>
+-->
 <div id="wrapper">
 <div id="regtitle">
         	<h1>Freeshell Control Panel</h1>
