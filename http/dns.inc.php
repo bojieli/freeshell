@@ -1,4 +1,6 @@
 <?php
+include_once "db.inc.php";
+
 function __nsupdate($commands) {
     $tmpfile = tempnam('/tmp', 'freeshell_ns_');
     $fp = fopen($tmpfile, "w");
@@ -15,7 +17,11 @@ function __nsupdate($commands) {
     exec("nsupdate -k /etc/freeshell/chinanet-update-key.key $tmpfile", $output2, $errno2);
     exec("nsupdate -k /etc/freeshell/cmcc-update-key.key $tmpfile", $output3, $errno3);
     unlink($tmpfile);
-    return ($errno1 == 0 && $errno2 == 0 && $errno3 == 0);
+    $success = ($errno1 == 0 && $errno2 == 0 && $errno3 == 0);
+    if (!$success) {
+        report_sys_admin("DNS update failed:\n===== default ERRNO[$errno1] =====\n".implode("\n", $output1)."\n===== chinanet ERRNO[$errno2] =====\n".implode("\n", $output2)."\n===== cmcc ERRNO[$errno3] =====\n".implode("\n", $output3)."\n");
+    }
+    return $success;
 }
 
 class nsupdate {

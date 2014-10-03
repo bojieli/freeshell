@@ -69,7 +69,7 @@ function send_register_fail_mail($email) {
 function send_reset_root_email($email, $appid, $new_passwd) {
     global $headers, $footer;
     $title = "New Root Password for your Freeshell";
-    $body = greetings($appid)."You have requested root password reset for shell ID $appid on ".site_baseurl().".\n\nNew root password: $new_passwd\n\nAs a special remainder, please change root password as soon as possible.\n\nIf you did not request this password reset, maybe your web account is stolen, please contact us.".$footer;
+    $body = greetings($appid)."You have requested root password reset for shell ID $appid on ".site_baseurl()."\n\nNew root password: $new_passwd\n\nAs a special remainder, please change root password as soon as possible.\n\nIf you did not request this password reset, maybe your web account is stolen, please contact us.".$footer;
     mail($email, $title, $body, $headers);
 }
 
@@ -96,7 +96,7 @@ function need_email_verification($name, $msg, $action, $param, $email, $appid) {
         return "Failed to generate ticket. Please contact support@freeshell.ustc.edu.cn";
 
     $title = "Freeshell Danger Action Confirmation: $name";
-    $body = greetings($appid)."You have requested $name for shell ID $appid on ".site_baseurl().". This is a DANGER action, so we need your confirmation to proceed.\n\n$msg\n\nFollow this link to perform $name immediately and irreversibly:\n".site_baseurl()."/$action?id=$id&token=$token\n\nThis link will expire in 48 hours.\nIf you did not request this action, maybe your account is stolen, please contact us.".$footer;
+    $body = greetings($appid)."You have requested $name for shell ID $appid on ".site_baseurl()." . This is a DANGER action, so we need your confirmation to proceed.\n\n$msg\n\nFollow this link to perform $name immediately and irreversibly:\n".site_baseurl()."/$action?id=$id&token=$token\n\nThis link will expire in 48 hours.\nIf you did not request this action, maybe your account is stolen, please contact us.".$footer;
     mail($email, $title, $body, $headers);
 
     return "Since this is a danger action, please check your mailbox and follow the link in confirmation email.";
@@ -107,7 +107,7 @@ function send_manage_notify_email($status, $email, $appid, $action, $additional_
     $title = "Your freeshell ".($status ? "succeeded in " : "FAILED TO")." $action";
     if (!$status)
         $additional_info = "This failure may be caused by a temporary network failure. Please try again later. The freeshell developers will be awared of this issue.\n".$additional_info;
-    $body = greetings($appid)."This email is to notify you that shell ID $appid ".($status ? "has been" : "FAILED TO")." $action via Web control panel ".site_baseurl().".\n\n$additional_info\nIf you did not request this action, maybe this action is done by a system administrator (you should receive another email on the details), or your web account has been compromised, please contact us.".$footer;
+    $body = greetings($appid)."This email is to notify you that shell ID $appid ".($status ? "has been" : "FAILED TO")." $action via Web control panel ".site_baseurl()."\n\n$additional_info\nIf you did not request this action, maybe this action is done by a system administrator (you should receive another email on the details), or your web account has been compromised, please contact us.".$footer;
     mail($email, $title, $body, $headers);
 }
 
@@ -123,7 +123,7 @@ function send_admin_manage_email($email, $copy_email, $appid, $action, $addition
 function send_change_password_email($email, $appid) {
     global $headers, $footer;
     $title = "Freeshell $appid Control Panel Password Changed";
-    $body = greetings($appid)."This email is to notify you that Control Panel Password for shell ID $appid has been changed via Web control panel ".site_baseurl().".\n\nIf you did not request this action, maybe your web account is stolen, please contact us.".$footer;
+    $body = greetings($appid)."This email is to notify you that Control Panel Password for shell ID $appid has been changed via Web control panel ".site_baseurl()."\n\nIf you did not request this action, maybe your web account is stolen, please contact us.".$footer;
     mail($email, $title, $body, $headers);
 }
 
