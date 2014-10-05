@@ -39,10 +39,10 @@ function do_sync(){
 # initial sync
 do_sync
 # second pass sync to ensure consistency
-if [ -n "$(vzctl status $oldid | grep running)" ]; then
+if [ -n "$(vzctl status $VEID | grep running)" ]; then
     # leave it if chkpnt does not complete in 10 seconds and kill it if does not complete in 30 seconds
-    timeout -k 30 10 vzctl chkpnt $oldid --suspend
+    timeout -k 30 10 vzctl chkpnt $VEID --suspend
     do_sync
-    timeout -k 30 10 vzctl chkpnt $oldid --resume
+    timeout -k 30 10 vzctl chkpnt $VEID --resume
 fi
 
