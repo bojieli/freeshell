@@ -15,8 +15,10 @@ distribution=$7
 storage_base=$8
 
 [ -f "/etc/vz/conf/$id.conf" ] && echo "removing existing vz config" && mv /etc/vz/conf/$id.conf /etc/vz/conf/$id.conf.old
+STORAGE="$storage_base/private/$id"
+[ -e "$STORAGE" ] && echo "removing existing vz storage" && rm -rf $STORAGE
 
-vzctl create $id --ostemplate $distribution --private $storage_base/private/$id
+vzctl create $id --ostemplate $distribution --private $STORAGE
 vzctl set $id --userpasswd root:$password
 vzctl set $id --kmemsize unlimited --save
 vzctl set $id --privvmpages unlimited --save
