@@ -45,4 +45,4 @@ if [ -n "$(vzctl status $VEID | grep running)" ]; then
     do_sync
     timeout -k 30 10 vzctl chkpnt $VEID --resume
 fi
-
+exit 0
