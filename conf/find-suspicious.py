@@ -1,7 +1,7 @@
 import os
 import time
 
-suspicious = ["boinc","wcgrid","setiathome","distrrtgen","cgminer","coin-miner","minerd"]
+suspicious = ["boinc","wcgrid","setiathome","distrrtgen","cgminer","coin-miner","minerd","minecraft","ss-server","ssserver","shadowsocks"]
 
 def getcmd(id):
     try:
