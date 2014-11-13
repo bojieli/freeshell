@@ -1,4 +1,4 @@
 <?php
-include_once '../port-forwarding.inc.php';
-$fwd = new PortForwarding();
-echo $fwd->commit();
+include_once '../db.php';
+include_once '../nodes.inc.php';
+echo update_port_forwarding();
