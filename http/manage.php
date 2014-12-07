@@ -159,10 +159,6 @@ switch ($_POST['action']) {
             report_sys_admin("failed to update proxy conf");
             goto move_finish;
         }
-        if (!($status = update_port_forwarding())) {
-            report_sys_admin("failed to update port forwarding");
-            goto move_finish;
-        }
         if (!($status = copy_vz($a['nodeno'], $id, $_POST['nodeno'], $appid, $a['hostname'], $a['distribution'], $new_storage))) {
             report_sys_admin("failed to copy vz");
             goto move_finish;
