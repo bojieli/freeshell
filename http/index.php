@@ -102,8 +102,8 @@ $shellnum = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo"), 
     	<div id="servtext">
     		<p>There are <span class="number"><?php echo $shellnum; ?></span> shells. Want to join us?</p>
         </div>
-        <div id="regbutton">
-        	<p>Register now!</p>
+        <div id="regbutton-disabled">
+        	<p>Register disabled temporaily</p>
         </div>
     </div>
     <div id="regplace">
