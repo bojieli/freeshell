@@ -1,4 +1,7 @@
 <?php
+// temporaily disable
+exit();
+
 include_once "header.php";
 session_write_close();
 include_once "config.inc.php";

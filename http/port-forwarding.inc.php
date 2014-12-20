@@ -29,7 +29,7 @@ class PortForwarding {
     }
 
     private function gen_all_rules($new_rules) {
-        $static = file_get_contents('/srv/smartproxy/blog-specific/iptables-save');
+        $static = file_get_contents('/etc/iptables/rules.v4');
         if (!$static)
             return false;
         $nat_start = strpos($static, "\n*nat\n");
