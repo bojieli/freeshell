@@ -9,4 +9,4 @@ node=$2
 ip=$3
 gw=10.71.$node.2
 
-ip route replace $ip/32 via $gw table 1002
+ip route replace $ip/32 via $gw table 100
