@@ -12,6 +12,8 @@ CREATE TABLE shellinfo (
     `lock_time` INT(10),
     `blocked` BOOL NOT NULL DEFAULT FALSE,
     `http_subdomain` VARCHAR(50) NOT NULL,
+    `force_ssl` BOOL NOT NULL DEFAULT FALSE,
+    `websocket_en` BOOL NOT NULL DEFAULT FALSE,
     `diskspace_softlimit` VARCHAR(20) NOT NULL DEFAULT '5G',
     `diskspace_hardlimit` VARCHAR(20) NOT NULL DEFAULT '7G',
     `distribution` VARCHAR(255) NOT NULL,
@@ -73,7 +75,6 @@ CREATE TABLE cname (
     `id` INT(10) NOT NULL,
     `domain` VARCHAR(255) NOT NULL,
     `is_ssl` BOOL NOT NULL DEFAULT FALSE,
-    `force_ssl` BOOL NOT NULL DEFAULT FALSE,
     KEY key_id (`id`),
     UNIQUE KEY key_domain (`domain`),
     FOREIGN KEY (`id`) REFERENCES shellinfo (`id`)
