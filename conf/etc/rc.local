@@ -24,6 +24,9 @@ ip route add 202.38.64.0/19 via $GATEWAY table 999
 ip route add 222.195.64.0/19 via $GATEWAY table 999
 ip route add 114.214.192.0/18 via $GATEWAY table 999
 ip route add 121.255.0.0/16 via $GATEWAY table 999
+# USTC Cloud
+ip route add 10.38.0.0/16 via $GATEWAY table 999
+ip route add 172.16.0.0/16 via $GATEWAY table 999
 
 # scgy routes
 ip route add 114.214.197.0/24 dev eth0 table 999
