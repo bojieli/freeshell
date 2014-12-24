@@ -60,10 +60,6 @@ server {
         listen [::]:443;
         server_name $server_name;\n".$additional_conf.
         ($conf['force_ssl'] ? "include conf.d/redirect2https.inc;\n" : "").
-        ($conf['websocket_en'] ? "
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection \$connection_upgrade;\n": "").
         ($conf['page40x'] ? "error_page 400 403 404 = $conf[page40x];\n" : "").
         ($conf['page50x'] ? "error_page 500 502 503 504 = $conf[page50x];\n" : "")."
         access_log /var/log/nginx/freeshell-proxy/access.log logverbose;
@@ -75,7 +71,12 @@ server {
                 proxy_set_header X-Forwarded-For \$remote_addr;
                 proxy_set_header X-Real-IP  \$remote_addr;
                 proxy_set_header X-Scheme   \$scheme;
-        }
+".
+            ($conf['websocket_en'] ? "
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade \$http_upgrade;
+                proxy_set_header Connection \$connection_upgrade;\n": "").
+"        }
 }
 ";
 }
