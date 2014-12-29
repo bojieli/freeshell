@@ -375,6 +375,6 @@ function update_hostname($hostname) {
         return false;
 
     if (strlen($a['hostname']) > 0)
-        delete_dns($a['hostname']);
+        delete_dns($a['hostname'], $id);
     return update_dns($hostname, $id);
 }

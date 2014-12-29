@@ -1,18 +1,7 @@
 <?php
 include_once "admin.inc.php";
-
-$nodes2ip = array(
- 1 => "114.214.197.8",
- 2 => "114.214.197.143",
- 3 => "202.38.70.100",
- 4 => "114.214.197.140",
- 5 => "114.214.197.173",
- 6 => "114.214.197.124",
- 7 => "114.214.197.235",
-);
-$master_node = 1;
-
-$SSH_TIMEOUT = 3; // in seconds
+include_once "config.inc.php";
+include_once "utils.inc.php";
 
 $errno = 0;
 
@@ -30,39 +19,6 @@ function is_valid_nodeno($nodeno) {
     return $int > 0 && $int <= nodes_num();
 }
 
-function node_default_mem_limit($nodeno) {
-    return '4G';
-}
-
-function get_node_ipv4($nodeno) {
-    global $nodes2ip;
-    return $nodes2ip[$nodeno];
-}
-
-function get_node_ipv6($nodeno) {
-    return "2001:da8:d800:71::".$nodeno;
-}
-
-function get_shell_ipv6($id) {
-    $prefix = "2001:da8:d800:71::";
-    if ($id < 10000)
-        return $prefix.($id % 10000);
-    else
-        return $prefix.intval($id / 10000).':'.($id % 10000);
-}
-
-function get_shell_ipv4($id) {
-    return "10.10.".intval($id / 256).".".($id % 256);
-}
-
-function get_shell_v6_dns_name($hostname) {
-    return "$hostname.6.freeshell.ustc.edu.cn";
-}
-
-function get_shell_v4_dns_name($hostname) {
-    return "$hostname.4.freeshell.ustc.edu.cn";
-}
-
 function local_exec($cmd) {
     $start_time = microtime(true);
     exec($cmd, $output, $errno);
@@ -76,11 +32,6 @@ function local_exec($cmd) {
 
 function local_sudo($cmd) {
     return local_exec("sudo $cmd");
-}
-
-function single_quote_escape($cmd) {
-    // substitute ' with '\'': close the single quote, add an escaped quote, reopen the single quote
-    return str_replace("'", "'\\''", $cmd);
 }
 
 function run_in_node($nodeno, $cmd) {
@@ -150,8 +101,12 @@ function destroy_vz($nodeno, $id, $keep_dirs = "") {
     return call_monitor($nodeno, "destroy", "$id $keep_dirs");
 }
 
-function delete_dns($hostname) {
+function delete_dns($hostname, $shellid) {
     include_once "dns.inc.php";
+    $ns = new nsupdate();
+    $ns->delete(ipv6_to_nibble(get_shell_ipv6($shellid)), 'PTR');
+    $ns->commit_default_view();
+
     $ns = new nsupdate();
     $ns->delete(get_shell_v6_dns_name($hostname), 'AAAA');
     $ns->delete('*.'.get_shell_v6_dns_name($hostname), 'AAAA');
@@ -168,11 +123,17 @@ function __update_dns($ns, $hostname, $appid) {
     $ns->replace('*.'.get_shell_v4_dns_name($hostname), 'A', get_shell_ipv4($appid));
 }
 
+function __update_ptr_v6($ns, $hostname, $appid) {
+    $ns->replace(ipv6_to_nibble(get_shell_ipv6($appid)), 'PTR', get_shell_v6_dns_name($hostname));
+}
+
 function update_dns($hostname, $appid) {
     include_once "dns.inc.php";
     $ns = new nsupdate();
     __update_dns($ns, $hostname, $appid);
-    return $ns->commit();
+    $ns_ptr = new nsupdate();
+    __update_ptr_v6($ns_ptr, $hostname, $appid);
+    return $ns->commit() && $ns_ptr->commit_default_view();
 }
 
 function create_vz($nodeno, $id, $hostname, $password, $mem_limit, $diskspace_softlimit, $diskspace_hardlimit, $distribution, $storage) {

@@ -48,7 +48,7 @@ checked_mysql_query("UPDATE tickets SET used_time=NOW() WHERE id='$ticket_id'");
 <?php
 fastcgi_finish_request();
 function do_destroy($info) {
-    if (!delete_dns($info['hostname']))
+    if (!delete_dns($info['hostname'], $info['shellid']))
         return false;
     if (!update_proxy_conf())
         return false;
