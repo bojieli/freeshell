@@ -28,8 +28,7 @@ class nsupdate {
         unlink($tmpfile);
         return true;
     }
-    function replace($fqdn, $record, $content) {
-        $ttl = 600;
+    function replace($fqdn, $record, $content, $ttl = 600) {
         $this->commands[] = "delete $fqdn $record";
         $this->commands[] = "add $fqdn $ttl $record $content";
     }

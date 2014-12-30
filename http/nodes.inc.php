@@ -124,7 +124,7 @@ function __update_dns($ns, $hostname, $appid) {
 }
 
 function __update_ptr_v6($ns, $hostname, $appid) {
-    $ns->replace(ipv6_to_nibble(get_shell_ipv6($appid)), 'PTR', get_shell_v6_dns_name($hostname));
+    $ns->replace(ipv6_to_nibble(get_shell_ipv6($appid)), 'PTR', get_shell_v6_dns_name($hostname), 3600);
 }
 
 function update_dns($hostname, $appid) {
