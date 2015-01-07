@@ -139,9 +139,15 @@ if ($num_shells >= 2) {
 <div id="progbar"></div>
 <?php
 }
-?>
 
-<?php
+function headinfo($msg) {
+    ?>
+    <h2>Oops! There seems to be some problem.</h2>
+    <p><strong><?=$msg?></strong></p>
+    <div id="progbar"></div>
+    <?php
+}
+
 if ($info['locked']) {
     ?>
     <p><strong>Your freeshell has a pending action started <?=time() - $info['lock_time']?> seconds ago, please wait.<br />Refresh at will.</strong>
@@ -151,15 +157,7 @@ if ($info['locked']) {
     <div id="progbar"></div>
     <?php
 }
-
-function headinfo($msg) {
-    ?>
-    <h2>Oops! There seems to be some problem.</h2>
-    <p><strong><?=$msg?></strong></p>
-    <div id="progbar"></div>
-    <?php
-}
-if ($node['mystatus'] == 'Unknown') {
+else if ($node['mystatus'] == 'Unknown') {
     headinfo('Failed to connect to worker node. Please try again later.');
     exit();
 }

@@ -79,3 +79,8 @@ CREATE TABLE cname (
     UNIQUE KEY key_domain (`domain`),
     FOREIGN KEY (`id`) REFERENCES shellinfo (`id`)
 ) ENGINE = InnoDB;
+
+create table pending_register (
+    `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `reginfo` TEXT
+) ENGINE = InnoDB;

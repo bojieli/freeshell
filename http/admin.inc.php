@@ -55,7 +55,7 @@ function greetings($appid){
 function send_activate_mail($email, $appid, $token) {
     global $headers, $footer;
     $title = "Account Activation for USTC freeshell";
-    $body = greetings($appid)."Thanks for being the ".($appid-100)."-th user of USTC freeshell. Please click on the link below (or copy it to the address bar) to activate your freeshell account.\n\n".site_baseurl()."/activate.php?appid=$appid&token=$token\n\nThis link will expire in 48 hours.".$footer;
+    $body = "Hello,\n\nThanks for choosing USTC freeshell. Please click on the link below (or copy it to the address bar) to activate your freeshell account.\n\n".site_baseurl()."/activate.php?appid=$appid&token=$token\n\nThis link will expire in 48 hours.".$footer;
     mail($email, $title, $body, $headers);
 }
 
@@ -63,6 +63,13 @@ function send_register_fail_mail($email) {
     global $headers, $footer;
     $title = "Register Failed for USTC freeshell";
     $body = "Hello,\n\nSorry that your freeshell failed to be created. It might because the hard disk is full or the network is temporarily down. Please try again later.".$footer;
+    mail($email, $title, $body, $headers);
+}
+
+function send_register_success_mail($email, $appid, $hostname) {
+    global $headers, $footer;
+    $title = "Your USTC freeshell has been created";
+    $body = greetings($appid)."Your freeshell '$hostname' is up and running. You can login to your freeshell via IPv6:\n\nssh root@".get_shell_v6_dns_name($hostname)."\n\nFor alternative login methods and more information, please login to Web Control Panel: https://freeshell.ustc.edu.cn/".$footer;
     mail($email, $title, $body, $headers);
 }
 
