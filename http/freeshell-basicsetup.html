@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+<h1>Basic Setup for Freeshell</h1>
+
+<h3>by <code>yousong</code>, Jan. 1, 2014.</h3>
+
+<h2>Basic Setup</h2>
+
+<p>The default operating system on freeshell is a bare minimal Debian 7.0
+(Wheezy).  Minimal setup for my everyday usage is as the following.</p>
+
+<ol>
+<li><p>Update repository database and upgrade current system.</p>
+
+<pre><code>apt-get update
+apt-get upgrade
+</code></pre></li>
+<li><p>Install <code>sudo</code> and add a <code>sudoer</code>.</p>
+
+<pre><code>apt-get install sudo
+adduser &lt;USERNAME&gt;
+usermod --append --groups sudo &lt;USERNAME&gt;
+</code></pre>
+
+<p>This will take effect only on the next login as <code>&lt;USERNAME&gt;</code> at which
+time you will have root privilege with the help of <code>sudo</code>.</p></li>
+<li><p>Setup UTF-8 locale.</p>
+
+<p>Package <code>locales</code> should have already been installed by default.  Current
+locale settings can be checked with command <code>locale</code>.</p>
+
+<ol>
+<li><p>Locales need to be generated first.</p>
+
+<pre><code>sudo vi /etc/locale.gen
+# decide what you want and uncomment it.
+# zh_CN.UTF-8 UTF-8
+# Then generate it with command:
+sudo locale-gen
+</code></pre></li>
+<li><p>Add a line in <code>~/.bashrc</code> like the following.  Better at the top.</p>
+
+<pre><code>export LC_ALL=zh_CN.UTF-8
+</code></pre></li>
+<li><p>Basically, a simple command as <code>exec bash</code> will let this take effect.</p></li>
+</ol></li>
+<li><p>Install basic packages.</p>
+
+<pre><code>sudo apt-get install bash-completion build-essential
+</code></pre>
+
+<p>To use bash completion, make sure there is a line like the following in
+<code>~/.bashrc</code>.  By default it should be there.</p>
+
+<pre><code>. /etc/bash_completion
+</code></pre>
+
+<p>Package <code>build-essential</code> provides <code>gcc</code>, <code>g++</code>, <code>make</code>, <code>libc-dev</code>, etc.</p></li>
+</ol>
+
+<h2>Quirks and Tips</h2>
+
+<ol>
+<li><p>Install tmux.</p>
+
+<p>Note that for Debian 6.0 (Squeeze), tmux 1.3 will be installed by default
+which does not work well with PuTTY on Unicode line drawing.  Also, to avoid
+ncurses drawing lines with <code>q</code> and <code>x</code>, UTF-8 locale has to be configured.</p>
+
+<p>To install tmux 1.6 from backport repository:</p>
+
+<pre><code>sudo apt-get install 'tmux=1.6-2~bpo60+1'
+</code></pre>
+
+<p>Avaiable versions can be got from the <code>Provides</code> section of the following
+command.</p>
+
+<pre><code>apt-cache showpkg tmux
+</code></pre></li>
+<li><p>Remount <code>/tmp</code> without <code>noexec</code></p>
+
+<p>For security reasons, by default <code>/tmp</code> will be mounted be like this:</p>
+
+<pre><code>yousong@jumper:~$ mount | column -t
+...
+tmpfs       on  /tmp          type  tmpfs   (rw,relatime,noexec)
+</code></pre>
+
+<p>There are times <code>configure</code> script needs to compile and run dummy test
+programs in <code>/tmp</code> and <code>noexec</code> will fail that.  So remount with</p>
+
+<pre><code>mount -t tmpfs -o remount,rw,relatime tmpfs /tmp
+</code></pre></li>
+</ol>
+
+<p>Last updated <code>2014/1/17 10:58:56</code></p>
+</body>
+</html>
