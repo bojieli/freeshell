@@ -18,6 +18,9 @@ fi
 # preserve perms and execution bit, chown as root
 rsync -rpE --exclude=sudoers $BASE/etc/ /etc/
 
+# fix sysctl startup ordering
+update-rc.d procps enable S >/dev/null
+# load sysctl params
 sysctl -p >/dev/null
 
 KEY_SRC="$BASE/scgyshell-client.authorized_keys"
