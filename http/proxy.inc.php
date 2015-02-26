@@ -68,8 +68,9 @@ server {
         location / {
                 proxy_pass       http://$upstream_ip:$conf[httpport];
                 proxy_set_header Host       \$http_host;
-                proxy_set_header X-Forwarded-For \$remote_addr;
+                proxy_set_header X-Forwarded-For    \$remote_addr;
                 proxy_set_header X-Real-IP  \$remote_addr;
+                proxy_set_header X-Forwarded-Proto  \$scheme;
                 proxy_set_header X-Scheme   \$scheme;
 ".
             ($conf['websocket_en'] ? "
