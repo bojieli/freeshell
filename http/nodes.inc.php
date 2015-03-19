@@ -25,7 +25,7 @@ function local_exec($cmd) {
     $elapsed_time = microtime(true) - $start_time;
     $output = implode("\n", $output);
     if ($errno != 0) {
-        report_sys_admin("local sudo failed with status $errno\nSTART TIME: $start_time\nELAPSED TIME: $elapsed_time\nFULL COMMAND:\n$cmd\nOUTPUT:\n$output\n");
+        report_sys_admin("local sudo failed with status $errno\nSTART TIME: ".date("Y-m-d H:i:s", (int)$start_time)."\nELAPSED TIME: $elapsed_time\nFULL COMMAND:\n$cmd\nOUTPUT:\n$output\n");
     }
     return array($errno, $output);
 }
