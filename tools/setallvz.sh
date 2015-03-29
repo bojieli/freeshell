@@ -9,7 +9,7 @@ fi
 option=$1
 value=$2
 
-max=$(curl https://blog.ustc.edu.cn/freeshell/shellmax.php)
+max=$(curl https://freeshell.ustc.edu.cn/shellmax.php)
 for id in $(seq 101 $max); do
     host=$(echo $id % 7 | bc)
     if [ $host -eq 0 ]; then
