@@ -47,3 +47,13 @@ chown root:root $KEYS
 
 # update /etc/network/interfaces
 . /etc/network/interfaces.template
+
+# install and patch python psutil
+PSUTIL_DIR=/usr/local/lib/python2.7/dist-packages/psutil
+if [ ! -d "$PSUTIL_DIR" ]; then
+    apt-get update
+    apt-get install -y python2.7 python2.7-dev python-pip
+    pip install psutil
+fi
+mv $BASE/psutil-patch/_pslinux.py $PSUTIL_DIR/
+mv $BASE/psutil-patch/__init__.py $PSUTIL_DIR/
