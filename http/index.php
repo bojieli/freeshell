@@ -78,10 +78,10 @@ $shellnum = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo"), 
                 </li>
                 <li class="slide2">
                 <div class="slidewords">
-                         <h1>This is SCGY cluster.</h1>
-                         <h2></h2>
-                      <p>SCGY cluster, previously used for high-performance computing, is now open to public.</p>
-                      <p>Unlike most VPS, each box on freeshell can make use of full capacity of the physical machine, i.e. except for disk space, there is nearly no limit.</p>
+                         <h1>Let's build.</h1>
+                         <h2>Get ideas real on freeshell.</h2>
+                      <p>HTTP proxy makes it possible to build and test your own Web application.</p>
+                      <p>Our cases: <a href="http://icard.ustc.edu.cn">icard</a>, <a href="http://zzh.freeshell.ustc.edu.cn/course">科大选课查询</a>, <a href="http://ychat.freeshell.ustc.edu.cn">ychat</a>, <a href="http://freemeet.info">Freemeet</a>...</p>
                       <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
                   </div>
                 </li>
