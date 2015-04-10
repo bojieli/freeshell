@@ -10,12 +10,17 @@ option=$1
 value=$2
 
 max=$(curl https://freeshell.ustc.edu.cn/shellmax.php)
-for id in $(seq 101 $max); do
-    host=$(echo $id % 7 | bc)
-    if [ $host -eq 0 ]; then
-        host=7
-    fi
-    echo $host:$id
-    realvalue=$(echo $value | sed "s/\$id/$id/g")
-    ssh s$host.freeshell.ustc.edu.cn "sudo vzctl set $id --$option $realvalue --save"
+for h in {1..7}; do
+    for id in $(seq 101 $max); do
+        host=$(echo $id % 7 | bc)
+        if [ $host -eq 0 ]; then
+            host=7
+        fi
+        [ "$h" -eq "$host" ] || continue
+        echo $host:$id
+        realvalue=$(echo $value | sed "s/\$id/$id/g")
+        ssh s$host.freeshell.ustc.edu.cn "sudo vzctl set $id --$option $realvalue --save"
+    done &
 done
+
+wait
