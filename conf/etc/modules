@@ -4,6 +4,7 @@
 # at boot time, one per line. Lines beginning with "#" are ignored.
 # Parameters can be specified after the module name.
 
+fuse
 loop
 pppol2tp
 ppp_synctty
