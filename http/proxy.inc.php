@@ -166,16 +166,7 @@ function cname_check_norepeat($domain) {
     if ($domain == "edu.cn" || $domain == "ustc.edu.cn")
         return 2;
 
-    require_once "tld.inc.php";
-    if (is_tld($domain))
-        return 1;
-    $parts = explode('.', $domain);
-    $count = count($parts);
-    if (is_tld($parts[$count - 1]))
-        return 0;
-    if (is_tld($parts[$count - 2] . "." . $parts[$count - 1]))
-        return 0;
-    return 1;
+    return 0;
 }
 
 function cname_check($id, $domain) {
