@@ -72,7 +72,7 @@ $shellnum = mysql_result(checked_mysql_query("SELECT COUNT(*) FROM shellinfo"), 
 	                  <h1>This is freeshell.</h1>
 	                  <h2>Create your own Linux box!</h2>
 	                  <p>You can create a free Linux box on real servers and take full control of it.</p>
-                      <p>The word "free" is both in terms of free-of-change and freedom-of-use.</p>
+                      <p>The word "free" is both in terms of free-of-charge and freedom-of-use.</p>
                       <p class="lastline"><img src="img/tour.png"  style="vertical-align:-4px;"/></a> <a>Take the tour </a></p>
                   </div>
                 </li>
